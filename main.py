@@ -18,7 +18,7 @@ class TestApp(App):
         # with open('inews.json') as json_file:
         #     data = json.load(json_file)
         #     # move this points addition somewhere cheaper
-        #     for d in data:
+        #     for d in data:k
         #         d['points'] = []
         #     self.rvdata = data
         self.pull_data()
