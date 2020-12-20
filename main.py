@@ -1,29 +1,17 @@
 import json
 from kivy.app import App
 from kivy import properties as kp
-from kivy.core.window import Window
 from rows.rows import Row #### DO NOT DELETE!!! ######
-from pprint import pprint
-
-Window.size = (1200, 1920)
-
-# todo: SEE PULL DATA TEST FUNC
 
 
 class TestApp(App):
-
     rvdata = kp.ListProperty()
 
     def build(self):
-        # with open('inews.json') as json_file:
-        #     data = json.load(json_file)
-        #     # move this points addition somewhere cheaper
-        #     for d in data:k
-        #         d['points'] = []
-        #     self.rvdata = data
-        self.pull_data()
+        self.pull_json_data()
 
-    def pull_data(self):
+    def pull_json_data(self):
+
         temp_drawings = []
         # iterate through each row
         for row in self.rvdata:
@@ -31,7 +19,7 @@ class TestApp(App):
             if row['points']:
                 temp_drawings.append([row['story_id'], row['points']])
 
-        with open('LW.json') as json_file:
+        with open('sample.json') as json_file:
             fresh_data = json.load(json_file)
 
             # for EACH ROW in new data do the following (plus adds reversed index number to that row:
@@ -64,18 +52,7 @@ class TestApp(App):
                 if 'points' not in row:
                     row['points'] = []
 
-            # for f in fresh_data:
-            #     print(f)
-
-
             self.rvdata = fresh_data
-            # ### REM DRAWING AFTER SUCCEFUL REPLACEMENT? YES, SHOULD HELP COST
-
-
-    def test2(self, widg, index, title):
-        print(widg, index, title)
-
-    # todo: THIS IS GETTING FIRED WAY TOO MUCH AND ASSIGNING POINTS TO INCRORRECT ROWS
 
     def send_lines(self, new_line, index, info, touch):
         # Without statement default points for each row come through. e.g. [100, 600] for each row bar intended
@@ -89,24 +66,6 @@ class TestApp(App):
 
             if lower_val <= ref_point <= upper_val:
                 self.rvdata[index]['points'].append(new_line.points)
-
-                print(self.rvdata[index]['points'])
-
-
-
-        # print('points: ' + str(int(new_line.points[1])) + '...index:' + str(self.rvdata[index]['reversed_index']))
-
-
-
-
-
-        # if int(new_line.points[1]) / self.rvdata[index]['reversed_index'] < 200:
-        #     self.rvdata[index]['points'].append(new_line.points)
-
-
-
-    def clear_canv(self):
-        self.root.ids.rview.canvas.clear()
 
 
 if __name__ == '__main__':

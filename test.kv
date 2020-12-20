@@ -1,58 +1,35 @@
 #:include rows/rows.kv
-#:import Line kivy.graphics
 
-TabbedPanel
-    do_default_tab: False
-    TabbedPanelItem
+BoxLayout:
+    orientation: 'vertical'
+    BoxLayout:
+        size_hint_y: 0.1
+        Button:
+            text: 'INDEX'
+            size_hint_x: .05
+        Button:
+            text: 'PAGE'
+            size_hint_x: .05
+        Button:
+            text: 'TITLE'
+            size_hint_x: .3
+        Button:
+            text: 'CAMERA'
+            size_hint_x: .05
+        Button:
+            text: 'BACK-TIME'
+            size_hint_x: .1
+        Button:
+            text: 'NOTES'
+            size_hint_x: .4
 
-        BoxLayout:
+    RecycleView
+        id: rview
+        data: app.rvdata
+        viewclass: 'Row'
+        RecycleBoxLayout:
+            default_size: None, dp(50)
+            default_size_hint: 1, None
+            size_hint_y: None
+            height: self.minimum_height
             orientation: 'vertical'
-
-            BoxLayout:
-                size_hint_y: 0.1
-
-                Button:
-                    text: 'INDEX'
-                    size_hint_x: .05
-                Button:
-                    text: 'PAGE'
-                    size_hint_x: .05
-                Button:
-                    text: 'TITLE'
-                    size_hint_x: .3
-                Button:
-                    text: 'CAMERA'
-                    size_hint_x: .05
-
-                Button:
-                    text: 'BACK-TIME'
-                    size_hint_x: .1
-
-                Button:
-                    text: 'NOTES'
-                    size_hint_x: .4
-
-
-
-            RecycleView
-                id: rview
-
-                data: app.rvdata
-                viewclass: 'Row'
-                RecycleBoxLayout:
-                    default_size: None, dp(50)
-                    default_size_hint: 1, None
-                    size_hint_y: None
-                    height: self.minimum_height
-                    orientation: 'vertical'
-
-            BoxLayout
-                size_hint_x: .2
-                size_hint_y: .2
-                Button:
-                    text: 'pull'
-                    on_release: app.pull_data()
-
-                Button:
-                    text: 'del'
-                    on_release: app.del_row()
