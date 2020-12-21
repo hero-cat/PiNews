@@ -14,7 +14,7 @@
     Button:
         id: back_time_lbl
         size_hint_x: .1
-    MyPaintWidget:
+    DrawingWidget:
         size_hint_x: .4
         id: pw
-        on_touch_up: app.send_lines(self.new_line, root.index, self, self.touch)
+        on_touch_up: app.new_drawing(self.drawing, root.index)

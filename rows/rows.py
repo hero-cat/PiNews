@@ -5,11 +5,11 @@ from kivy.graphics import Line
 from kivy.uix.widget import Widget
 
 
-class MyPaintWidget(Widget):
+class DrawingWidget(Widget):
 
     touch = 'null'
 
-    new_line = []
+    drawing = []
 
     def on_touch_down(self, touch):
         self.bottom = self.y
@@ -17,23 +17,23 @@ class MyPaintWidget(Widget):
         self.left = self.x
         self.right = self.x + self.width
 
-        self.new_line = Line(points=(self.x, self.y), width=2)  # set default Line
+        self.drawing = Line(points=(self.x, self.y), width=2)  # set default Line
 
         if self.bottom <= touch.y <= self.top and self.left <= touch.x <= self.right:
             with self.canvas:
-                self.new_line = Line(points=(touch.x, touch.y), width=2, group=(str(self.canvas)))
+                self.drawing = Line(points=(touch.x, touch.y), width=2, group=(str(self.canvas)))
 
                 self.touch = touch
 
-        return super(MyPaintWidget, self).on_touch_down(touch)
+        return super(DrawingWidget, self).on_touch_down(touch)
 
     def on_touch_move(self, touch):
         if self.bottom <= touch.y <= self.top and self.left <= touch.x <= self.right and \
-                self.new_line.group == str(self.canvas):
+                self.drawing.group == str(self.canvas):
 
-            self.new_line.points += [touch.x, touch.y]
+            self.drawing.points += [touch.x, touch.y]
 
-        return super(MyPaintWidget, self).on_touch_move(touch)
+        return super(DrawingWidget, self).on_touch_move(touch)
 
 
 
