@@ -15,7 +15,7 @@ into a cell at the end of the row.
 import json
 from kivy.app import App
 from kivy import properties as kp
-from rows.rows import Row #### DO NOT DELETE!!! ######
+from rows.row import Row #### DO NOT DELETE!!! ######
 
 
 class TestApp(App):

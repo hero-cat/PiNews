@@ -3,18 +3,12 @@
         id: index_lbl
         size_hint_x: .05
     Button:
-        id: page_number_lbl
-        size_hint_x: .05
-    Button:
         id: title_lbl
         size_hint_x: .3
     Button:
         id: camera_lbl
         size_hint_x: .05
-    Button:
-        id: back_time_lbl
-        size_hint_x: .1
     DrawingWidget:
         size_hint_x: .4
-        id: pw
+        id: drawingwidget
         on_touch_up: app.new_drawing(self.drawing, root.index)
