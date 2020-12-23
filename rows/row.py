@@ -1,28 +1,34 @@
 import kivy.properties as kp
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
 from kivy.uix.boxlayout import BoxLayout
-from kivy.graphics import Line
-from kivy.uix.widget import Widget
+from kivy.factory import Factory as F
+
+
+class DrawingRepository:
+    drawings = {}
+
+    @staticmethod
+    def add_drawing(story_id, points):
+        if story_id is not None:
+            DrawingRepository.drawings[story_id] = points
+            print(DrawingRepository.drawings[story_id])
+
+    @staticmethod
+    def get_drawing(story_id, default=None):
+        return DrawingRepository.drawings.get(story_id, default)
+
+    @staticmethod
+    def has_drawing(story_id):
+        return story_id in DrawingRepository.drawings
 
 
 class Row(RecycleDataViewBehavior, BoxLayout):
-    """This class is used by RecycleView to create each row"""
     index = kp.NumericProperty()
     title = kp.StringProperty()
     camera = kp.StringProperty()
 
     def refresh_view_attrs(self, view, index, data):
-        """Using refresh_view_attrs to rewrite the drawings to the correct position because this is the only way
-        I know how to access rvdata/app data from within RV. I'm sure a cleaner solution exists...
-        """
         self.index = index  # keep index up to date
-
-        self.ids.drawingwidget.canvas.clear() # Clear DrawingWidget before writing
-
-        # loop through list of lists that contain the points and draw them to that row's drawing_widget
-        for p in data['points']:
-            with self.ids.drawingwidget.canvas:
-                Line(points=(p), width=2)
 
         super().refresh_view_attrs(view, index, data)
 
@@ -31,46 +37,87 @@ class Row(RecycleDataViewBehavior, BoxLayout):
             self.ids.index_lbl.text = str(self.index)
             self.ids.title_lbl.text = self.title
             self.ids.camera_lbl.text = self.camera
+            # self.ids.drawingwidget = DrawingRepository.drawings
 
 
-class DrawingWidget(Widget):
-    """The drawing widget was built around the kivy example of MyPaintWidget:
-    https://kivy.org/doc/stable/tutorials/firstwidget.html
+class DrawingWidget(F.RelativeLayout):
+    story_id = F.NumericProperty(None, allownone=True)
+    line_color = F.ColorProperty('#ffffff')
+    line_width = F.NumericProperty(2)
+    line_points = F.ListProperty()
 
-    """
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        # Create a Color and Line instruction for this widget. They are
+        # reused throughout the widget lifetime.
+        with self.canvas:
+            self._color = F.Color(self.line_color)
+            self._line = F.Line(width=self.line_width)
+        # Load existing drawing for this story_id, if any
+        if DrawingRepository.has_drawing(self.story_id):
+            self.line_points = DrawingRepository.get_drawing(self.story_id)
+        # Immediately draw line if we have any data (could be supplied
+        # in kwargs, or loaded from repository above)
+        if self.line_points:
+            self._line.points = self.line_points
+        # Ensure that canvas instructions are in sync with properties
+        self.bind(line_color=self._update_line_color)
+        self.bind(line_points=self._update_line_points)
+        self.bind(line_width=self._update_line_width)
 
-    drawing = []
+    def _update_line_color(self, _, color):
+        self._color.rgba = color
+
+    def _update_line_points(self, _, points):
+        self._line.points = points
+
+    def _update_line_width(self, _, width):
+        self._line.width = width
+
+    # This is a property event handler; this method is called automatically
+    # when the story_id property changes. The above functions could be named
+    # `on_line_color`, `on_line_points` and `on_line_width`, and the bind
+    # call in __init__ would not be required. Either technique works. The
+    # downside with this vs bind is that a subclass must call this via
+    # super() in order to implement its own on_story_id method.
+    def on_story_id(self, _, story_id):
+        drawing = DrawingRepository.get_drawing(story_id)
+        if drawing is not None:
+            self.line_points = drawing
+        else:
+            self.line_points = []
 
     def on_touch_down(self, touch):
-        """When a click is made within this widget a line begins to be drawn as a single point (an x and a y coordinate)
-        All this line info is stored in drawing to be expanded on with on_touch_move
-
-        I've had to specify that only the widget within the borders of the touched widget should be the one written on
-        in line 59.
-        Without it the same widget in other rows gets written to. I also set the group as self.canvas so the same issue
-        isn't repeated in on_touch_move"""
-
-        self.bottom = self.y
-        self.top = self.y + self.height
-        self.left = self.x
-        self.right = self.x + self.width
-
-        self.drawing = Line(points=(self.x, self.y), width=2)  # set default Line
-
-        if self.bottom <= touch.y <= self.top and self.left <= touch.x <= self.right:
-            with self.canvas:
-                self.drawing = Line(points=(touch.x, touch.y), width=2, group=(str(self.canvas)))
-
-        return super(DrawingWidget, self).on_touch_down(touch)
+        if self.collide_point(*touch.pos):
+            # If the touch occurs within widget boundaries, we do touch.grab
+            # which ensures that our move/up handlers will always be called
+            # for this touch event's lifetime
+            touch.grab(self)
+            self.line_points.clear()
+            self.line_points.extend(self.to_local(*touch.pos))
+            return True
+        return super().on_touch_down(touch)
 
     def on_touch_move(self, touch):
-        """With contact still being made on the screen and the finger moving on_touch_move is triggered and new points
-        are added to the line/self.drawing
+        if touch.grab_current is self:
+            # Our logic only applies to grabbed touches. This test will fail
+            # if the initial touch_down event was outside our boundaries, in
+            # which case the super() handler is called (as usual).
+            if self.collide_point(*touch.pos):
+                self.line_points.extend(self.to_local(*touch.pos))
+            return True
+        return super().on_touch_move(touch)
 
-        Instead of simply just writing self.drawing.points += [touch.x, touch.y] I have to add all of these constraints
-        to specify that only the touched widget should be the one affected - HOW TO FIX THIS..."""
-        if self.bottom <= touch.y <= self.top and self.left <= touch.x <= self.right and \
-                self.drawing.group == str(self.canvas):
-            self.drawing.points += [touch.x, touch.y]
-
-        return super(DrawingWidget, self).on_touch_move(touch)
+    def on_touch_up(self, touch):
+        if touch.grab_current is self:
+            # Only add the final point if touch is released inside our boundaries.
+            if self.collide_point(*touch.pos):
+                self.line_points.extend(self.to_local(*touch.pos))
+            # Reject single-point drawings
+            if len(self.line_points) <= 2:
+                self.line_points = []
+            # Store in repository
+            elif self.story_id is not None:
+                DrawingRepository.add_drawing(self.story_id, self.line_points[:])
+            return True
+        return super().on_touch_up(touch)
