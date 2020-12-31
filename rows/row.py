@@ -1,4 +1,3 @@
-import kivy.properties as kp
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
 from kivy.uix.boxlayout import BoxLayout
 from kivy.factory import Factory as F
@@ -17,23 +16,21 @@ class DrawingRepository:
 
     @staticmethod
     def get_drawing(story_id, default=None):
-        #print('getting')
         return DrawingRepository.drawings.get(story_id, default)
 
     @staticmethod
     def has_drawing(story_id):
-        #print('has')
         return story_id in DrawingRepository.drawings
 
 
 class Row(RecycleDataViewBehavior, BoxLayout):
-    index = kp.NumericProperty()
-    title = kp.StringProperty()
-    camera = kp.StringProperty()
-    story_id = kp.StringProperty()
+    index = F.NumericProperty()
+    title = F.StringProperty()
+    camera = F.StringProperty()
+    story_id = F.StringProperty()
 
     def refresh_view_attrs(self, view, index, data):
-        self.index = index  # keep index up to date
+        self.index = index
 
         super().refresh_view_attrs(view, index, data)
 
@@ -50,31 +47,13 @@ class DrawingWidget(F.RelativeLayout):
     story_id = F.StringProperty(None, allownone=True)
     line_points = F.ListProperty()
 
-
-
     def __init__(self, **kwargs):
-
         super().__init__(**kwargs)
-
-
-        if DrawingRepository.has_drawing(self.story_id):
-            self.line_points = DrawingRepository.get_drawing(self.story_id)
-
-
         self.bind(line_points=self._update_line_points)
 
-
-
     def _update_line_points(self, _, points):
-
         with self.canvas:
             F.Line(width=2, points=points)
-
-
-
-
-
-
 
     def on_story_id(self, _, story_id):
         drawing = DrawingRepository.get_drawing(story_id)
@@ -87,36 +66,18 @@ class DrawingWidget(F.RelativeLayout):
             self.line_points = []
             self.canvas.clear()
 
-
-
-
     def on_touch_down(self, touch):
         if self.collide_point(*touch.pos):
-
             touch.grab(self)
-
-
-
             return True
         return super().on_touch_down(touch)
-
-
-
 
     def on_touch_move(self, touch):
         if touch.grab_current is self:
             if self.collide_point(*touch.pos):
-
-
                 self.line_points.extend(self.to_local(*touch.pos))
-
-
-
             return True
         return super().on_touch_move(touch)
-
-
-
 
     def on_touch_up(self, touch):
         if touch.grab_current is self:
@@ -124,16 +85,12 @@ class DrawingWidget(F.RelativeLayout):
             if self.collide_point(*touch.pos):
                 self.line_points.extend(self.to_local(*touch.pos))
 
-
             if len(self.line_points) <= 2:
                 self.line_points = []
 
-
             if self.story_id is not None:
                 DrawingRepository.add_drawing(self.story_id, self.line_points[:])
-
                 self.line_points = []
-
 
             return True
         return super().on_touch_up(touch)
