@@ -5,13 +5,18 @@ import re
 import datetime
 import json
 import os
-import time
 
 
 def generate_json(path, filename):
+    with open("/Users/joseedwa/PycharmProjects/xyz/aws_creds.json") as aws_creds:
+        inews_details = json.load(aws_creds)
+        user = inews_details[1]['user']
+        passwd = inews_details[1]['passwd']
+        ip = inews_details[1]['ip']
+
     # Open FTP connection
-    ftp = FTP("10.141.132.122")
-    ftp.login(user="joseedwa", passwd="qweqwe")
+    ftp = FTP(ip)
+    ftp.login(user=user, passwd=passwd)
 
     # Retrieve rundown using 'path' parameter passed when function is called
     # e.g. ftp.cwd("CTS.TX.0600")
@@ -28,6 +33,7 @@ def generate_json(path, filename):
         with open("story/" + line, "wb") as story:
             ftp.retrbinary("RETR " + line, story.write)
         story.close()
+
 
     # Close FTP connection
     ftp.quit()
@@ -155,7 +161,6 @@ def generate_json(path, filename):
                     else:
                         storyline[key] = value
 
-
         # 7) Append storyLine dictionary to 'data' list
         data.append(storyline)
 
@@ -272,12 +277,12 @@ def generate_json(path, filename):
     # generate_json("CTS.TX.0630", "0630")
     # generate_json("CTS.TX.0700", "0700")
     # generate_json("CTS.TX.0800", "0800")
-# generate_json("CTS.TX.TC2_LW", "test_rundown")
+generate_json("CTS.TX.TC2_LW", "test_rundown")
     # generate_json("*GMB-LK.*GMB.TX.0600", "0600")
     # generate_json("*GMB-LK.*GMB.TX.0630", "0630")
     # generate_json("*GMB-LK.*GMB.TX.0700", "0700")
     # generate_json("*GMB-LK.*GMB.TX.0800", "0800")
     # generate_json("*LW.RUNORDERS.PROGRAMME", "LW")
 
-    # time.sleep(60)
+    # time.sleep(3)
     # counter += 1
