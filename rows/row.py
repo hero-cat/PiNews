@@ -28,6 +28,7 @@ class Row(RecycleDataViewBehavior, BoxLayout):
     title = F.StringProperty()
     camera = F.StringProperty()
     story_id = F.StringProperty()
+    backtime = F.StringProperty()
 
     def refresh_view_attrs(self, view, index, data):
         self.index = index
@@ -37,10 +38,11 @@ class Row(RecycleDataViewBehavior, BoxLayout):
     def on_parent(self, instance, parent):
 
         if parent:
-            self.ids.index_lbl.text = str(self.index)
+
             self.ids.title_lbl.text = self.title
             self.ids.camera_lbl.text = self.camera
             self.ids.drawingwidget.story_id = self.story_id
+            self.ids.backtime_lbl.text = self.backtime
 
 
 class DrawingWidget(F.RelativeLayout):

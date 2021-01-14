@@ -1,34 +1,456 @@
 #:include rows/row.kv
 
-BoxLayout:
-    orientation: 'vertical'
-    BoxLayout:
-        size_hint_y: 0.1
-        Button:
-            text: 'INDEX'
-            size_hint_x: .05
-        Button:
-            text: 'TITLE'
-            size_hint_x: .3
-        Button:
-            text: 'CAMERA'
-            size_hint_x: .05
-        Button:
-            text: 'NOTES'
-            size_hint_x: .4
+ScreenManager:
+    id: screen_manager
+    MenuScreen:
+        id: menu_screen
+        name: 'menu'
+        manager: 'screen_manager'
+    SettingsScreen:
+        id: settings_screen
+        name: 'settings'
+        manager: 'screen_manager'
+    LWRundown
+        id: lw_rundown
+        name: 'lw'
+        manager: 'screen_manager'
+    LKRundown:
+        id: lk_rundown
+        name: 'lk'
+        manager: 'screen_manager'
+    TMRundown:
+        id: tm_rundown
+        name: 'tm'
+        manager: 'screen_manager'
+    GMBMenu:
+        id: gmb_menu
+        name: 'gmb'
+        manager: 'screen_manager'
+    SixRundown:
+        id: six
+        name: '0600'
+        manager: 'screen_manager'
+    SixThirtyRundown:
+        id: six_thirty
+        name: '0630'
+        manager: 'screen_manager'
+    SevenRundown:
+        id: seven
+        name: '0700'
+        manager: 'screen_manager'
+    EightRundown:
+        id: eight
+        name: '0800'
+        manager: 'screen_manager'
 
-    RecycleView
-        id: rview
-        data: app.rvdata
-        viewclass: 'Row'
-        RecycleBoxLayout:
-            default_size: None, dp(50)
-            default_size_hint: 1, None
-            size_hint_y: None
-            height: self.minimum_height
-            orientation: 'vertical'
-#
-#    Button:
-#        size_hint_y: 0.1
-#        text: 'PULL'
-#        on_release: app.pull_json_data()
+
+
+<MenuScreen>:
+    BoxLayout:
+
+        orientation: 'vertical'
+
+        MDToolbar:
+            right_action_items: [["close", lambda x: app.stop()]]
+            title: 'PiNews'
+            size_hint_y: .1
+
+
+        Widget:
+            size_hint_y: .1
+
+        MDLabel:
+            text: 'CHOOSE A PRODUCTION'
+            font_size: 40
+            halign: 'center'
+            size_hint_y: .1
+
+
+        BoxLayout:
+            size_hint_y: .1
+            Widget:
+            MDRaisedButton:
+                text: '    LW    '
+                on_press: app.root.current = 'lw'
+            Widget:
+            MDRaisedButton:
+                text: '    LK    '
+                on_press: app.root.current = 'lk'
+            Widget:
+            MDRaisedButton:
+                text: '    TM    '
+                on_press: app.root.current = 'tm'
+            Widget
+            MDRaisedButton:
+                text: '  GMB   '
+                on_press: app.root.current = 'gmb'
+            Widget:
+
+        BoxLayout:
+            size_hint_y: .1
+            Widget:
+            MDRaisedButton:
+                text: 'CSTM_1'
+                on_press: app.root.current = 'lw'
+            Widget:
+            MDRaisedButton:
+                text: 'CSTM_2'
+                on_press: app.root.current = 'lk'
+            Widget:
+            MDRaisedButton:
+                text: 'CSTM_3'
+                on_press: app.root.current = 'tm'
+            Widget
+            MDRaisedButton:
+                text: 'CSTM_4'
+                on_press: app.root.current = 'gmb'
+            Widget:
+
+
+        Widget:
+            size_hint_y: .7
+
+
+<SettingsScreen>:
+    BoxLayout:
+        Button:
+            text: 'My settings button'
+        Button:
+            text: 'Back to menu'
+            on_press: app.root.current = 'menu'
+
+<GMBMenu>
+    BoxLayout:
+        Button:
+            text: '0600'
+            on_press: app.root.current = '0600'
+        Button:
+            text: '0630'
+            on_press: app.root.current = '0630'
+        Button:
+            text: '0700'
+            on_press: app.root.current = '0700'
+        Button:
+            text: '0800'
+            on_press: app.root.current = '0800'
+        Button:
+            text: 'Back to menu'
+            on_press: app.root.current = 'menu'
+
+<LWRundown>
+    BoxLayout:
+        orientation: 'vertical'
+        MDToolbar:
+            size_hint_y: .05
+            title: '///'
+            Widget:
+                size_hint_x: 4
+            BoxLayout:
+                orientation: 'vertical'
+                Widget:
+                    size_hint_y: .1
+                MDRaisedButton:
+                    md_bg_color: 0.419, 0.807, 1, 1
+                    text: 'COLOUR'
+                    text_color: 0, 0, 0, 1
+                    font_size: 11
+                    size_hint_y: .2
+                Widget:
+                    size_hint_y: .1
+                MDRaisedButton:
+                    md_bg_color: 0.419, 0.807, 1, 1
+                    text: ' WIDTH  '
+                    text_color: 0, 0, 0, 1
+                    font_size: 11
+                    size_hint_y: .2
+                Widget:
+                    size_hint_y: .1
+            MDIconButton
+                icon: "pencil"
+                on_press: app.root.current = 'menu'
+            MDIconButton
+                icon: "format-color-fill"
+                on_press: app.root.current = 'menu'
+            MDIconButton
+                icon: "eraser"
+                on_press: app.root.current = 'menu'
+            MDIconButton
+                icon: "close-box"
+                on_press: app.root.current = 'menu'
+
+
+
+        BoxLayout:
+            size_hint_y: 0.039
+            MDRectangleFlatButton:
+                text: '  TIME  '
+                text_color: 1, 1, 1, 1
+                md_bg_color: 0.2, 0.2, 0.2, 1
+
+            MDRectangleFlatButton:
+                text: '                       TITLE                        '
+                text_color: 1, 1, 1, 1
+                md_bg_color: 0.2, 0.2, 0.2, 1
+
+            MDRectangleFlatButton:
+                text: '  CAM  '
+                text_color: 1, 1, 1, 1
+                md_bg_color: 0.2, 0.2, 0.2, 1
+
+            MDRectangleFlatButton:
+                text: '                                  NOTES                                  '
+                text_color: 1, 1, 1, 1
+                md_bg_color: 0.2, 0.2, 0.2, 1
+
+
+        RecycleView
+            id: rview
+            data: app.rvdata
+            viewclass: 'Row'
+            RecycleBoxLayout:
+                default_size: None, dp(50)
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                orientation: 'vertical'
+
+<LKRundown>
+    BoxLayout:
+        orientation: 'vertical'
+        Button:
+            text: 'Back'
+            on_press: app.root.current = 'menu'
+            size_hint_y: .1
+        BoxLayout:
+            size_hint_y: 0.1
+            Button:
+                text: 'INDEX'
+                size_hint_x: .05
+            Button:
+                text: 'TITLE'
+                size_hint_x: .3
+            Button:
+                text: 'CAMERA'
+                size_hint_x: .05
+            Button:
+                text: 'NOTES'
+                size_hint_x: .4
+
+        RecycleView
+            id: rview
+            data: app.rvdata
+            viewclass: 'Row'
+            RecycleBoxLayout:
+                default_size: None, dp(50)
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                orientation: 'vertical'
+
+
+<TMRundown>
+    BoxLayout:
+        orientation: 'vertical'
+        Button:
+            text: 'Back'
+            on_press: app.root.current = 'menu'
+            size_hint_y: .1
+        BoxLayout:
+            size_hint_y: 0.1
+            Button:
+                text: 'INDEX'
+                size_hint_x: .05
+            Button:
+                text: 'TITLE'
+                size_hint_x: .3
+            Button:
+                text: 'CAMERA'
+                size_hint_x: .05
+            Button:
+                text: 'NOTES'
+                size_hint_x: .4
+
+        RecycleView
+            id: rview
+            data: app.rvdata
+            viewclass: 'Row'
+            RecycleBoxLayout:
+                default_size: None, dp(50)
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                orientation: 'vertical'
+
+<SixRundown>
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            size_hint_y: .1
+            Button:
+                text: '0630'
+                on_press: app.root.current = '0630'
+            Button:
+                text: '0700'
+                on_press: app.root.current = '0700'
+            Button:
+                text: '0800'
+                on_press: app.root.current = '0800'
+            Button:
+                text: 'Back'
+                on_press: app.root.current = 'gmb'
+        BoxLayout:
+            size_hint_y: 0.1
+            Button:
+                text: 'INDEX'
+                size_hint_x: .05
+            Button:
+                text: 'TITLE'
+                size_hint_x: .3
+            Button:
+                text: 'CAMERA'
+                size_hint_x: .05
+            Button:
+                text: 'NOTES'
+                size_hint_x: .4
+
+        RecycleView
+            id: rview
+            data: app.rvdata
+            viewclass: 'Row'
+            RecycleBoxLayout:
+                default_size: None, dp(50)
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                orientation: 'vertical'
+
+<SixThirtyRundown>
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            size_hint_y: .1
+            Button:
+                text: '0600'
+                on_press: app.root.current = '0600'
+            Button:
+                text: '0700'
+                on_press: app.root.current = '0700'
+            Button:
+                text: '0800'
+                on_press: app.root.current = '0800'
+            Button:
+                text: 'Back'
+                on_press: app.root.current = 'gmb'
+
+        BoxLayout:
+            size_hint_y: 0.1
+            Button:
+                text: 'INDEX'
+                size_hint_x: .05
+            Button:
+                text: 'TITLE'
+                size_hint_x: .3
+            Button:
+                text: 'CAMERA'
+                size_hint_x: .05
+            Button:
+                text: 'NOTES'
+                size_hint_x: .4
+
+        RecycleView
+            id: rview
+            data: app.rvdata
+            viewclass: 'Row'
+            RecycleBoxLayout:
+                default_size: None, dp(50)
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                orientation: 'vertical'
+
+<SevenRundown>
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            size_hint_y: .1
+            Button:
+                text: '0600'
+                on_press: app.root.current = '0600'
+            Button:
+                text: '0630'
+                on_press: app.root.current = '0630'
+            Button:
+                text: '0800'
+                on_press: app.root.current = '0800'
+            Button:
+                text: 'Back'
+                on_press: app.root.current = 'gmb'
+        BoxLayout:
+            size_hint_y: 0.1
+            Button:
+                text: 'INDEX'
+                size_hint_x: .05
+            Button:
+                text: 'TITLE'
+                size_hint_x: .3
+            Button:
+                text: 'CAMERA'
+                size_hint_x: .05
+            Button:
+                text: 'NOTES'
+                size_hint_x: .4
+
+        RecycleView
+            id: rview
+            data: app.rvdata
+            viewclass: 'Row'
+            RecycleBoxLayout:
+                default_size: None, dp(50)
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                orientation: 'vertical'
+
+
+<EightRundown>
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            size_hint_y: .1
+            Button:
+                text: '0600'
+                on_press: app.root.current = '0600'
+            Button:
+                text: '0630'
+                on_press: app.root.current = '0630'
+            Button:
+                text: '0700'
+                on_press: app.root.current = '0700'
+            Button:
+                text: 'Back'
+                on_press: app.root.current = 'gmb'
+        BoxLayout:
+            size_hint_y: 0.1
+            Button:
+                text: 'INDEX'
+                size_hint_x: .05
+            Button:
+                text: 'TITLE'
+                size_hint_x: .3
+            Button:
+                text: 'CAMERA'
+                size_hint_x: .05
+            Button:
+                text: 'NOTES'
+                size_hint_x: .4
+
+        RecycleView
+            id: rview
+            data: app.rvdata
+            viewclass: 'Row'
+            RecycleBoxLayout:
+                default_size: None, dp(50)
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                orientation: 'vertical'
