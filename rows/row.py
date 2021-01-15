@@ -55,6 +55,7 @@ class DrawingWidget(F.RelativeLayout):
 
     def _update_line_points(self, _, points):
         with self.canvas:
+            F.Color(0, 0, 0)
             F.Line(width=2, points=points)
 
     def on_story_id(self, _, story_id):
@@ -63,6 +64,7 @@ class DrawingWidget(F.RelativeLayout):
         if drawing is not None:
             for d in drawing:
                 with self.canvas:
+
                     F.Line(width=2, points=d)
         else:
             self.line_points = []

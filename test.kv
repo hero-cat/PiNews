@@ -2,13 +2,13 @@
 
 ScreenManager:
     id: screen_manager
+    LoginScreen:
+        id: login
+        name: 'login'
+        manager: 'screen_manager'
     MenuScreen:
         id: menu_screen
         name: 'menu'
-        manager: 'screen_manager'
-    SettingsScreen:
-        id: settings_screen
-        name: 'settings'
         manager: 'screen_manager'
     LWRundown
         id: lw_rundown
@@ -21,10 +21,6 @@ ScreenManager:
     TMRundown:
         id: tm_rundown
         name: 'tm'
-        manager: 'screen_manager'
-    GMBMenu:
-        id: gmb_menu
-        name: 'gmb'
         manager: 'screen_manager'
     SixRundown:
         id: six
@@ -42,20 +38,100 @@ ScreenManager:
         id: eight
         name: '0800'
         manager: 'screen_manager'
+    NineRundown:
+        id: nine
+        name: '0900'
+        manager: 'screen_manager'
 
+<LoginScreen>
+    MDBoxLayout:
+        Widget:
+            size_hint_x: .1
+
+        VertBox:
+            size_hint_x: .8
+            MDLabel:
+                text: 'Welcome to PiNews - Please login'
+                halign: 'center'
+            MDTextField:
+                id: login
+                font_size: 28
+                hint_text: "USERNAME"
+                mode: "rectangle"
+            MDTextField:
+                id: password
+                font_size: 28
+                hint_text: "PASSWORD"
+                mode: "rectangle"
+                password: True
+
+            MDBoxLayout
+                Widget
+                MDRaisedButton:
+                    text: 'CONNECT'
+                    on_press: root.login(login.text, password.text)
+                Widget
+            Widget
+                size_hint_y: 4
+
+        Widget:
+            size_hint_x: .1
+
+
+
+
+#    BoxLayout
+#        id: login_layout
+#        orientation: 'vertical'
+#        padding: [10,50,10,50]
+#        spacing: 50
+#
+#        MDLabel:
+#            text: 'Welcome'
+#            font_size: 32
+#
+#        BoxLayout:
+#            orientation: 'vertical'
+#
+#            MDLabel:
+#                text: 'Login'
+#                font_size: 18
+#                halign: 'left'
+#                text_size: root.width-20, 20
+#
+#            TextInput:
+#                id: login
+#                multiline:False
+#                font_size: 28
+#
+#        BoxLayout:
+#            orientation: 'vertical'
+#            MDLabel:
+#                text: 'Password'
+#                halign: 'left'
+#                font_size: 18
+#                text_size: root.width-20, 20
+#
+#            TextInput:
+#                id: password
+#                multiline:False
+#                password:True
+#                font_size: 28
+#
+#        MDRaisedButton:
+#            text: 'Connexion'
+#            font_size: 24
+#
+#            on_press: root.login(login.text, password.text)
 
 
 <MenuScreen>:
     BoxLayout:
-
         orientation: 'vertical'
-
         MDToolbar:
             right_action_items: [["close", lambda x: app.stop()]]
             title: 'PiNews'
             size_hint_y: .1
-
-
         Widget:
             size_hint_y: .1
 
@@ -65,13 +141,12 @@ ScreenManager:
             halign: 'center'
             size_hint_y: .1
 
-
         BoxLayout:
             size_hint_y: .1
             Widget:
             MDRaisedButton:
-                text: '    LW    '
-                on_press: app.root.current = 'lw'
+                text: '  GMB   '
+                on_press: app.root.current = '0600'
             Widget:
             MDRaisedButton:
                 text: '    LK    '
@@ -82,8 +157,8 @@ ScreenManager:
                 on_press: app.root.current = 'tm'
             Widget
             MDRaisedButton:
-                text: '  GMB   '
-                on_press: app.root.current = 'gmb'
+                text: '    LW    '
+                on_press: app.root.current = 'lw'
             Widget:
 
         BoxLayout:
@@ -91,60 +166,54 @@ ScreenManager:
             Widget:
             MDRaisedButton:
                 text: 'CSTM_1'
-                on_press: app.root.current = 'lw'
             Widget:
             MDRaisedButton:
                 text: 'CSTM_2'
-                on_press: app.root.current = 'lk'
             Widget:
             MDRaisedButton:
                 text: 'CSTM_3'
-                on_press: app.root.current = 'tm'
             Widget
             MDRaisedButton:
                 text: 'CSTM_4'
-                on_press: app.root.current = 'gmb'
             Widget:
-
 
         Widget:
             size_hint_y: .7
 
 
-<SettingsScreen>:
-    BoxLayout:
-        Button:
-            text: 'My settings button'
-        Button:
-            text: 'Back to menu'
-            on_press: app.root.current = 'menu'
 
-<GMBMenu>
-    BoxLayout:
-        Button:
-            text: '0600'
-            on_press: app.root.current = '0600'
-        Button:
-            text: '0630'
-            on_press: app.root.current = '0630'
-        Button:
-            text: '0700'
-            on_press: app.root.current = '0700'
-        Button:
-            text: '0800'
-            on_press: app.root.current = '0800'
-        Button:
-            text: 'Back to menu'
-            on_press: app.root.current = 'menu'
-
-<LWRundown>
+<RundownTemplate@MDScreen>
+    rundown: 'default'
+    data: app.default_data
     BoxLayout:
         orientation: 'vertical'
         MDToolbar:
-            size_hint_y: .05
-            title: '///'
-            Widget:
-                size_hint_x: 4
+            size_hint_y: None
+            height: 90
+            title: root.rundown
+            MDIconButton:
+                icon: "arrow-left-bold-outline"
+                on_press: app.root.current = 'menu'
+
+            MDIconButton:
+                icon: "power-on"
+                theme_text_color: "Custom"
+                text_color: 1, 1, 1, 1
+
+            MDIconButton:
+                icon: "arrow-up"
+            MDIconButton:
+                icon: "arrow-down"
+            MDIconButton:
+                icon: "format-vertical-align-top"
+            MDIconButton:
+                icon: "format-vertical-align-bottom"
+
+            MDIconButton:
+                icon: "power-on"
+                theme_text_color: "Custom"
+                text_color: 1, 1, 1, 1
+
             BoxLayout:
                 orientation: 'vertical'
                 Widget:
@@ -165,80 +234,40 @@ ScreenManager:
                     size_hint_y: .2
                 Widget:
                     size_hint_y: .1
+
             MDIconButton
                 icon: "pencil"
-                on_press: app.root.current = 'menu'
             MDIconButton
                 icon: "format-color-fill"
-                on_press: app.root.current = 'menu'
             MDIconButton
                 icon: "eraser"
-                on_press: app.root.current = 'menu'
             MDIconButton
                 icon: "close-box"
-                on_press: app.root.current = 'menu'
-
-
 
         BoxLayout:
             size_hint_y: 0.039
             MDRectangleFlatButton:
                 text: '  TIME  '
                 text_color: 1, 1, 1, 1
-                md_bg_color: 0.2, 0.2, 0.2, 1
+                md_bg_color: 0.098, 0.407, 0.670, 1
 
             MDRectangleFlatButton:
                 text: '                       TITLE                        '
                 text_color: 1, 1, 1, 1
-                md_bg_color: 0.2, 0.2, 0.2, 1
+                md_bg_color: 0.098, 0.407, 0.670, 1
 
             MDRectangleFlatButton:
                 text: '  CAM  '
                 text_color: 1, 1, 1, 1
-                md_bg_color: 0.2, 0.2, 0.2, 1
+                md_bg_color: 0.098, 0.407, 0.670, 1
 
             MDRectangleFlatButton:
                 text: '                                  NOTES                                  '
                 text_color: 1, 1, 1, 1
-                md_bg_color: 0.2, 0.2, 0.2, 1
-
-
+                md_bg_color: 0.098, 0.407, 0.670, 1
         RecycleView
             id: rview
-            data: app.rvdata
-            viewclass: 'Row'
-            RecycleBoxLayout:
-                default_size: None, dp(50)
-                default_size_hint: 1, None
-                size_hint_y: None
-                height: self.minimum_height
-                orientation: 'vertical'
-
-<LKRundown>
-    BoxLayout:
-        orientation: 'vertical'
-        Button:
-            text: 'Back'
-            on_press: app.root.current = 'menu'
-            size_hint_y: .1
-        BoxLayout:
-            size_hint_y: 0.1
-            Button:
-                text: 'INDEX'
-                size_hint_x: .05
-            Button:
-                text: 'TITLE'
-                size_hint_x: .3
-            Button:
-                text: 'CAMERA'
-                size_hint_x: .05
-            Button:
-                text: 'NOTES'
-                size_hint_x: .4
-
-        RecycleView
-            id: rview
-            data: app.rvdata
+            data: root.data
             viewclass: 'Row'
             RecycleBoxLayout:
                 default_size: None, dp(50)
@@ -248,209 +277,92 @@ ScreenManager:
                 orientation: 'vertical'
 
 
-<TMRundown>
-    BoxLayout:
-        orientation: 'vertical'
-        Button:
-            text: 'Back'
-            on_press: app.root.current = 'menu'
-            size_hint_y: .1
-        BoxLayout:
-            size_hint_y: 0.1
-            Button:
-                text: 'INDEX'
-                size_hint_x: .05
-            Button:
-                text: 'TITLE'
-                size_hint_x: .3
-            Button:
-                text: 'CAMERA'
-                size_hint_x: .05
-            Button:
-                text: 'NOTES'
-                size_hint_x: .4
+<GMBToolbar@BoxLayout>
+    size_hint_y: None
+    height: 75
+    Widget
+    MDRaisedButton:
+        text: '    0600    '
+        on_press: app.root.current = '0600'
+    Widget
+    MDRaisedButton:
+        text: '    0630    '
+        on_press: app.root.current = '0630'
+    Widget
+    MDRaisedButton:
+        text: '    0700    '
+        on_press: app.root.current = '0700'
+    Widget
+    MDRaisedButton:
+        text: '    0800    '
+        on_press: app.root.current = '0800'
+    Widget
+    MDRaisedButton:
+        text: '    0900    '
+        on_press: app.root.current = '0900'
+    Widget
 
-        RecycleView
-            id: rview
-            data: app.rvdata
-            viewclass: 'Row'
-            RecycleBoxLayout:
-                default_size: None, dp(50)
-                default_size_hint: 1, None
-                size_hint_y: None
-                height: self.minimum_height
-                orientation: 'vertical'
+<ThinGap@Widget>
+    size_hint_y: None
+    height: 3
+
+<VertBox@MDBoxLayout>
+    orientation: 'vertical'
+
+
+
 
 <SixRundown>
-    BoxLayout:
-        orientation: 'vertical'
-        BoxLayout:
-            size_hint_y: .1
-            Button:
-                text: '0630'
-                on_press: app.root.current = '0630'
-            Button:
-                text: '0700'
-                on_press: app.root.current = '0700'
-            Button:
-                text: '0800'
-                on_press: app.root.current = '0800'
-            Button:
-                text: 'Back'
-                on_press: app.root.current = 'gmb'
-        BoxLayout:
-            size_hint_y: 0.1
-            Button:
-                text: 'INDEX'
-                size_hint_x: .05
-            Button:
-                text: 'TITLE'
-                size_hint_x: .3
-            Button:
-                text: 'CAMERA'
-                size_hint_x: .05
-            Button:
-                text: 'NOTES'
-                size_hint_x: .4
-
-        RecycleView
-            id: rview
+    VertBox
+        GMBToolbar
+        ThinGap
+        RundownTemplate
+            rundown: '0600'
             data: app.rvdata
-            viewclass: 'Row'
-            RecycleBoxLayout:
-                default_size: None, dp(50)
-                default_size_hint: 1, None
-                size_hint_y: None
-                height: self.minimum_height
-                orientation: 'vertical'
 
 <SixThirtyRundown>
-    BoxLayout:
-        orientation: 'vertical'
-        BoxLayout:
-            size_hint_y: .1
-            Button:
-                text: '0600'
-                on_press: app.root.current = '0600'
-            Button:
-                text: '0700'
-                on_press: app.root.current = '0700'
-            Button:
-                text: '0800'
-                on_press: app.root.current = '0800'
-            Button:
-                text: 'Back'
-                on_press: app.root.current = 'gmb'
-
-        BoxLayout:
-            size_hint_y: 0.1
-            Button:
-                text: 'INDEX'
-                size_hint_x: .05
-            Button:
-                text: 'TITLE'
-                size_hint_x: .3
-            Button:
-                text: 'CAMERA'
-                size_hint_x: .05
-            Button:
-                text: 'NOTES'
-                size_hint_x: .4
-
-        RecycleView
-            id: rview
+    VertBox
+        GMBToolbar
+        ThinGap
+        RundownTemplate
+            rundown: '0630'
             data: app.rvdata
-            viewclass: 'Row'
-            RecycleBoxLayout:
-                default_size: None, dp(50)
-                default_size_hint: 1, None
-                size_hint_y: None
-                height: self.minimum_height
-                orientation: 'vertical'
 
 <SevenRundown>
-    BoxLayout:
-        orientation: 'vertical'
-        BoxLayout:
-            size_hint_y: .1
-            Button:
-                text: '0600'
-                on_press: app.root.current = '0600'
-            Button:
-                text: '0630'
-                on_press: app.root.current = '0630'
-            Button:
-                text: '0800'
-                on_press: app.root.current = '0800'
-            Button:
-                text: 'Back'
-                on_press: app.root.current = 'gmb'
-        BoxLayout:
-            size_hint_y: 0.1
-            Button:
-                text: 'INDEX'
-                size_hint_x: .05
-            Button:
-                text: 'TITLE'
-                size_hint_x: .3
-            Button:
-                text: 'CAMERA'
-                size_hint_x: .05
-            Button:
-                text: 'NOTES'
-                size_hint_x: .4
-
-        RecycleView
-            id: rview
+    VertBox
+        GMBToolbar
+        ThinGap
+        RundownTemplate
+            rundown: '0700'
             data: app.rvdata
-            viewclass: 'Row'
-            RecycleBoxLayout:
-                default_size: None, dp(50)
-                default_size_hint: 1, None
-                size_hint_y: None
-                height: self.minimum_height
-                orientation: 'vertical'
-
 
 <EightRundown>
-    BoxLayout:
-        orientation: 'vertical'
-        BoxLayout:
-            size_hint_y: .1
-            Button:
-                text: '0600'
-                on_press: app.root.current = '0600'
-            Button:
-                text: '0630'
-                on_press: app.root.current = '0630'
-            Button:
-                text: '0700'
-                on_press: app.root.current = '0700'
-            Button:
-                text: 'Back'
-                on_press: app.root.current = 'gmb'
-        BoxLayout:
-            size_hint_y: 0.1
-            Button:
-                text: 'INDEX'
-                size_hint_x: .05
-            Button:
-                text: 'TITLE'
-                size_hint_x: .3
-            Button:
-                text: 'CAMERA'
-                size_hint_x: .05
-            Button:
-                text: 'NOTES'
-                size_hint_x: .4
-
-        RecycleView
-            id: rview
+    VertBox
+        GMBToolbar
+        ThinGap
+        RundownTemplate
+            rundown: '0800'
             data: app.rvdata
-            viewclass: 'Row'
-            RecycleBoxLayout:
-                default_size: None, dp(50)
-                default_size_hint: 1, None
-                size_hint_y: None
-                height: self.minimum_height
-                orientation: 'vertical'
+
+<NineRundown>
+    VertBox
+        GMBToolbar
+        ThinGap
+        RundownTemplate
+            rundown: '0900'
+            data: app.rvdata
+
+<LKRundown>
+    RundownTemplate
+        rundown: 'LK'
+        data: app.rvdata
+
+<TMRundown>
+    RundownTemplate
+        rundown: 'TM'
+        data: app.data_tm
+
+<LWRundown>
+    RundownTemplate
+        rundown: 'LW'
+        data: app.data_tm

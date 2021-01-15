@@ -8,10 +8,21 @@ from kivy.clock import Clock
 from kivymd.app import MDApp
 from kivy.factory import Factory as F
 from rows.row import Row #### DO NOT DELETE!!! ######
-
+from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
 
 class TestApp(MDApp):
+    default_data = F.ListProperty()
     rvdata = F.ListProperty()
+    data_gmb_six = F.ListProperty()
+    data_gmb_six_thirty = F.ListProperty()
+    data_gmb_seven = F.ListProperty()
+    data_gmb_eight = F.ListProperty()
+    data_gmb_nine = F.ListProperty()
+    data_lk = F.ListProperty()
+    data_tm = F.ListProperty()
+    data_lw = F.ListProperty()
+    username = F.StringProperty(None)
+    password = F.StringProperty(None)
 
     with open("/Users/joseedwa/PycharmProjects/xyz/aws_creds.json") as aws_creds:
         aws_credentials = json.load(aws_creds)
@@ -27,6 +38,7 @@ class TestApp(MDApp):
         self.pull_json_data(0)
         Clock.schedule_interval(self.pull_json_data, 15.0)
 
+
     def pull_json_data(self, dt):
         #self.s3.download_file('hero-cat-test', 'test_rundown', 'test_rundown.json')
         with open('test_rundown.json') as json_file:
@@ -38,11 +50,20 @@ class TestApp(MDApp):
     def test(self):
         print('test')
 
+
+class LoginScreen(F.MDScreen):
+    username = 'joe'
+    password = 'aaa'
+
+    def login(self, loginText, passwordText):
+        if loginText == self.username and passwordText == self.password:
+            self.parent.current = 'menu'
+        else:
+            pass
+
+
+
 class MenuScreen(F.MDScreen):
-    pass
-
-
-class SettingsScreen(F.MDScreen):
     pass
 
 
@@ -55,10 +76,6 @@ class LKRundown(F.MDScreen):
 
 
 class TMRundown(F.MDScreen):
-    pass
-
-
-class GMBMenu(F.MDScreen):
     pass
 
 
@@ -75,6 +92,10 @@ class SevenRundown(F.MDScreen):
 
 
 class EightRundown(F.MDScreen):
+    pass
+
+
+class NineRundown(F.MDScreen):
     pass
 
 
