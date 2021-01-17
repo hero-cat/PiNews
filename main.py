@@ -7,7 +7,8 @@ import boto3
 from kivy.clock import Clock
 from kivymd.app import MDApp
 from kivy.factory import Factory as F
-from rows.row import Row #### DO NOT DELETE!!! ######
+from rows.row import Row, DrawingRepository #### DO NOT DELETE!!! ######
+from popups.popups import Popups
 from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
 
 class TestApp(MDApp):
@@ -23,6 +24,8 @@ class TestApp(MDApp):
     data_lw = F.ListProperty()
     username = F.StringProperty(None)
     password = F.StringProperty(None)
+    popups = Popups()
+
 
     with open("/Users/joseedwa/PycharmProjects/xyz/aws_creds.json") as aws_creds:
         aws_credentials = json.load(aws_creds)
@@ -47,8 +50,15 @@ class TestApp(MDApp):
             self.rvdata = fresh_data
             print('json updated inside main loop')
 
-    def test(self):
-        print('test')
+    def test(self, **args):
+        print(self.root.ids.six.connection_status)
+
+    def scroll_down(self):
+        # self.root.ids.rview.scroll_x = 1.0
+        print(self.root.ids.lw_rundown.children)
+
+    def change_tool(self, tool):
+        DrawingRepository.change_tool(tool)
 
 
 class LoginScreen(F.MDScreen):
@@ -59,7 +69,7 @@ class LoginScreen(F.MDScreen):
         if loginText == self.username and passwordText == self.password:
             self.parent.current = 'menu'
         else:
-            pass
+            self.parent.current = 'menu'
 
 
 

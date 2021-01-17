@@ -1,4 +1,5 @@
 #:include rows/row.kv
+#:include popups/popups.kv
 
 ScreenManager:
     id: screen_manager
@@ -78,53 +79,6 @@ ScreenManager:
             size_hint_x: .1
 
 
-
-
-#    BoxLayout
-#        id: login_layout
-#        orientation: 'vertical'
-#        padding: [10,50,10,50]
-#        spacing: 50
-#
-#        MDLabel:
-#            text: 'Welcome'
-#            font_size: 32
-#
-#        BoxLayout:
-#            orientation: 'vertical'
-#
-#            MDLabel:
-#                text: 'Login'
-#                font_size: 18
-#                halign: 'left'
-#                text_size: root.width-20, 20
-#
-#            TextInput:
-#                id: login
-#                multiline:False
-#                font_size: 28
-#
-#        BoxLayout:
-#            orientation: 'vertical'
-#            MDLabel:
-#                text: 'Password'
-#                halign: 'left'
-#                font_size: 18
-#                text_size: root.width-20, 20
-#
-#            TextInput:
-#                id: password
-#                multiline:False
-#                password:True
-#                font_size: 28
-#
-#        MDRaisedButton:
-#            text: 'Connexion'
-#            font_size: 24
-#
-#            on_press: root.login(login.text, password.text)
-
-
 <MenuScreen>:
     BoxLayout:
         orientation: 'vertical'
@@ -183,6 +137,7 @@ ScreenManager:
 
 
 <RundownTemplate@MDScreen>
+    id: test
     rundown: 'default'
     data: app.default_data
     BoxLayout:
@@ -206,8 +161,10 @@ ScreenManager:
                 icon: "arrow-down"
             MDIconButton:
                 icon: "format-vertical-align-top"
+
             MDIconButton:
                 icon: "format-vertical-align-bottom"
+                on_release: app.scroll_down()
 
             MDIconButton:
                 icon: "power-on"
@@ -224,6 +181,7 @@ ScreenManager:
                     text_color: 0, 0, 0, 1
                     font_size: 11
                     size_hint_y: .2
+                    on_release: app.popups.select_color()
                 Widget:
                     size_hint_y: .1
                 MDRaisedButton:
@@ -232,15 +190,19 @@ ScreenManager:
                     text_color: 0, 0, 0, 1
                     font_size: 11
                     size_hint_y: .2
+                    on_release: app.popups.select_width()
                 Widget:
                     size_hint_y: .1
 
             MDIconButton
                 icon: "pencil"
+                on_release: app.change_tool('pencil')
             MDIconButton
                 icon: "format-color-fill"
+                on_release: app.change_tool('fill')
             MDIconButton
                 icon: "eraser"
+                on_release: app.change_tool('eraser')
             MDIconButton
                 icon: "close-box"
 
@@ -276,6 +238,29 @@ ScreenManager:
                 height: self.minimum_height
                 orientation: 'vertical'
 
+        MDBoxLayout:
+            size_hint_y: .001
+            canvas:
+                Color:
+                    rgb: 0.6, 0.6, 0.6
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+        MDBoxLayout:
+            size_hint_y: .02
+            canvas:
+                Color:
+                    rgb: 0.8, 0.8, 0.8
+                Rectangle:
+
+                    pos: self.pos
+                    size: self.size
+            MDLabel:
+                # todo: HOW T0 REACH THIS FROM APP OR ELSEWHERE
+                id: connection_status
+                text: '  STATUS: '
+                font_size: 20
 
 <GMBToolbar@BoxLayout>
     size_hint_y: None
@@ -318,7 +303,7 @@ ScreenManager:
         ThinGap
         RundownTemplate
             rundown: '0600'
-            data: app.rvdata
+            data: app.data_gmb_six
 
 <SixThirtyRundown>
     VertBox
@@ -326,7 +311,7 @@ ScreenManager:
         ThinGap
         RundownTemplate
             rundown: '0630'
-            data: app.rvdata
+            data: app.data_gmb_six_thirty
 
 <SevenRundown>
     VertBox
@@ -334,7 +319,7 @@ ScreenManager:
         ThinGap
         RundownTemplate
             rundown: '0700'
-            data: app.rvdata
+            data: app.data_gmb_seven
 
 <EightRundown>
     VertBox
@@ -342,7 +327,7 @@ ScreenManager:
         ThinGap
         RundownTemplate
             rundown: '0800'
-            data: app.rvdata
+            data: app.data_gmb_eight
 
 <NineRundown>
     VertBox
@@ -350,12 +335,12 @@ ScreenManager:
         ThinGap
         RundownTemplate
             rundown: '0900'
-            data: app.rvdata
+            data: app.data_gmb_nine
 
 <LKRundown>
     RundownTemplate
         rundown: 'LK'
-        data: app.rvdata
+        data: app.data_lk
 
 <TMRundown>
     RundownTemplate
@@ -365,4 +350,4 @@ ScreenManager:
 <LWRundown>
     RundownTemplate
         rundown: 'LW'
-        data: app.data_tm
+        data: app.rvdata

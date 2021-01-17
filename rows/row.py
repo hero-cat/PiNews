@@ -1,10 +1,14 @@
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
 from kivy.uix.boxlayout import BoxLayout
 from kivy.factory import Factory as F
+from kivy.config import Config
 
 
 class DrawingRepository:
     drawings = {}
+    line_color = (0, 1, 0)
+    line_width = 2
+    tool = 'pencil'
 
     @staticmethod
     def add_drawing(story_id, points):
@@ -21,6 +25,19 @@ class DrawingRepository:
     @staticmethod
     def has_drawing(story_id):
         return story_id in DrawingRepository.drawings
+
+    @staticmethod
+    def change_color(color):
+        DrawingRepository.line_color = color
+
+    @staticmethod
+    def change_width(width):
+        DrawingRepository.line_width = width
+
+    @staticmethod
+    def change_tool(tool):
+        DrawingRepository.tool = tool
+        print('changin tool')
 
 
 class Row(RecycleDataViewBehavior, BoxLayout):
@@ -45,26 +62,55 @@ class Row(RecycleDataViewBehavior, BoxLayout):
             self.ids.backtime_lbl.text = self.backtime
 
 
+
+
 class DrawingWidget(F.RelativeLayout):
     story_id = F.StringProperty(None, allownone=True)
     line_points = F.ListProperty()
 
+
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.bind(line_points=self._update_line_points)
+        self.bind(line_points=self.draw_on_canvas)
 
-    def _update_line_points(self, _, points):
+    def draw_rectangle(self):
         with self.canvas:
-            F.Color(0, 0, 0)
-            F.Line(width=2, points=points)
+            F.Color(0, 0, 0, 1)
+            F.Rectangle(size=self.size)
+            print('drawing rect')
+
+    def draw_on_canvas(self, _, points):
+
+        if DrawingRepository.tool == 'pencil':
+            with self.canvas:
+                lc_rgb = DrawingRepository.line_color
+                F.Color(lc_rgb[0], lc_rgb[1], lc_rgb[2])
+                F.Line(width=DrawingRepository.line_width, points=points)
+
+        elif DrawingRepository.tool == 'fill':
+            with self.canvas:
+                lc_rgb = DrawingRepository.line_color
+                F.Color(lc_rgb[0], lc_rgb[1], lc_rgb[2])
+                F.Rectangle(size=self.size)
+                print('drawing rect')
+
+        else:
+            # Eraser
+            with self.canvas:
+                F.Color(0.983, 0.983, 0.983, 1)
+                F.Rectangle(size=self.size)
+                print('erasing')
 
     def on_story_id(self, _, story_id):
+        # todo: REMEMBER RECTANGLES
         drawing = DrawingRepository.get_drawing(story_id)
 
         if drawing is not None:
             for d in drawing:
                 with self.canvas:
-
+                    lc_rgb = DrawingRepository.line_color
+                    F.Color(lc_rgb[0], lc_rgb[1], lc_rgb[2])
                     F.Line(width=2, points=d)
         else:
             self.line_points = []
