@@ -11,12 +11,13 @@ class DrawingRepository:
     tool = 'pencil'
 
     @staticmethod
-    def add_drawing(story_id, points):
+    def add_drawing(story_id, color, points):
         if story_id is not None:
             if story_id in DrawingRepository.drawings:
-                DrawingRepository.drawings[story_id].append(points)
+                DrawingRepository.drawings[story_id][1].append(points)
             else:
-                DrawingRepository.drawings[story_id] = [points]
+                DrawingRepository.drawings[story_id] = [color][points]
+                print(DrawingRepository.drawings)
 
     @staticmethod
     def get_drawing(story_id, default=None):
@@ -37,7 +38,6 @@ class DrawingRepository:
     @staticmethod
     def change_tool(tool):
         DrawingRepository.tool = tool
-        print('changin tool')
 
 
 class Row(RecycleDataViewBehavior, BoxLayout):
@@ -70,15 +70,11 @@ class DrawingWidget(F.RelativeLayout):
 
 
 
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.bind(line_points=self.draw_on_canvas)
 
-    def draw_rectangle(self):
-        with self.canvas:
-            F.Color(0, 0, 0, 1)
-            F.Rectangle(size=self.size)
-            print('drawing rect')
 
     def draw_on_canvas(self, _, points):
 
@@ -94,13 +90,15 @@ class DrawingWidget(F.RelativeLayout):
                 F.Color(lc_rgb[0], lc_rgb[1], lc_rgb[2])
                 F.Rectangle(size=self.size)
                 print('drawing rect')
-
         else:
             # Eraser
             with self.canvas:
                 F.Color(0.983, 0.983, 0.983, 1)
                 F.Rectangle(size=self.size)
                 print('erasing')
+
+
+
 
     def on_story_id(self, _, story_id):
         # todo: REMEMBER RECTANGLES
@@ -116,11 +114,19 @@ class DrawingWidget(F.RelativeLayout):
             self.line_points = []
             self.canvas.clear()
 
+
+
+
     def on_touch_down(self, touch):
-        if self.collide_point(*touch.pos):
-            touch.grab(self)
-            return True
-        return super().on_touch_down(touch)
+        if DrawingRepository.tool == 'pencil':
+            if self.collide_point(*touch.pos):
+                touch.grab(self)
+                return True
+            return super().on_touch_down(touch)
+        else:
+            DrawingRepository.add_drawing(self.story_id, DrawingRepository.line_color, self.line_points[:])
+
+
 
     def on_touch_move(self, touch):
         if touch.grab_current is self:
@@ -139,7 +145,7 @@ class DrawingWidget(F.RelativeLayout):
                 self.line_points = []
 
             if self.story_id is not None:
-                DrawingRepository.add_drawing(self.story_id, self.line_points[:])
+                DrawingRepository.add_drawing(self.story_id, DrawingRepository.line_color, self.line_points[:])
                 self.line_points = []
 
             return True
