@@ -11,13 +11,12 @@ class DrawingRepository:
     tool = 'pencil'
 
     @staticmethod
-    def add_drawing(story_id, color, points):
+    def add_drawing(story_id, points):
         if story_id is not None:
             if story_id in DrawingRepository.drawings:
-                DrawingRepository.drawings[story_id][1].append(points)
+                DrawingRepository.drawings[story_id].append(points)
             else:
-                DrawingRepository.drawings[story_id] = [color][points]
-                print(DrawingRepository.drawings)
+                DrawingRepository.drawings[story_id] = [points]
 
     @staticmethod
     def get_drawing(story_id, default=None):
@@ -124,7 +123,7 @@ class DrawingWidget(F.RelativeLayout):
                 return True
             return super().on_touch_down(touch)
         else:
-            DrawingRepository.add_drawing(self.story_id, DrawingRepository.line_color, self.line_points[:])
+            DrawingRepository.add_drawing(self.story_id, self.line_points[:])
 
 
 
@@ -145,7 +144,7 @@ class DrawingWidget(F.RelativeLayout):
                 self.line_points = []
 
             if self.story_id is not None:
-                DrawingRepository.add_drawing(self.story_id, DrawingRepository.line_color, self.line_points[:])
+                DrawingRepository.add_drawing(self.story_id, self.line_points[:])
                 self.line_points = []
 
             return True
