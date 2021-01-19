@@ -48,7 +48,7 @@ class TestApp(MDApp):
             fresh_data = json.load(json_file)
 
             self.rvdata = fresh_data
-            print('json updated inside main loop')
+            #print('json updated inside main loop')
 
     def test(self, **args):
         print(self.root.ids.six.connection_status)
