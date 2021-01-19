@@ -8,47 +8,44 @@ from pprint import pprint
 class DrawingRepository:
     drawings = {}
     line_color = (0, 0, 0)
+    bg_color = (0, 0, 0)
     line_width = 2
     tool = 'pencil'
 
     @staticmethod
-    def add_drawing(story_id, tool, color, width, points):
+    def add_drawing(story_id, tool, line_color, bg_color, width, points):
         drngs = DrawingRepository.drawings
-
-        default_dict = {'tool': tool,
-                        'rect_color': color,
-                        'pencil_drawings': [{'width': 2,
-                                             'color': (0, 0, 0),
-                                             'points': []
-                                             }]}
 
         if story_id is not None:
 
             if story_id in drngs:
 
                 if tool != 'pencil':
-                    drngs[story_id] = default_dict
-
+                    drngs[story_id] = {'tool': tool,
+                                       'bg_color': bg_color,
+                                       'pencil_drawings': [{'width': 2,
+                                                            'line_color': (0.983, 0.983, 0.983),
+                                                            'points': []
+                                                            }]}  # can this list be empty?
                 else:
-                    drngs[story_id] = default_dict
                     drngs[story_id]['pencil_drawings'].append({'width': width,
-                                                               'color': color,
+                                                               'line_color': line_color,
                                                                'points': points})
-
             else:
                 if tool != 'pencil':
-                    drngs[story_id] = default_dict
+                    drngs[story_id] = {'tool': tool,
+                                       'bg_color': bg_color,
+                                       'pencil_drawings': [{'width': 2,
+                                                            'line_color': (0.983, 0.983, 0.983),
+                                                            'points': []
+                                                            }]}  # can this list be empty?
                 else:
                     drngs[story_id] = {'tool': tool,
-                                       'color': color,
+                                       'bg_color': (1, 1, 1),
                                        'pencil_drawings': [{'width': width,
-                                                            'color': color,
+                                                            'line_color': line_color,
                                                             'points': points}]}
         print(drngs[story_id])
-
-    #
-    #
-    #
 
     @staticmethod
     def get_drawing(story_id, default=None):
@@ -59,8 +56,12 @@ class DrawingRepository:
         return story_id in DrawingRepository.drawings
 
     @staticmethod
-    def change_color(color):
+    def change_line_color(color):
         DrawingRepository.line_color = color
+
+    @staticmethod
+    def change_bg_color(color):
+        DrawingRepository.bg_color = color
 
     @staticmethod
     def change_width(width):
@@ -69,6 +70,8 @@ class DrawingRepository:
     @staticmethod
     def change_tool(tool):
         DrawingRepository.tool = tool
+        if tool == 'fill':
+            DrawingRepository.change_bg_color(DrawingRepository.line_color)
 
 
 class Row(RecycleDataViewBehavior, BoxLayout):
@@ -109,13 +112,14 @@ class DrawingWidget(F.RelativeLayout):
 
         elif DrawingRepository.tool == 'fill':
             with self.canvas:
-                rgb = DrawingRepository.line_color
+                rgb = DrawingRepository.bg_color
                 F.Color(rgb[0], rgb[1], rgb[2])
                 F.Rectangle(size=self.size)
 
         else:
             # Eraser
             with self.canvas:
+                DrawingRepository.change_bg_color((0.983, 0.983, 0.983))
                 F.Color(0.983, 0.983, 0.983, 1)
                 F.Rectangle(size=self.size)
 
@@ -124,23 +128,23 @@ class DrawingWidget(F.RelativeLayout):
         drawings = DrawingRepository.get_drawing(story_id)
 
         if drawings is not None:
-            print(drawings['tool'])
-            if drawings['tool'] == 'pencil':
-                for drawinz in drawings['pencil_drawings']:
-                    with self.canvas:
-                        rgb1 = drawings['color']
-                        F.Color(rgb1[0], rgb1[1], rgb1[2])
-                        F.Rectangle(size=self.size)
-                        rgb = drawinz['color']
-                        F.Color(rgb[0], rgb[1], rgb[2])
-                        F.Line(width=drawinz['width'], points=drawinz['points'])
+            with self.canvas:
+                rgb1 = drawings['bg_color']
+                F.Color(rgb1[0], rgb1[1], rgb1[2])
+                F.Rectangle(size=self.size)
 
-            else:
-                print(drawings['tool'])
+            for drawinz in drawings['pencil_drawings']:
                 with self.canvas:
-                    rgb = drawings['color']
+                    rgb = drawinz['line_color']
                     F.Color(rgb[0], rgb[1], rgb[2])
-                    F.Rectangle(size=self.size)
+                    F.Line(width=drawinz['width'], points=drawinz['points'])
+
+            # else:
+            #     print(drawings['tool'])
+            #     with self.canvas:
+            #         rgb = drawings['color']
+            #         F.Color(rgb[0], rgb[1], rgb[2])
+            #         F.Rectangle(size=self.size)
         else:
             self.line_points = []
             self.canvas.clear()
@@ -176,7 +180,7 @@ class DrawingWidget(F.RelativeLayout):
                 self.line_points = []
 
             if self.story_id is not None:
-                dp.add_drawing(self.story_id, dp.tool, dp.line_color, dp.line_width, self.line_points[:])
+                dp.add_drawing(self.story_id, dp.tool, dp.line_color, dp.bg_color, dp.line_width, self.line_points[:])
                 self.line_points = []
 
             return True

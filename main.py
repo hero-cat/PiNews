@@ -51,7 +51,8 @@ class TestApp(MDApp):
             #print('json updated inside main loop')
 
     def test(self, **args):
-        print(self.root.ids.six.connection_status)
+        # print(self.root.ids.six.connection_status)
+        pass
 
     def scroll_down(self):
         # self.root.ids.rview.scroll_x = 1.0
