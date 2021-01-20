@@ -44,6 +44,195 @@ ScreenManager:
         name: '0900'
         manager: 'screen_manager'
 
+
+
+
+
+<RundownTemplate@MDScreen>
+    rundown: 'default'
+    data: app.default_data
+    BoxLayout:
+        orientation: 'vertical'
+        MDToolbar:
+            size_hint_y: None
+            height: 90
+            title: root.rundown
+            MDIconButton:
+                icon: "arrow-left-bold-outline"
+                on_press: app.root.current = 'menu'
+
+            MDIconButton:
+                icon: "power-on"
+                theme_text_color: "Custom"
+                text_color: 1, 1, 1, 1
+
+            MDIconButton:
+                icon: "arrow-up"
+                on_release: app.scroll_page_up()
+            MDIconButton:
+                icon: "arrow-down"
+                on_release: app.scroll_page_down()
+            MDIconButton:
+                icon: "format-vertical-align-top"
+                on_release: app.scroll_home()
+
+            MDIconButton:
+                icon: "format-vertical-align-bottom"
+                on_release: app.scroll_end()
+
+            MDIconButton:
+                icon: "power-on"
+                theme_text_color: "Custom"
+                text_color: 1, 1, 1, 1
+
+            BoxLayout:
+                orientation: 'vertical'
+                Widget:
+                    size_hint_y: .1
+                MDRaisedButton:
+                    id: color_button
+                    md_bg_color: 0, 0, 0, 1
+                    text: 'COLOUR'
+                    text_color: 1, 1, 1, 1
+                    font_size: 11
+                    size_hint_y: .5
+                    on_release: app.popups.select_color()
+                Widget:
+                    size_hint_y: .1
+                MDRaisedButton:
+                    md_bg_color: 0, 0, 0, 1
+                    text: 'THICKNESS'
+                    text_color: 1, 1, 1, 1
+                    font_size: 11
+                    size_hint_y: .5
+                    size_hint_x: 1
+                    on_release: app.popups.select_width()
+                Widget:
+                    size_hint_y: .1
+
+            MDIconButton
+                id: pencil_button
+                icon: "pencil"
+                theme_text_color: "Custom"
+                text_color: 1, 1, 1, 1
+                on_release: app.change_tool('pencil')
+                on_release: self.text_color = 1, 1, 1, 1
+                on_release: fill_button.text_color = 0, 0, 0, 1
+                on_release: eraser_button.text_color = 0, 0, 0, 1
+            MDIconButton
+                id: fill_button
+                icon: "format-color-fill"
+                theme_text_color: "Custom"
+                on_release: app.change_tool('fill')
+                on_release: self.text_color = 1, 1, 1, 1
+                on_release: pencil_button.text_color = 0, 0, 0, 1
+                on_release: eraser_button.text_color = 0, 0, 0, 1
+            MDIconButton
+                id: eraser_button
+                icon: "eraser"
+                theme_text_color: "Custom"
+                on_release: self.text_color = 1, 1, 1, 1
+                on_release: pencil_button.text_color = 0, 0, 0, 1
+                on_release: fill_button.text_color = 0, 0, 0, 1
+                on_release: app.change_tool('eraser')
+            MDIconButton
+                icon: "close-box"
+                on_release: app.clear_all_drawings()
+
+        BoxLayout:
+            size_hint_y: 0.039
+            MDRectangleFlatButton:
+                text: '  TIME  '
+                text_color: 1, 1, 1, 1
+                md_bg_color: 0.098, 0.407, 0.670, 1
+
+            MDRectangleFlatButton:
+                text: '                       TITLE                        '
+                text_color: 1, 1, 1, 1
+                md_bg_color: 0.098, 0.407, 0.670, 1
+
+            MDRectangleFlatButton:
+                text: '  CAM  '
+                text_color: 1, 1, 1, 1
+                md_bg_color: 0.098, 0.407, 0.670, 1
+
+            MDRectangleFlatButton:
+                text: '                                  NOTES                                  '
+                text_color: 1, 1, 1, 1
+                md_bg_color: 0.098, 0.407, 0.670, 1
+                on_release: root.status_update()
+
+        RecycleView
+            id: rview
+            data: root.data
+            viewclass: 'Row'
+            RecycleBoxLayout:
+                default_size: None, dp(50)
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                orientation: 'vertical'
+
+        MDBoxLayout:
+            size_hint_y: .001
+            canvas:
+                Color:
+                    rgb: 0.6, 0.6, 0.6
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+        MDBoxLayout:
+            size_hint_y: .02
+            canvas:
+                Color:
+                    rgb: 0.8, 0.8, 0.8
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            MDLabel:
+                id: conn_status
+                text: '  STATUS: '
+                font_size: 20
+
+
+<ThinGap@Widget>
+    size_hint_y: None
+    height: 3
+
+<VertBox@MDBoxLayout>
+    orientation: 'vertical'
+
+
+<GMBToolbar@BoxLayout>
+    size_hint_y: None
+    height: 75
+    Widget
+    MDRaisedButton:
+        text: '    0600    '
+        on_press: app.root.current = '0600'
+    Widget
+    MDRaisedButton:
+        text: '    0630    '
+        on_press: app.root.current = '0630'
+    Widget
+    MDRaisedButton:
+        text: '    0700    '
+        on_press: app.root.current = '0700'
+    Widget
+    MDRaisedButton:
+        text: '    0800    '
+        on_press: app.root.current = '0800'
+    Widget
+    MDRaisedButton:
+        text: '    0900    '
+        on_press: app.root.current = '0900'
+    Widget
+
+
+
+
 <LoginScreen>
     MDBoxLayout:
         Widget:
@@ -79,7 +268,7 @@ ScreenManager:
             size_hint_x: .1
 
 
-<MenuScreen>:
+<MenuScreen@MDScreen>:
     BoxLayout:
         orientation: 'vertical'
         MDToolbar:
@@ -136,218 +325,65 @@ ScreenManager:
 
 
 
-<RundownTemplate@MDScreen>
-    id: test
-    rundown: 'default'
-    data: app.default_data
-    BoxLayout:
-        orientation: 'vertical'
-        MDToolbar:
-            size_hint_y: None
-            height: 90
-            title: root.rundown
-            MDIconButton:
-                icon: "arrow-left-bold-outline"
-                on_press: app.root.current = 'menu'
-
-            MDIconButton:
-                icon: "power-on"
-                theme_text_color: "Custom"
-                text_color: 1, 1, 1, 1
-
-            MDIconButton:
-                icon: "arrow-up"
-            MDIconButton:
-                icon: "arrow-down"
-            MDIconButton:
-                icon: "format-vertical-align-top"
-
-            MDIconButton:
-                icon: "format-vertical-align-bottom"
-                on_release: app.scroll_down()
-
-            MDIconButton:
-                icon: "power-on"
-                theme_text_color: "Custom"
-                text_color: 1, 1, 1, 1
-
-            BoxLayout:
-                orientation: 'vertical'
-                Widget:
-                    size_hint_y: .1
-                MDRaisedButton:
-                    md_bg_color: 0.419, 0.807, 1, 1
-                    text: 'COLOUR'
-                    text_color: 0, 0, 0, 1
-                    font_size: 11
-                    size_hint_y: .2
-                    on_release: app.popups.select_color()
-                Widget:
-                    size_hint_y: .1
-                MDRaisedButton:
-                    md_bg_color: 0.419, 0.807, 1, 1
-                    text: ' WIDTH  '
-                    text_color: 0, 0, 0, 1
-                    font_size: 11
-                    size_hint_y: .2
-                    on_release: app.popups.select_width()
-                Widget:
-                    size_hint_y: .1
-
-            MDIconButton
-                icon: "pencil"
-                on_release: app.change_tool('pencil')
-            MDIconButton
-                icon: "format-color-fill"
-                on_release: app.change_tool('fill')
-            MDIconButton
-                icon: "eraser"
-                on_release: app.change_tool('eraser')
-            MDIconButton
-                icon: "close-box"
-
-        BoxLayout:
-            size_hint_y: 0.039
-            MDRectangleFlatButton:
-                text: '  TIME  '
-                text_color: 1, 1, 1, 1
-                md_bg_color: 0.098, 0.407, 0.670, 1
-
-            MDRectangleFlatButton:
-                text: '                       TITLE                        '
-                text_color: 1, 1, 1, 1
-                md_bg_color: 0.098, 0.407, 0.670, 1
-
-            MDRectangleFlatButton:
-                text: '  CAM  '
-                text_color: 1, 1, 1, 1
-                md_bg_color: 0.098, 0.407, 0.670, 1
-
-            MDRectangleFlatButton:
-                text: '                                  NOTES                                  '
-                text_color: 1, 1, 1, 1
-                md_bg_color: 0.098, 0.407, 0.670, 1
-        RecycleView
-            id: rview
-            data: root.data
-            viewclass: 'Row'
-            RecycleBoxLayout:
-                default_size: None, dp(50)
-                default_size_hint: 1, None
-                size_hint_y: None
-                height: self.minimum_height
-                orientation: 'vertical'
-
-        MDBoxLayout:
-            size_hint_y: .001
-            canvas:
-                Color:
-                    rgb: 0.6, 0.6, 0.6
-                Rectangle:
-                    pos: self.pos
-                    size: self.size
-
-        MDBoxLayout:
-            size_hint_y: .02
-            canvas:
-                Color:
-                    rgb: 0.8, 0.8, 0.8
-                Rectangle:
-
-                    pos: self.pos
-                    size: self.size
-            MDLabel:
-                # todo: HOW T0 REACH THIS FROM APP OR ELSEWHERE
-                id: connection_status
-                text: '  STATUS: '
-                font_size: 20
-
-<GMBToolbar@BoxLayout>
-    size_hint_y: None
-    height: 75
-    Widget
-    MDRaisedButton:
-        text: '    0600    '
-        on_press: app.root.current = '0600'
-    Widget
-    MDRaisedButton:
-        text: '    0630    '
-        on_press: app.root.current = '0630'
-    Widget
-    MDRaisedButton:
-        text: '    0700    '
-        on_press: app.root.current = '0700'
-    Widget
-    MDRaisedButton:
-        text: '    0800    '
-        on_press: app.root.current = '0800'
-    Widget
-    MDRaisedButton:
-        text: '    0900    '
-        on_press: app.root.current = '0900'
-    Widget
-
-<ThinGap@Widget>
-    size_hint_y: None
-    height: 3
-
-<VertBox@MDBoxLayout>
-    orientation: 'vertical'
-
-
-
-
-<SixRundown>
+<SixRundown@MDScreen>
     VertBox
         GMBToolbar
         ThinGap
         RundownTemplate
+            id: six
             rundown: '0600'
             data: app.data_gmb_six
 
-<SixThirtyRundown>
+<SixThirtyRundown@MDScreen>
     VertBox
         GMBToolbar
         ThinGap
         RundownTemplate
+            id: six_thirty
             rundown: '0630'
             data: app.data_gmb_six_thirty
 
-<SevenRundown>
+<SevenRundown@MDScreen>
     VertBox
         GMBToolbar
         ThinGap
         RundownTemplate
+            id: seven
             rundown: '0700'
             data: app.data_gmb_seven
 
-<EightRundown>
+<EightRundown@MDScreen>
     VertBox
         GMBToolbar
         ThinGap
         RundownTemplate
+            id: eight
             rundown: '0800'
             data: app.data_gmb_eight
 
-<NineRundown>
+<NineRundown@MDScreen>
     VertBox
         GMBToolbar
         ThinGap
         RundownTemplate
+            id: nine
             rundown: '0900'
             data: app.data_gmb_nine
 
-<LKRundown>
+<LKRundown@MDScreen>
     RundownTemplate
+        id: lk
         rundown: 'LK'
         data: app.data_lk
 
-<TMRundown>
+<TMRundown@MDScreen>
     RundownTemplate
+        id: tm
         rundown: 'TM'
         data: app.data_tm
 
-<LWRundown>
+<LWRundown@MDScreen>
     RundownTemplate
+        id: lw
         rundown: 'LW'
         data: app.rvdata

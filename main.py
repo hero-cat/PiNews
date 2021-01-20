@@ -10,8 +10,11 @@ from kivy.factory import Factory as F
 from rows.row import Row, DrawingRepository #### DO NOT DELETE!!! ######
 from popups.popups import Popups
 from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
+from kivy.effects.dampedscroll import DampedScrollEffect
+from kivy.effects.scroll import ScrollEffect
 
 class TestApp(MDApp):
+
     default_data = F.ListProperty()
     rvdata = F.ListProperty()
     data_gmb_six = F.ListProperty()
@@ -25,7 +28,9 @@ class TestApp(MDApp):
     username = F.StringProperty(None)
     password = F.StringProperty(None)
     popups = Popups()
+    line_width = 2
 
+    counter = 0
 
     with open("/Users/joseedwa/PycharmProjects/xyz/aws_creds.json") as aws_creds:
         aws_credentials = json.load(aws_creds)
@@ -37,7 +42,7 @@ class TestApp(MDApp):
                       aws_secret_access_key=aws_secret_access_key)
 
     def build(self):
-        self.theme_cls.primary_palette = "Blue"  # "Purple", "Red"
+        self.theme_cls.primary_palette = "Blue"  # "Purple", "Red" PICK ANOTHER THEME...MAYBE BLUEGRAY
         self.pull_json_data(0)
         Clock.schedule_interval(self.pull_json_data, 15.0)
 
@@ -50,19 +55,65 @@ class TestApp(MDApp):
             self.rvdata = fresh_data
             #print('json updated inside main loop')
 
-    def test(self, **args):
-        # print(self.root.ids.six.connection_status)
-        pass
+        self.connection_status_update(str(self.counter))
+        self.counter += 1
 
-    def scroll_down(self):
-        # self.root.ids.rview.scroll_x = 1.0
-        print(self.root.ids.lw_rundown.children)
+    def test(self, **args):
+        print(self.line_width)
+
+    def connection_status_update(self, message):
+        self.root.ids.lw_rundown.ids.lw.ids.conn_status.text = message
+
+    def scroll_end(self):
+        self.root.ids.lw_rundown.ids.lw.ids.rview.effect_y.reset(0)
+
+    def scroll_home(self):
+        max = self.root.ids.lw_rundown.ids.lw.ids.rview.effect_y.max
+        self.root.ids.lw_rundown.ids.lw.ids.rview.effect_y.reset(max)
+
+    def scroll_page_up(self):
+        max = self.root.ids.lw_rundown.ids.lw.ids.rview.effect_y.max
+
+        increment = max / 10
+
+        pos = self.root.ids.lw_rundown.ids.lw.ids.rview.effect_y.value
+
+        if (pos + increment) > max:
+            pos += increment
+        else:
+            pos = max
+
+        self.root.ids.lw_rundown.ids.lw.ids.rview.effect_y.reset(pos)
+
+    def scroll_page_down(self):
+        max = self.root.ids.lw_rundown.ids.lw.ids.rview.effect_y.max
+
+        increment = max / 10
+
+        pos = self.root.ids.lw_rundown.ids.lw.ids.rview.effect_y.value
+
+        if (pos - increment) < 0:
+            pos -= increment
+        else:
+            pos = 0
+
+        self.root.ids.lw_rundown.ids.lw.ids.rview.effect_y.reset(pos)
 
     def change_tool(self, tool):
         DrawingRepository.change_tool(tool)
 
+    def color_btn_color(self, color):
+        self.root.ids.lw_rundown.ids.lw.ids.color_button.md_bg_color = color
 
-    
+    def color_btn_text(self, color):
+        self.root.ids.lw_rundown.ids.lw.ids.color_button.text_color = color
+
+    def clear_all_drawings(self):
+        DrawingRepository.clear_all()
+        return self.rvdata.reverse(), self.rvdata.reverse()
+
+
+
 
 class LoginScreen(F.MDScreen):
     username = 'joe'
@@ -73,43 +124,6 @@ class LoginScreen(F.MDScreen):
             self.parent.current = 'menu'
         else:
             self.parent.current = 'menu'
-
-
-
-class MenuScreen(F.MDScreen):
-    pass
-
-
-class LWRundown(F.MDScreen):
-    pass
-
-
-class LKRundown(F.MDScreen):
-    pass
-
-
-class TMRundown(F.MDScreen):
-    pass
-
-
-class SixRundown(F.MDScreen):
-    pass
-
-
-class SixThirtyRundown(F.MDScreen):
-    pass
-
-
-class SevenRundown(F.MDScreen):
-    pass
-
-
-class EightRundown(F.MDScreen):
-    pass
-
-
-class NineRundown(F.MDScreen):
-    pass
 
 
 if __name__ == '__main__':

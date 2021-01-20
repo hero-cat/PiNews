@@ -5,10 +5,30 @@ from kivy.config import Config
 from pprint import pprint
 
 
+class Row(RecycleDataViewBehavior, BoxLayout):
+    index = F.NumericProperty()
+    title = F.StringProperty()
+    camera = F.StringProperty()
+    story_id = F.StringProperty()
+    backtime = F.StringProperty()
+
+    def refresh_view_attrs(self, view, index, data):
+        self.index = index
+
+        super().refresh_view_attrs(view, index, data)
+
+    def on_parent(self, instance, parent):
+        if parent:
+            self.ids.title_lbl.text = self.title
+            self.ids.camera_lbl.text = self.camera
+            self.ids.drawingwidget.story_id = self.story_id
+            self.ids.backtime_lbl.text = self.backtime
+
+
 class DrawingRepository:
     drawings = {}
     line_color = (0, 0, 0)
-    bg_color = (0, 0, 0)
+    bg_color = (0.982, 0.982, 0.982)
     line_width = 2
     tool = 'pencil'
 
@@ -24,7 +44,7 @@ class DrawingRepository:
                     drngs[story_id] = {'tool': tool,
                                        'bg_color': bg_color,
                                        'pencil_drawings': [{'width': 2,
-                                                            'line_color': (0.983, 0.983, 0.983),
+                                                            'line_color': (0.982, 0.982, 0.982),
                                                             'points': []
                                                             }]}  # can this list be empty?
                 else:
@@ -36,12 +56,12 @@ class DrawingRepository:
                     drngs[story_id] = {'tool': tool,
                                        'bg_color': bg_color,
                                        'pencil_drawings': [{'width': 2,
-                                                            'line_color': (0.983, 0.983, 0.983),
+                                                            'line_color': (0.982, 0.982, 0.982),
                                                             'points': []
                                                             }]}  # can this list be empty?
                 else:
                     drngs[story_id] = {'tool': tool,
-                                       'bg_color': (1, 1, 1),
+                                       'bg_color': (0.982, 0.982, 0.982),
                                        'pencil_drawings': [{'width': width,
                                                             'line_color': line_color,
                                                             'points': points}]}
@@ -65,7 +85,12 @@ class DrawingRepository:
 
     @staticmethod
     def change_width(width):
-        DrawingRepository.line_width = width
+        DrawingRepository.line_width = int(width)
+        print(DrawingRepository.line_width)
+
+    @staticmethod
+    def get_width():
+        return DrawingRepository.line_width
 
     @staticmethod
     def change_tool(tool):
@@ -73,25 +98,13 @@ class DrawingRepository:
         if tool == 'fill':
             DrawingRepository.change_bg_color(DrawingRepository.line_color)
 
+    @staticmethod
+    def clear_all():
+        # todo: HOW TO REFRESH VIEW TO CLEAR SCREEN OF DRAWINGS?
 
-class Row(RecycleDataViewBehavior, BoxLayout):
-    index = F.NumericProperty()
-    title = F.StringProperty()
-    camera = F.StringProperty()
-    story_id = F.StringProperty()
-    backtime = F.StringProperty()
+        DrawingRepository.drawings = {}
 
-    def refresh_view_attrs(self, view, index, data):
-        self.index = index
 
-        super().refresh_view_attrs(view, index, data)
-
-    def on_parent(self, instance, parent):
-        if parent:
-            self.ids.title_lbl.text = self.title
-            self.ids.camera_lbl.text = self.camera
-            self.ids.drawingwidget.story_id = self.story_id
-            self.ids.backtime_lbl.text = self.backtime
 
 
 class DrawingWidget(F.RelativeLayout):
@@ -119,12 +132,11 @@ class DrawingWidget(F.RelativeLayout):
         else:
             # Eraser
             with self.canvas:
-                DrawingRepository.change_bg_color((0.983, 0.983, 0.983))
-                F.Color(0.983, 0.983, 0.983, 1)
+                DrawingRepository.change_bg_color((0.982, 0.982, 0.982))
+                F.Color(0.982, 0.982, 0.982, 1)
                 F.Rectangle(size=self.size)
 
     def on_story_id(self, _, story_id):
-        # todo: REMEMBER RECTANGLES
         drawings = DrawingRepository.get_drawing(story_id)
 
         if drawings is not None:
@@ -138,13 +150,6 @@ class DrawingWidget(F.RelativeLayout):
                     rgb = drawinz['line_color']
                     F.Color(rgb[0], rgb[1], rgb[2])
                     F.Line(width=drawinz['width'], points=drawinz['points'])
-
-            # else:
-            #     print(drawings['tool'])
-            #     with self.canvas:
-            #         rgb = drawings['color']
-            #         F.Color(rgb[0], rgb[1], rgb[2])
-            #         F.Rectangle(size=self.size)
         else:
             self.line_points = []
             self.canvas.clear()
