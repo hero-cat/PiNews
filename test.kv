@@ -1,4 +1,3 @@
-#:include rows/row.kv
 #:include popups/popups.kv
 
 ScreenManager:
@@ -167,6 +166,7 @@ ScreenManager:
             data: root.data
             viewclass: 'Row'
             RecycleBoxLayout:
+                id: rv
                 default_size: None, dp(50)
                 default_size_hint: 1, None
                 size_hint_y: None

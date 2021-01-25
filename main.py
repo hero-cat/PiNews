@@ -9,9 +9,8 @@ from kivymd.app import MDApp
 from kivy.factory import Factory as F
 from rows.row import Row, DrawingRepository #### DO NOT DELETE!!! ######
 from popups.popups import Popups
-from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
-from kivy.effects.dampedscroll import DampedScrollEffect
-from kivy.effects.scroll import ScrollEffect
+
+from pprint import pprint
 
 class TestApp(MDApp):
 
@@ -58,9 +57,6 @@ class TestApp(MDApp):
         self.connection_status_update(str(self.counter))
         self.counter += 1
 
-    def test(self, **args):
-        print(self.line_width)
-
     def connection_status_update(self, message):
         self.root.ids.lw_rundown.ids.lw.ids.conn_status.text = message
 
@@ -87,9 +83,7 @@ class TestApp(MDApp):
 
     def scroll_page_down(self):
         max = self.root.ids.lw_rundown.ids.lw.ids.rview.effect_y.max
-
         increment = max / 10
-
         pos = self.root.ids.lw_rundown.ids.lw.ids.rview.effect_y.value
 
         if (pos - increment) < 0:
@@ -110,18 +104,18 @@ class TestApp(MDApp):
 
     def clear_all_drawings(self):
         DrawingRepository.clear_all()
-        return self.rvdata.reverse(), self.rvdata.reverse()
-
-
+        for row in self.root.ids.lw_rundown.ids.lw.ids.rv.children:
+            row.ids.drawingwidget.canvas.clear()
 
 
 class LoginScreen(F.MDScreen):
     username = 'joe'
     password = 'aaa'
 
-    def login(self, loginText, passwordText):
-        if loginText == self.username and passwordText == self.password:
+    def login(self, login_text, password_text):
+        if login_text == self.username and password_text == self.password:
             self.parent.current = 'menu'
+
         else:
             self.parent.current = 'menu'
 
