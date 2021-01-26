@@ -1,10 +1,10 @@
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
 from kivy.uix.boxlayout import BoxLayout
 from kivy.factory import Factory as F
-from pprint import pprint
 
 
 class Row(RecycleDataViewBehavior, BoxLayout):
+    # Copy description from Slicker
     index = F.NumericProperty()
     title = F.StringProperty()
     camera = F.StringProperty()
@@ -42,10 +42,7 @@ class DrawingRepository:
                 if tool != 'pencil':
                     drngs[story_id] = {'tool': tool,
                                        'bg_color': bg_color,
-                                       'pencil_drawings': [{'width': 2,
-                                                            'line_color': (0.982, 0.982, 0.982),
-                                                            'points': []
-                                                            }]}  # can this list be empty?
+                                       'pencil_drawings': []}
                 else:
                     drngs[story_id]['pencil_drawings'].append({'width': width,
                                                                'line_color': line_color,
@@ -54,10 +51,7 @@ class DrawingRepository:
                 if tool != 'pencil':
                     drngs[story_id] = {'tool': tool,
                                        'bg_color': bg_color,
-                                       'pencil_drawings': [{'width': 2,
-                                                            'line_color': (0.982, 0.982, 0.982),
-                                                            'points': []
-                                                            }]}  # can this list be empty?
+                                       'pencil_drawings': []}
                 else:
                     drngs[story_id] = {'tool': tool,
                                        'bg_color': (0.982, 0.982, 0.982),

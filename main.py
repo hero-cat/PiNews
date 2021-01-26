@@ -3,14 +3,12 @@ Config.set('graphics', 'width', '700')
 Config.set('graphics', 'height', '1000')
 # todo: REM ABOVE BEFORE APK
 import json
-import boto3
 from kivy.clock import Clock
 from kivymd.app import MDApp
 from kivy.factory import Factory as F
 from rows.row import Row, DrawingRepository #### DO NOT DELETE!!! ######
 from popups.popups import Popups
 
-from pprint import pprint
 
 class TestApp(MDApp):
 
@@ -31,14 +29,14 @@ class TestApp(MDApp):
 
     counter = 0
 
-    with open("/Users/joseedwa/PycharmProjects/xyz/aws_creds.json") as aws_creds:
-        aws_credentials = json.load(aws_creds)
-        aws_access_key_id = aws_credentials[0]['aws_access_key_id']
-        aws_secret_access_key = aws_credentials[0]['aws_secret_access_key']
-
-    s3 = boto3.client('s3',
-                      aws_access_key_id=aws_access_key_id,
-                      aws_secret_access_key=aws_secret_access_key)
+    # with open("/Users/joseedwa/PycharmProjects/xyz/aws_creds.json") as aws_creds:
+    #     aws_credentials = json.load(aws_creds)
+    #     aws_access_key_id = aws_credentials[0]['aws_access_key_id']
+    #     aws_secret_access_key = aws_credentials[0]['aws_secret_access_key']
+    #
+    # s3 = boto3.client('s3',
+    #                   aws_access_key_id=aws_access_key_id,
+    #                   aws_secret_access_key=aws_secret_access_key)
 
     def build(self):
         self.theme_cls.primary_palette = "Blue"  # "Purple", "Red" PICK ANOTHER THEME...MAYBE BLUEGRAY
