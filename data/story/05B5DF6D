@@ -1,0 +1,64 @@
+<nsml version="-//AVID//DTD NSML 1.0//EN">
+<head>
+<meta words=47 rate=180 float>
+<rgroup number=4></rgroup>
+<wgroup number=4></wgroup>
+<formname>LW-STORY-GEN</formname>
+<storyid>05b5df6d:00ed675c:5ff3244f</storyid>
+</head>
+<story>
+<fields>
+<f id=page-number>P.01</f>
+<f id=done></f>
+<f id=rewrite></f>
+<f id=title>** TM PROMO </f>
+<f id=camera>CAM1</f>
+<f id=video-id></f>
+<f id=pres1></f>
+<f id=pres2></f>
+<f id=format>M/CU JANE</f>
+<f id=audio-time>15</f>
+<f id=runs-time>0</f>
+<f id=total-time uec>20</f>
+<f id=back-time></f>
+<f id=event-status></f>
+<f id=item-channel>***</f>
+<f id=grfx></f>
+<f id=edit></f>
+<f id=create-date>1609770063</f>
+<f id=create-by>richjack</f>
+<f id=modify-date>1609770063</f>
+<f id=modify-by>laurridg</f>
+<f id=air-date></f>
+<f id=copyright></f>
+<f id=timecode></f>
+<f id=important></f>
+<f id=channel></f>
+<f id=sound></f>
+<f id=grams>BED</f>
+<f id=var-3></f>
+</fields>
+<body>
+<p><a idref=0><pi>JANE</pi></p>
+<p>Hi there and a Happy New Year from us.</p>
+<p></p>
+<p>Coming up - after a very eventful Christmas ... </p>
+<p></p>
+<p><pi>LINDA - YOU CAN SAY THAT AGAIN  </pi></p>
+<p></p>
+<p><cc>STILL: STACEY AND JOE ENGAGEMENT</cc></p>
+<p>From Stacey's festive engagement to Loose departures - we'll be giving you the Loose Lowdown ... </p>
+<p></p>
+<p>As well as that - lots of fun and fiery debates ... </p>
+<p></p>
+<p><cc>BEDDARD BOXES</cc></p>
+<p>with me, Linda, Brenda and Kelle at 12.30</p>
+<p></p>
+</body>
+<aeset>
+<ae id=0>
+<ap>]] S3.0 G 0 [[</ap>
+<ap><b>GRAMS: Menu Bed</b></ap>
+</ae>
+</aeset>
+</story>

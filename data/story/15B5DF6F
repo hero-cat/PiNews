@@ -1,0 +1,60 @@
+<nsml version="-//AVID//DTD NSML 1.0//EN">
+<head>
+<meta words=66 rate=180>
+<rgroup number=4></rgroup>
+<wgroup number=4></wgroup>
+<formname>LW-STORY-GEN</formname>
+<storyid>15b5df6f:010f8b98:5ff32450</storyid>
+</head>
+<story>
+<fields>
+<f id=page-number>8.01</f>
+<f id=done></f>
+<f id=rewrite></f>
+<f id=title>** AMBER GILL INTRO</f>
+<f id=camera>CAM1</f>
+<f id=video-id></f>
+<f id=pres1> </f>
+<f id=pres2></f>
+<f id=format>M/CU JANE</f>
+<f id=audio-time>22</f>
+<f id=runs-time>0</f>
+<f id=total-time>22</f>
+<f id=back-time></f>
+<f id=event-status></f>
+<f id=item-channel>***</f>
+<f id=grfx></f>
+<f id=edit></f>
+<f id=create-date>1609770064</f>
+<f id=create-by>richjack</f>
+<f id=modify-date>1609770064</f>
+<f id=modify-by>laurridg</f>
+<f id=air-date>1609764406</f>
+<f id=copyright></f>
+<f id=timecode></f>
+<f id=important></f>
+<f id=channel></f>
+<f id=sound></f>
+<f id=grams></f>
+<f id=var-3></f>
+</fields>
+<body>
+<p><a idref=0><pi>JANE</pi></p>
+<p>Now, </p>
+<p><cc>GFX5: AMBER FAT SHAMED </cc></p>
+<p>take a look at this stunning picture of 2019 Love Island winner Amber Gill. What words spring to mind? I bet you weren't thinking 'Fat' or 'Podgy'. Yet shockingly those are just two of the appalling comments Amber recieved after posting images to her millions of followers during last year's lockdown. Here to tell us why she'll never let those bullies bring her down, it's Amber Gill.</p>
+<p></p>
+<p><a idref=1><pi>AD LIB PANEL INTERVIEW WITH AMBER</pi></p>
+<p></p>
+</body>
+<aeset>
+<ae id=0>
+<ap>]] S3.0 G 0 [[</ap>
+<ap></ap>
+</ae>
+<ae id=1>
+<ap>]] S3.0 G 0 [[</ap>
+<ap></ap>
+</ae>
+</aeset>
+</story>
