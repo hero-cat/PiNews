@@ -31,8 +31,6 @@ class DrawingRepository:
     line_width = 2
     tool = 'pencil'
 
-
-
     @staticmethod
     def add_drawing(story_id, tool, line_color, bg_color, width, points):
         drngs = DrawingRepository.drawings
