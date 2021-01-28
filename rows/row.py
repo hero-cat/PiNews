@@ -6,7 +6,7 @@ from kivy.uix.relativelayout import RelativeLayout
 
 
 class Row(RecycleDataViewBehavior, BoxLayout):
-    # Copy description from Slicker
+    
     index = KP.NumericProperty()
     title = KP.StringProperty()
     camera = KP.StringProperty()
