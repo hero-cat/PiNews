@@ -1,64 +1,34 @@
 #:include popups/popups.kv
 
+
+# RundownTemplate being used as there will be round 10 screens eventually,
+# sharing the same template
+
 ScreenManager:
     id: screen_manager
-    LoginScreen:
-        id: login
-        name: 'login'
-        manager: 'screen_manager'
-    MenuScreen:
-        id: menu_screen
-        name: 'menu'
-        manager: 'screen_manager'
     LWRundown
         id: lw_rundown
         name: 'lw'
         manager: 'screen_manager'
-    LKRundown:
-        id: lk_rundown
-        name: 'lk'
-        manager: 'screen_manager'
-    TMRundown:
-        id: tm_rundown
-        name: 'tm'
-        manager: 'screen_manager'
-    SixRundown:
-        id: six
-        name: '0600'
-        manager: 'screen_manager'
-    SixThirtyRundown:
-        id: six_thirty
-        name: '0630'
-        manager: 'screen_manager'
-    SevenRundown:
-        id: seven
-        name: '0700'
-        manager: 'screen_manager'
-    EightRundown:
-        id: eight
-        name: '0800'
-        manager: 'screen_manager'
-    NineRundown:
-        id: nine
-        name: '0900'
-        manager: 'screen_manager'
 
 
-
+<LWRundown@MDScreen>
+    RundownTemplate
+        id: lw
+        rundown: 'LW'
+        data: app.rvdata
 
 
 <RundownTemplate@MDScreen>
-    rundown: 'default'
-    data: app.default_data
     BoxLayout:
         orientation: 'vertical'
         MDToolbar:
             size_hint_y: None
             height: 90
-            title: root.rundown
+            title: 'Test'
+
             MDIconButton:
                 icon: "arrow-left-bold-outline"
-                on_press: app.root.current = 'menu'
 
             MDIconButton:
                 icon: "power-on"
@@ -67,17 +37,15 @@ ScreenManager:
 
             MDIconButton:
                 icon: "arrow-up"
-                on_release: app.scroll_page_up()
+
             MDIconButton:
                 icon: "arrow-down"
-                on_release: app.scroll_page_down()
+
             MDIconButton:
                 icon: "format-vertical-align-top"
-                on_release: app.scroll_home()
 
             MDIconButton:
                 icon: "format-vertical-align-bottom"
-                on_release: app.scroll_end()
 
             MDIconButton:
                 icon: "power-on"
@@ -161,13 +129,15 @@ ScreenManager:
                 md_bg_color: 0.098, 0.407, 0.670, 1
                 on_release: root.status_update()
 
+        # ## ### RECYCLEVIEW ### ## #
+        # ## ### RECYCLEVIEW ### ## #
+        # ## ### RECYCLEVIEW ### ## #
         RecycleView
-            id: rview
-            data: root.data
+            data: app.rvdata
             viewclass: 'Row'
             RecycleBoxLayout:
                 id: rv
-                default_size: None, dp(50)
+                default_size: None, dp(80)
                 default_size_hint: 1, None
                 size_hint_y: None
                 height: self.minimum_height
@@ -197,193 +167,4 @@ ScreenManager:
                 font_size: 20
 
 
-<ThinGap@Widget>
-    size_hint_y: None
-    height: 3
 
-<VertBox@MDBoxLayout>
-    orientation: 'vertical'
-
-
-<GMBToolbar@BoxLayout>
-    size_hint_y: None
-    height: 75
-    Widget
-    MDRaisedButton:
-        text: '    0600    '
-        on_press: app.root.current = '0600'
-    Widget
-    MDRaisedButton:
-        text: '    0630    '
-        on_press: app.root.current = '0630'
-    Widget
-    MDRaisedButton:
-        text: '    0700    '
-        on_press: app.root.current = '0700'
-    Widget
-    MDRaisedButton:
-        text: '    0800    '
-        on_press: app.root.current = '0800'
-    Widget
-    MDRaisedButton:
-        text: '    0900    '
-        on_press: app.root.current = '0900'
-    Widget
-
-
-
-
-<LoginScreen>
-    MDBoxLayout:
-        Widget:
-            size_hint_x: .1
-
-        VertBox:
-            size_hint_x: .8
-            MDLabel:
-                text: 'Welcome to PiNews - Please login'
-                halign: 'center'
-            MDTextField:
-                id: login
-                font_size: 28
-                hint_text: "USERNAME"
-                mode: "rectangle"
-            MDTextField:
-                id: password
-                font_size: 28
-                hint_text: "PASSWORD"
-                mode: "rectangle"
-                password: True
-
-            MDBoxLayout
-                Widget
-                MDRaisedButton:
-                    text: 'CONNECT'
-                    on_press: root.login(login.text, password.text)
-                Widget
-            Widget
-                size_hint_y: 4
-
-        Widget:
-            size_hint_x: .1
-
-
-<MenuScreen@MDScreen>:
-    BoxLayout:
-        orientation: 'vertical'
-        MDToolbar:
-            right_action_items: [["close", lambda x: app.stop()]]
-            title: 'PiNews'
-            size_hint_y: .1
-        Widget:
-            size_hint_y: .1
-
-        MDLabel:
-            text: 'CHOOSE A PRODUCTION'
-            font_size: 40
-            halign: 'center'
-            size_hint_y: .1
-
-        BoxLayout:
-            size_hint_y: .1
-            Widget:
-            MDRaisedButton:
-                text: '  GMB   '
-                on_press: app.root.current = '0600'
-            Widget:
-            MDRaisedButton:
-                text: '    LK    '
-                on_press: app.root.current = 'lk'
-            Widget:
-            MDRaisedButton:
-                text: '    TM    '
-                on_press: app.root.current = 'tm'
-            Widget
-            MDRaisedButton:
-                text: '    LW    '
-                on_press: app.root.current = 'lw'
-            Widget:
-
-        BoxLayout:
-            size_hint_y: .1
-            Widget:
-            MDRaisedButton:
-                text: 'CSTM_1'
-            Widget:
-            MDRaisedButton:
-                text: 'CSTM_2'
-            Widget:
-            MDRaisedButton:
-                text: 'CSTM_3'
-            Widget
-            MDRaisedButton:
-                text: 'CSTM_4'
-            Widget:
-
-        Widget:
-            size_hint_y: .7
-
-
-
-<SixRundown@MDScreen>
-    VertBox
-        GMBToolbar
-        ThinGap
-        RundownTemplate
-            id: six
-            rundown: '0600'
-            data: app.data_gmb_six
-
-<SixThirtyRundown@MDScreen>
-    VertBox
-        GMBToolbar
-        ThinGap
-        RundownTemplate
-            id: six_thirty
-            rundown: '0630'
-            data: app.data_gmb_six_thirty
-
-<SevenRundown@MDScreen>
-    VertBox
-        GMBToolbar
-        ThinGap
-        RundownTemplate
-            id: seven
-            rundown: '0700'
-            data: app.data_gmb_seven
-
-<EightRundown@MDScreen>
-    VertBox
-        GMBToolbar
-        ThinGap
-        RundownTemplate
-            id: eight
-            rundown: '0800'
-            data: app.data_gmb_eight
-
-<NineRundown@MDScreen>
-    VertBox
-        GMBToolbar
-        ThinGap
-        RundownTemplate
-            id: nine
-            rundown: '0900'
-            data: app.data_gmb_nine
-
-<LKRundown@MDScreen>
-    RundownTemplate
-        id: lk
-        rundown: 'LK'
-        data: app.data_lk
-
-<TMRundown@MDScreen>
-    RundownTemplate
-        id: tm
-        rundown: 'TM'
-        data: app.data_tm
-
-<LWRundown@MDScreen>
-    RundownTemplate
-        id: lw
-        rundown: 'LW'
-        data: app.rvdata

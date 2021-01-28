@@ -1,6 +1,8 @@
 from kivymd.uix.dialog import MDDialog
 from rows.row import DrawingRepository
 
+# Popups below are called to change the drawing color and pencil width
+
 
 class ColorChoice(MDDialog):
     @staticmethod
