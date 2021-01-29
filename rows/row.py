@@ -7,7 +7,7 @@ from kivy.uix.widget import Widget
 
 
 class Row(RecycleDataViewBehavior, BoxLayout):
-    # Copy description from Slicker
+    
     index = KP.NumericProperty()
     title = KP.StringProperty()
     camera = KP.StringProperty()
