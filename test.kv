@@ -12,6 +12,16 @@ ScreenManager:
         manager: 'screen_manager'
 
 
+    DrawingScreen:
+        id: drawing_screen
+        name: 'drawing'
+        manager: 'screen_manager'
+
+
+<DrawingScreen@MDScreen>
+    MyPaintWidget
+
+
 <LWRundown@MDScreen>
     RundownTemplate
         id: lw
@@ -29,6 +39,7 @@ ScreenManager:
 
             MDIconButton:
                 icon: "arrow-left-bold-outline"
+                on_press: app.root.current = 'drawing'
 
             MDIconButton:
                 icon: "power-on"

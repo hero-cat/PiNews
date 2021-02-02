@@ -8,6 +8,7 @@ from kivy.clock import Clock
 from kivymd.app import MDApp
 from rows.row import Row, DrawingRepository
 from popups.popups import Popups
+from kivy.factory import Factory as F
 
 
 class TestApp(MDApp):
@@ -69,6 +70,18 @@ class TestApp(MDApp):
         DrawingRepository.clear_all()
         for row in self.root.ids.lw_rundown.ids.lw.ids.rv.children:
             row.ids.drawingwidget.canvas.clear()
+
+
+
+class MyPaintWidget(F.Widget):
+
+    def on_touch_down(self, touch):
+        with self.canvas:
+            F.Color(0, 0, 0)
+            touch.ud['line'] = F.Line(width=2,points=(touch.x, touch.y))
+
+    def on_touch_move(self, touch):
+        touch.ud['line'].points += [touch.x, touch.y]
 
 
 if __name__ == '__main__':
