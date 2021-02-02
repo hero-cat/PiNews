@@ -9,6 +9,7 @@ from rows.row import Row, DrawingRepository
 from popups.popups import Popups
 # import boto3
 import cProfile
+from kivy.factory import Factory as F
 
 class TestApp(MDApp):
     # def on_start(self):
@@ -27,6 +28,26 @@ class TestApp(MDApp):
     popups = Popups()  # Popups used by the toolbar
     counter = 0
     line_width = 2
+
+    default_data = F.ListProperty()
+
+    data_gmb_six = F.ListProperty()
+    data_gmb_six_thirty = F.ListProperty()
+    data_gmb_seven = F.ListProperty()
+    data_gmb_eight = F.ListProperty()
+    data_gmb_nine = F.ListProperty()
+    data_lk = F.ListProperty()
+    data_tm = F.ListProperty()
+    data_lw = F.ListProperty()
+    username = F.StringProperty(None)
+    password = F.StringProperty(None)
+
+
+
+
+
+
+
 
 
     # AWS connection
@@ -76,6 +97,32 @@ class TestApp(MDApp):
         DrawingRepository.clear_all()
         for row in self.root.ids.lw_rundown.ids.lw.ids.rv.children:
             row.ids.drawingwidget.canvas.clear()
+
+
+
+class LoginScreen(F.MDScreen):
+    username = 'joe'
+    password = 'aaa'
+
+    def login(self, login_text, password_text):
+        if login_text == self.username and password_text == self.password:
+            self.parent.current = 'menu'
+
+        else:
+            self.parent.current = 'menu'
+
+
+
+class MyPaintWidget(F.Widget):
+
+    def on_touch_down(self, touch):
+
+        with self.canvas:
+            F.Color(0, 0, 0)
+            touch.ud['line'] = F.Line(width=2, points=(touch.x, touch.y))
+
+    def on_touch_move(self, touch):
+        touch.ud['line'].points += [touch.x, touch.y]
 
 
 if __name__ == '__main__':
