@@ -2,7 +2,6 @@ from kivy.config import Config
 Config.set('graphics', 'width', '700')
 Config.set('graphics', 'height', '1000')
 import json
-import boto3
 from kivy import properties as KP
 from kivy.clock import Clock
 from kivymd.app import MDApp
