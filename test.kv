@@ -135,8 +135,12 @@ ScreenManager:
         RecycleView
             data: app.rvdata
             viewclass: 'Row'
+            scroll_type: ['bars']
+            bar_width: 40
+
             RecycleBoxLayout:
                 id: rv
+
                 default_size: None, dp(80)
                 default_size_hint: 1, None
                 size_hint_y: None

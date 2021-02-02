@@ -15,13 +15,19 @@
         size_hint_x: .1
         background_color: 0.141, 0.580, 0.956, 1
 
+
+    Button:
+        on_press: app.popups.show_confirmation_dialog()
+        background_color: 1, 1, 1, 1
+        size_hint_x: .4
+
 #    ImprovedPW:
 #        id: drawingwidget
 #        size_hint_x: .4
 
-    MyPaintWidget:
-        id: drawingwidget
-        size_hint_x: .4
+#    MyPaintWidget:
+#        id: drawingwidget
+#        size_hint_x: .4
 #
 #    DrawingWidget:
 #        id: drawingwidget

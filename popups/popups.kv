@@ -1,5 +1,16 @@
 #:include rows/row.kv
 
+
+<Content>
+    orientation: "vertical"
+    spacing: "12dp"
+    size_hint_y: None
+    height: "400dp"
+
+    MyPaintWidget
+
+
+
 <ColorChoice>
     pos_hint: {'top': .98}
     text: 'test'
@@ -84,3 +95,6 @@
             value: app.line_width
             on_touch_up: root.change_width(self.value), root.dismiss()
             on_touch_up: app.line_width = int(self.value)
+
+
+

@@ -8,8 +8,16 @@ from kivymd.app import MDApp
 from rows.row import Row, DrawingRepository
 from popups.popups import Popups
 # import boto3
+import cProfile
 
 class TestApp(MDApp):
+    # def on_start(self):
+    #     self.profile = cProfile.Profile()
+    #     self.profile.enable()
+    #
+    # def on_stop(self):
+    #     self.profile.disable()
+    #     self.profile.dump_stats('myapp.profile')
     """This program works by pulling a dynamic JSON file from AWS at regular intervals.
     That data is the displayed in Kivy with Recycyleview, alongside a custom
     'drawing widget' on each row
