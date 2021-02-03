@@ -25,7 +25,7 @@ ScreenManager:
         MDIconButton:
             icon: "arrow-left-bold-outline"
 
-            on_press: app.print_status()
+            on_press: app.go_back()
             on_release: app.root.current = 'lw'
 
         Widget
@@ -33,6 +33,7 @@ ScreenManager:
         BoxLayout
             Widget
             MyPaintWidget
+                id: widget
                 background_color: 0.9, 0.9, 0.9, 1
                 size_hint_x: None
                 size_hint_y: None

@@ -5,7 +5,7 @@ import json
 from kivy import properties as KP
 from kivy.clock import Clock
 from kivymd.app import MDApp
-from rows.row import Row, DrawingRepository
+from rows.row import Row
 from popups.popups import Popups
 from kivy.factory import Factory as F
 from pprint import pprint as p
@@ -88,6 +88,17 @@ class TestApp(MDApp):
         print(var)
 
 
+    def go_back(self):
+        # with self.current_widget.canvas:
+        drawings = DrawingRepository.get_drawing('story1d')
+
+        for drawinz in drawings['pencil_drawings']:
+            with self.current_widget.canvas:
+                rgb = drawinz['line_color']
+                F.Color(rgb[0], rgb[1], rgb[2])
+                F.Line(width=drawinz['width'], points=drawinz['points'])
+
+
 class MyPaintWidget(F.RelativeLayout):
 
     # def on_touch_down(self, touch):
@@ -99,6 +110,7 @@ class MyPaintWidget(F.RelativeLayout):
     # def on_touch_move(self, touch):
     #     touch.ud['line'].points += [touch.x, touch.y]
 
+    story_id = KP.StringProperty('story1d')
     line_points = KP.ListProperty()
 
     def __init__(self, **kwargs):
@@ -108,10 +120,12 @@ class MyPaintWidget(F.RelativeLayout):
 
         with self.canvas:
             F.Color(.9, .9, .9, 1)
-            F.Rectangle(size=(self.size))
+            F.Rectangle(size=(622.22, 160))
+
 
 
     def draw_on_canvas(self, _, points):
+
         with self.canvas:
             F.Color(0,0,0)
             F.Line(width=2, points=points)
@@ -144,8 +158,92 @@ class MyPaintWidget(F.RelativeLayout):
             if len(self.line_points) <= 2:
                 self.line_points = []
 
+            if self.story_id is not None:
+                dp.add_drawing(self.story_id, dp.tool, dp.line_color, dp.bg_color, dp.line_width, self.line_points[:])
+                self.line_points = []
+
+
             return True
         return super().on_touch_up(touch)
+
+
+
+
+class DrawingRepository:
+    """This class houses all the DrawingWidget data"""
+
+    drawings = {}
+    line_color = (0, 0, 0)
+    bg_color = (0.982, 0.982, 0.982)
+    line_width = 2
+    tool = 'pencil'
+
+    @staticmethod
+    def add_drawing(story_id, tool, line_color, bg_color, width, points):
+        drngs = DrawingRepository.drawings
+
+        if story_id is not None:
+
+            if story_id in drngs:
+                # if a drawing already exists against the story_id
+
+                if tool != 'pencil':
+                    drngs[story_id] = {'tool': tool,
+                                       'bg_color': bg_color,
+                                       'pencil_drawings': []}
+                else:
+                    drngs[story_id]['pencil_drawings'].append({'width': width,
+                                                               'line_color': line_color,
+                                                               'points': points})
+            else:
+                # If no drawing yet exists in the repo
+                if tool != 'pencil':
+                    drngs[story_id] = {'tool': tool,
+                                       'bg_color': bg_color,
+                                       'pencil_drawings': []}
+                else:
+                    drngs[story_id] = {'tool': tool,
+                                       'bg_color': (0.982, 0.982, 0.982),
+                                       'pencil_drawings': [{'width': width,
+                                                            'line_color': line_color,
+                                                            'points': points}]}
+        print(drngs)
+
+    @staticmethod
+    def get_drawing(story_id, default=None):
+        return DrawingRepository.drawings.get(story_id, default)
+
+    @staticmethod
+    def has_drawing(story_id):
+        return story_id in DrawingRepository.drawings
+
+    @staticmethod
+    def change_line_color(color):
+        DrawingRepository.line_color = color
+
+    @staticmethod
+    def change_bg_color(color):
+        DrawingRepository.bg_color = color
+
+    @staticmethod
+    def change_width(width):
+        DrawingRepository.line_width = int(width)
+
+    @staticmethod
+    def get_width():
+        return DrawingRepository.line_width
+
+    @staticmethod
+    def change_tool(tool):
+        DrawingRepository.tool = tool
+        if tool == 'fill':
+            DrawingRepository.change_bg_color(DrawingRepository.line_color)
+
+    @staticmethod
+    def clear_all():
+        DrawingRepository.drawings = {}
+
+
 
 if __name__ == '__main__':
     TestApp().run()
