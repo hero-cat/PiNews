@@ -22,9 +22,10 @@ class TestApp(MDApp):
     counter = 0
     line_width = KP.NumericProperty(2)
 
-    current_widget = KP.ObjectProperty
+    current_widget = KP.ObjectProperty()
+    current_tool = KP.StringProperty('pencil')
 
-    story_id = KP.StringProperty
+    story_id = KP.StringProperty()
 
     # AWS connection
     # with open("/Users/joseedwa/PycharmProjects/xyz/aws_creds.json") as aws_creds:
@@ -59,6 +60,7 @@ class TestApp(MDApp):
     def change_tool(self, tool):
         """Choose between pencil, fill, eraser"""
         DrawingRepository.change_tool(tool)
+        self.current_tool = tool
 
     def color_btn_color(self, color):
         """Change colour button background colour"""
@@ -72,7 +74,7 @@ class TestApp(MDApp):
         """.clear() all visible DrawingWidgets from RV and empty stored drawings"""
         DrawingRepository.clear_all()
         for row in self.root.ids.lw_rundown.ids.lw.ids.rv.children:
-            row.ids.drawingwidget.canvas.clear()
+            row.ids.wig.canvas.clear()
 
 
 
@@ -82,11 +84,18 @@ class TestApp(MDApp):
 
         drawings = DrawingRepository.get_drawing(self.story_id)
 
-        for drawinz in drawings['pencil_drawings']:
-            with self.current_widget.canvas:
-                rgb = drawinz['line_color']
-                F.Color(rgb[0], rgb[1], rgb[2])
-                F.Line(width=drawinz['width'], points=drawinz['points'])
+        if drawings is not None:
+
+            for drawinz in drawings['pencil_drawings']:
+
+                print(drawinz['points'])
+                newlist = [(x * .66) for x in drawinz['points']]
+                print(newlist)
+                with self.current_widget.canvas:
+                    rgb = drawinz['line_color']
+                    F.Color(rgb[0], rgb[1], rgb[2])
+
+                    F.Line(width=2, points=newlist)
 
 
     def send_story_id(self, story_id):
@@ -112,7 +121,27 @@ class TestApp(MDApp):
             self.root.ids.drawing_screen.ids.mypaintpage.canvas.clear()
             with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
                 F.Color(.95, .95, .95, 1)
-                F.Rectangle(size=(622.22, 160))
+                F.Rectangle(size=(933.33, 240))
+
+
+
+    def choice(self, story_id):
+
+        if self.current_tool == 'pencil':
+            self.re_enter_page(story_id)
+            self.root.current = 'drawing'
+
+        elif self.current_tool == 'fill':
+            self.current_widget.canvas.clear()
+            with self.current_widget.canvas:
+                lc = DrawingRepository.line_color
+                F.Color(lc[0], lc[1], lc[2])
+                F.Rectangle(size=self.current_widget.size)
+
+        else:
+            # eraser
+            self.current_widget.canvas.clear()
+
 
 class MyPaintPage(F.RelativeLayout):
 
@@ -128,7 +157,7 @@ class MyPaintPage(F.RelativeLayout):
 
         with self.canvas:
             F.Color(.95, .95, .95, 1)
-            F.Rectangle(size=(622.22, 160))
+            F.Rectangle(size=(933.33, 240))
 
 
 

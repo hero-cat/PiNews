@@ -123,10 +123,15 @@ class ClickableBox(F.ButtonBehavior, F.RelativeLayout):
                 Rectangle(size=self.size)
 
             for drawinz in drawings['pencil_drawings']:
+
+                print(drawinz['points'])
+                newlist = [(x * .66) for x in drawinz['points']]
+                print(newlist)
                 with self.canvas:
                     rgb = drawinz['line_color']
-                    Color(rgb[0], rgb[1], rgb[2])
-                    Line(width=drawinz['width'], points=drawinz['points'])
+                    F.Color(rgb[0], rgb[1], rgb[2])
+
+                    F.Line(width=2, points=newlist)
 
         else:
             self.canvas.clear()

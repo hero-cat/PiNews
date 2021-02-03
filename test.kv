@@ -38,8 +38,8 @@ ScreenManager:
                 background_color: 0.9, 0.9, 0.9, 1
                 size_hint_x: None
                 size_hint_y: None
-                height: 160
-                width: 622.22
+                height: 240
+                width: 933.33
             Widget
 
         Widget
@@ -69,47 +69,47 @@ ScreenManager:
                 theme_text_color: "Custom"
                 text_color: 1, 1, 1, 1
 
-            MDIconButton:
-                icon: "arrow-up"
-
-            MDIconButton:
-                icon: "arrow-down"
-
-            MDIconButton:
-                icon: "format-vertical-align-top"
-
-            MDIconButton:
-                icon: "format-vertical-align-bottom"
-
-            MDIconButton:
-                icon: "power-on"
-                theme_text_color: "Custom"
-                text_color: 1, 1, 1, 1
-
-            BoxLayout:
-                orientation: 'vertical'
-                Widget:
-                    size_hint_y: .1
-                MDRaisedButton:
-                    id: color_button
-                    md_bg_color: 0, 0, 0, 1
-                    text: 'COLOUR'
-                    text_color: 1, 1, 1, 1
-                    font_size: 11
-                    size_hint_y: .5
-                    on_release: app.popups.select_color()
-                Widget:
-                    size_hint_y: .1
-                MDRaisedButton:
-                    md_bg_color: 0, 0, 0, 1
-                    text: 'THICKNESS'
-                    text_color: 1, 1, 1, 1
-                    font_size: 11
-                    size_hint_y: .5
-                    size_hint_x: 1
-                    on_release: app.popups.select_width()
-                Widget:
-                    size_hint_y: .1
+#            MDIconButton:
+#                icon: "arrow-up"
+#
+#            MDIconButton:
+#                icon: "arrow-down"
+#
+#            MDIconButton:
+#                icon: "format-vertical-align-top"
+#
+#            MDIconButton:
+#                icon: "format-vertical-align-bottom"
+#
+#            MDIconButton:
+#                icon: "power-on"
+#                theme_text_color: "Custom"
+#                text_color: 1, 1, 1, 1
+#
+#            BoxLayout:
+#                orientation: 'vertical'
+#                Widget:
+#                    size_hint_y: .1
+#                MDRaisedButton:
+#                    id: color_button
+#                    md_bg_color: 0, 0, 0, 1
+#                    text: 'COLOUR'
+#                    text_color: 1, 1, 1, 1
+#                    font_size: 11
+#                    size_hint_y: .5
+#                    on_release: app.popups.select_color()
+#                Widget:
+#                    size_hint_y: .1
+#                MDRaisedButton:
+#                    md_bg_color: 0, 0, 0, 1
+#                    text: 'THICKNESS'
+#                    text_color: 1, 1, 1, 1
+#                    font_size: 11
+#                    size_hint_y: .5
+#                    size_hint_x: 1
+#                    on_release: app.popups.select_width()
+#                Widget:
+#                    size_hint_y: .1
 
             MDIconButton
                 id: pencil_button
