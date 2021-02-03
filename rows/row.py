@@ -3,6 +3,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy import  properties as KP
 from kivy.graphics import Line, Color, Rectangle
 from kivy.uix.relativelayout import RelativeLayout
+from kivy.factory import Factory as F
 
 
 class Row(RecycleDataViewBehavior, BoxLayout):
@@ -24,7 +25,7 @@ class Row(RecycleDataViewBehavior, BoxLayout):
         if parent:
             self.ids.title_lbl.text = self.title
             self.ids.camera_lbl.text = self.camera
-            # self.ids.drawingwidget.story_id = self.story_id
+            self.ids.wig.story_id = self.story_id
             self.ids.backtime_lbl.text = self.backtime
 
 
@@ -102,35 +103,11 @@ class DrawingRepository:
         DrawingRepository.drawings = {}
 
 
-class DrawingWidget(RelativeLayout):
-    """This class needs to be as efficient as possible so the drawing is as smooth as can be"""
+
+
+
+class ClickableBox(F.ButtonBehavior, F.RelativeLayout):
     story_id = KP.StringProperty(None, allownone=True)
-    line_points = KP.ListProperty()
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        # Ensure that canvas instructions are in sync with properties
-        self.bind(line_points=self.draw_on_canvas)
-
-    def draw_on_canvas(self, _, points):
-        # IS this slowing it down?
-        if DrawingRepository.tool == 'pencil':
-            with self.canvas:
-                rgb = DrawingRepository.line_color
-                Color(rgb[0], rgb[1], rgb[2])
-                Line(width=DrawingRepository.line_width, points=points)
-
-        elif DrawingRepository.tool == 'fill':
-            with self.canvas:
-                rgb = DrawingRepository.bg_color
-                Color(rgb[0], rgb[1], rgb[2])
-                Rectangle(size=self.size)
-        else:
-            # Eraser
-            with self.canvas:
-                DrawingRepository.change_bg_color((0.982, 0.982, 0.982))
-                Color(0.982, 0.982, 0.982, 1)
-                Rectangle(size=self.size)
 
     def on_story_id(self, _, story_id):
         """Property event handler; this method is called automatically
@@ -150,45 +127,98 @@ class DrawingWidget(RelativeLayout):
                     rgb = drawinz['line_color']
                     Color(rgb[0], rgb[1], rgb[2])
                     Line(width=drawinz['width'], points=drawinz['points'])
+
         else:
-            self.line_points = []
             self.canvas.clear()
 
-    def on_touch_down(self, touch):
-        """If the touch occurs within widget boundaries, we do touch.grab
-        which ensures that our move/up handlers will always be called
-        or this touch event's lifetime
-        """
-        if self.collide_point(*touch.pos):
-            touch.grab(self)
-            return True
-        return super().on_touch_down(touch)
-
-    def on_touch_move(self, touch):
-        """Our logic only applies to grabbed touches. This test will fail
-        if the initial touch_down event was outside our boundaries, in
-        which case the super() handler is called (as usual).
-        """
-        if touch.grab_current is self:
-            if self.collide_point(*touch.pos):
-                self.line_points.extend(self.to_local(*touch.pos))
-            return True
-        return super().on_touch_move(touch)
-
-    def on_touch_up(self, touch):
-        dp = DrawingRepository
-        if touch.grab_current is self:
-            # Only add the final point if touch is released inside our boundaries.
-            if self.collide_point(*touch.pos):
-                self.line_points.extend(self.to_local(*touch.pos))
-
-            # Reject single-point drawings
-            if len(self.line_points) <= 2:
-                self.line_points = []
-
-            if self.story_id is not None:
-                dp.add_drawing(self.story_id, dp.tool, dp.line_color, dp.bg_color, dp.line_width, self.line_points[:])
-                self.line_points = []
-
-            return True
-        return super().on_touch_up(touch)
+#
+# class DrawingWidget(RelativeLayout):
+#     """This class needs to be as efficient as possible so the drawing is as smooth as can be"""
+#     story_id = KP.StringProperty(None, allownone=True)
+#     line_points = KP.ListProperty()
+#
+#     def __init__(self, **kwargs):
+#         super().__init__(**kwargs)
+#         # Ensure that canvas instructions are in sync with properties
+#         self.bind(line_points=self.draw_on_canvas)
+#
+#     def draw_on_canvas(self, _, points):
+#         # IS this slowing it down?
+#         if DrawingRepository.tool == 'pencil':
+#             with self.canvas:
+#                 rgb = DrawingRepository.line_color
+#                 Color(rgb[0], rgb[1], rgb[2])
+#                 Line(width=DrawingRepository.line_width, points=points)
+#
+#         elif DrawingRepository.tool == 'fill':
+#             with self.canvas:
+#                 rgb = DrawingRepository.bg_color
+#                 Color(rgb[0], rgb[1], rgb[2])
+#                 Rectangle(size=self.size)
+#         else:
+#             # Eraser
+#             with self.canvas:
+#                 DrawingRepository.change_bg_color((0.982, 0.982, 0.982))
+#                 Color(0.982, 0.982, 0.982, 1)
+#                 Rectangle(size=self.size)
+#
+#     def on_story_id(self, _, story_id):
+#         """Property event handler; this method is called automatically
+#         when the story_id property changes. This is how RecycleView redraws drawings
+#         against the correct row.
+#         """
+#         drawings = DrawingRepository.get_drawing(story_id)
+#
+#         if drawings is not None:
+#             with self.canvas:
+#                 rgb1 = drawings['bg_color']
+#                 Color(rgb1[0], rgb1[1], rgb1[2])
+#                 Rectangle(size=self.size)
+#
+#             for drawinz in drawings['pencil_drawings']:
+#                 with self.canvas:
+#                     rgb = drawinz['line_color']
+#                     Color(rgb[0], rgb[1], rgb[2])
+#                     Line(width=drawinz['width'], points=drawinz['points'])
+#         else:
+#             self.line_points = []
+#             self.canvas.clear()
+#
+#     def on_touch_down(self, touch):
+#         """If the touch occurs within widget boundaries, we do touch.grab
+#         which ensures that our move/up handlers will always be called
+#         or this touch event's lifetime
+#         """
+#         if self.collide_point(*touch.pos):
+#             touch.grab(self)
+#             return True
+#         return super().on_touch_down(touch)
+#
+#     def on_touch_move(self, touch):
+#         """Our logic only applies to grabbed touches. This test will fail
+#         if the initial touch_down event was outside our boundaries, in
+#         which case the super() handler is called (as usual).
+#         """
+#         if touch.grab_current is self:
+#             if self.collide_point(*touch.pos):
+#                 self.line_points.extend(self.to_local(*touch.pos))
+#             return True
+#         return super().on_touch_move(touch)
+#
+#     def on_touch_up(self, touch):
+#         dp = DrawingRepository
+#         if touch.grab_current is self:
+#             # Only add the final point if touch is released inside our boundaries.
+#             if self.collide_point(*touch.pos):
+#                 self.line_points.extend(self.to_local(*touch.pos))
+#
+#             # Reject single-point drawings
+#             if len(self.line_points) <= 2:
+#                 self.line_points = []
+#
+#             if self.story_id is not None:
+#                 dp.add_drawing(self.story_id, dp.tool, dp.line_color, dp.bg_color, dp.line_width, self.line_points[:])
+#                 self.line_points = []
+#
+#             return True
+#         return super().on_touch_up(touch)

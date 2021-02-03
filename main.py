@@ -5,7 +5,7 @@ import json
 from kivy import properties as KP
 from kivy.clock import Clock
 from kivymd.app import MDApp
-from rows.row import Row
+from rows.row import Row, DrawingRepository
 from popups.popups import Popups
 from kivy.factory import Factory as F
 from pprint import pprint as p
@@ -20,9 +20,11 @@ class TestApp(MDApp):
     rvdata = KP.ListProperty()  # JSON data converted to list of dicts
     popups = Popups()  # Popups used by the toolbar
     counter = 0
-    line_width = 2
+    line_width = KP.NumericProperty(2)
 
-    current_widget = 'testerrrr'
+    current_widget = KP.ObjectProperty
+
+    story_id = KP.StringProperty
 
     # AWS connection
     # with open("/Users/joseedwa/PycharmProjects/xyz/aws_creds.json") as aws_creds:
@@ -72,25 +74,13 @@ class TestApp(MDApp):
         for row in self.root.ids.lw_rundown.ids.lw.ids.rv.children:
             row.ids.drawingwidget.canvas.clear()
 
-    def print_status(self):
-        print(self.current_widget)
 
-    def change_widget(self):
-
-        with self.current_widget.canvas:
-            print(self.current_widget.size)
-
-            # F.Color(0,0,0)
-            # F.Rectangle(size=(50,50))
-
-
-    def test(self, var):
-        print(var)
 
 
     def go_back(self):
-        # with self.current_widget.canvas:
-        drawings = DrawingRepository.get_drawing('story1d')
+        # Back to RV
+
+        drawings = DrawingRepository.get_drawing(self.story_id)
 
         for drawinz in drawings['pencil_drawings']:
             with self.current_widget.canvas:
@@ -99,18 +89,36 @@ class TestApp(MDApp):
                 F.Line(width=drawinz['width'], points=drawinz['points'])
 
 
-class MyPaintWidget(F.RelativeLayout):
+    def send_story_id(self, story_id):
+        # Send PW page a story_id. Without this PW can't update the Drawing Repo
+        self.root.ids.drawing_screen.ids.mypaintpage.story_id = story_id
 
-    # def on_touch_down(self, touch):
-    #
-    #     with self.canvas:
-    #         F.Color(0, 0, 0)
-    #         touch.ud['line'] = F.Line(width=2,points=(touch.x, touch.y))
-    #
-    # def on_touch_move(self, touch):
-    #     touch.ud['line'].points += [touch.x, touch.y]
 
-    story_id = KP.StringProperty('story1d')
+
+
+    def re_enter_page(self, story_id):
+        drawings = DrawingRepository.get_drawing(story_id)
+
+        if drawings is not None:
+            self.root.ids.drawing_screen.ids.mypaintpage.canvas.clear()
+
+            for drawinz in drawings['pencil_drawings']:
+                with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
+                    rgb = drawinz['line_color']
+                    F.Color(rgb[0], rgb[1], rgb[2])
+                    F.Line(width=drawinz['width'], points=drawinz['points'])
+
+        else:
+            self.root.ids.drawing_screen.ids.mypaintpage.canvas.clear()
+            with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
+                F.Color(.95, .95, .95, 1)
+                F.Rectangle(size=(622.22, 160))
+
+class MyPaintPage(F.RelativeLayout):
+
+    # DRAWING PAGE
+
+    story_id = KP.StringProperty(None, allownone=True)
     line_points = KP.ListProperty()
 
     def __init__(self, **kwargs):
@@ -119,13 +127,14 @@ class MyPaintWidget(F.RelativeLayout):
         self.bind(line_points=self.draw_on_canvas)
 
         with self.canvas:
-            F.Color(.9, .9, .9, 1)
+            F.Color(.95, .95, .95, 1)
             F.Rectangle(size=(622.22, 160))
 
 
 
-    def draw_on_canvas(self, _, points):
 
+
+    def draw_on_canvas(self, _, points):
         with self.canvas:
             F.Color(0,0,0)
             F.Line(width=2, points=points)
@@ -169,79 +178,6 @@ class MyPaintWidget(F.RelativeLayout):
 
 
 
-class DrawingRepository:
-    """This class houses all the DrawingWidget data"""
-
-    drawings = {}
-    line_color = (0, 0, 0)
-    bg_color = (0.982, 0.982, 0.982)
-    line_width = 2
-    tool = 'pencil'
-
-    @staticmethod
-    def add_drawing(story_id, tool, line_color, bg_color, width, points):
-        drngs = DrawingRepository.drawings
-
-        if story_id is not None:
-
-            if story_id in drngs:
-                # if a drawing already exists against the story_id
-
-                if tool != 'pencil':
-                    drngs[story_id] = {'tool': tool,
-                                       'bg_color': bg_color,
-                                       'pencil_drawings': []}
-                else:
-                    drngs[story_id]['pencil_drawings'].append({'width': width,
-                                                               'line_color': line_color,
-                                                               'points': points})
-            else:
-                # If no drawing yet exists in the repo
-                if tool != 'pencil':
-                    drngs[story_id] = {'tool': tool,
-                                       'bg_color': bg_color,
-                                       'pencil_drawings': []}
-                else:
-                    drngs[story_id] = {'tool': tool,
-                                       'bg_color': (0.982, 0.982, 0.982),
-                                       'pencil_drawings': [{'width': width,
-                                                            'line_color': line_color,
-                                                            'points': points}]}
-        print(drngs)
-
-    @staticmethod
-    def get_drawing(story_id, default=None):
-        return DrawingRepository.drawings.get(story_id, default)
-
-    @staticmethod
-    def has_drawing(story_id):
-        return story_id in DrawingRepository.drawings
-
-    @staticmethod
-    def change_line_color(color):
-        DrawingRepository.line_color = color
-
-    @staticmethod
-    def change_bg_color(color):
-        DrawingRepository.bg_color = color
-
-    @staticmethod
-    def change_width(width):
-        DrawingRepository.line_width = int(width)
-
-    @staticmethod
-    def get_width():
-        return DrawingRepository.line_width
-
-    @staticmethod
-    def change_tool(tool):
-        DrawingRepository.tool = tool
-        if tool == 'fill':
-            DrawingRepository.change_bg_color(DrawingRepository.line_color)
-
-    @staticmethod
-    def clear_all():
-        DrawingRepository.drawings = {}
 
 
 
