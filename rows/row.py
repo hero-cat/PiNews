@@ -24,7 +24,7 @@ class Row(RecycleDataViewBehavior, BoxLayout):
         if parent:
             self.ids.title_lbl.text = self.title
             self.ids.camera_lbl.text = self.camera
-            self.ids.drawingwidget.story_id = self.story_id
+            # self.ids.drawingwidget.story_id = self.story_id
             self.ids.backtime_lbl.text = self.backtime
 
 

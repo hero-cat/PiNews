@@ -8,6 +8,7 @@ from kivymd.app import MDApp
 from rows.row import Row, DrawingRepository
 from popups.popups import Popups
 from kivy.factory import Factory as F
+from pprint import pprint as p
 
 
 class TestApp(MDApp):
@@ -21,6 +22,7 @@ class TestApp(MDApp):
     counter = 0
     line_width = 2
 
+    current_widget = 'testerrrr'
 
     # AWS connection
     # with open("/Users/joseedwa/PycharmProjects/xyz/aws_creds.json") as aws_creds:
@@ -70,18 +72,80 @@ class TestApp(MDApp):
         for row in self.root.ids.lw_rundown.ids.lw.ids.rv.children:
             row.ids.drawingwidget.canvas.clear()
 
+    def print_status(self):
+        print(self.current_widget)
+
+    def change_widget(self):
+
+        with self.current_widget.canvas:
+            print(self.current_widget.size)
+
+            # F.Color(0,0,0)
+            # F.Rectangle(size=(50,50))
 
 
-class MyPaintWidget(F.Widget):
+    def test(self, var):
+        print(var)
+
+
+class MyPaintWidget(F.RelativeLayout):
+
+    # def on_touch_down(self, touch):
+    #
+    #     with self.canvas:
+    #         F.Color(0, 0, 0)
+    #         touch.ud['line'] = F.Line(width=2,points=(touch.x, touch.y))
+    #
+    # def on_touch_move(self, touch):
+    #     touch.ud['line'].points += [touch.x, touch.y]
+
+    line_points = KP.ListProperty()
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        # Ensure that canvas instructions are in sync with properties
+        self.bind(line_points=self.draw_on_canvas)
+
+        with self.canvas:
+            F.Color(.9, .9, .9, 1)
+            F.Rectangle(size=(self.size))
+
+
+    def draw_on_canvas(self, _, points):
+        with self.canvas:
+            F.Color(0,0,0)
+            F.Line(width=2, points=points)
+
 
     def on_touch_down(self, touch):
-        with self.canvas:
-            F.Color(0, 0, 0)
-            touch.ud['line'] = F.Line(width=2,points=(touch.x, touch.y))
+
+        if self.collide_point(*touch.pos):
+            touch.grab(self)
+            return True
+        return super().on_touch_down(touch)
+
 
     def on_touch_move(self, touch):
-        touch.ud['line'].points += [touch.x, touch.y]
+        if touch.grab_current is self:
+            if self.collide_point(*touch.pos):
+                self.line_points.extend(self.to_local(*touch.pos))
+            return True
+        return super().on_touch_move(touch)
 
+
+    def on_touch_up(self, touch):
+        dp = DrawingRepository
+        if touch.grab_current is self:
+            # Only add the final point if touch is released inside our boundaries.
+            if self.collide_point(*touch.pos):
+                self.line_points.extend(self.to_local(*touch.pos))
+
+            # Reject single-point drawings
+            if len(self.line_points) <= 2:
+                self.line_points = []
+
+            return True
+        return super().on_touch_up(touch)
 
 if __name__ == '__main__':
     TestApp().run()

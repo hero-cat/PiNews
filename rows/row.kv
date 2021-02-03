@@ -1,3 +1,7 @@
+<ClickableBox@ButtonBehavior+RelativeLayout>:
+
+
+
 <Row@BoxLayout>
     Button:
         id: backtime_lbl
@@ -9,12 +13,24 @@
         font_size: 25
         size_hint_x: .3
         background_color: 0.141, 0.580, 0.956, 1
+        on_press: app.current_widget = self.parent
 
     Button:
         id: camera_lbl
         size_hint_x: .1
         background_color: 0.141, 0.580, 0.956, 1
+        on_release: app.change_widget()
 
-    DrawingWidget:
-        id: drawingwidget
+    ClickableBox:
+        id: wig
+        text: 'tets'
         size_hint_x: .4
+
+#        background_color: 1, 1, 1, 1
+        on_press: app.current_widget = self
+        on_release: app.root.current = 'drawing'
+
+
+#    DrawingWidget:
+#        id: drawingwidget
+#        size_hint_x: .4

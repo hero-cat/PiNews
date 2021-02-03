@@ -1,5 +1,6 @@
 #:include popups/popups.kv
 
+# todo: 1. send contents of new widget to row. when pop opens
 
 # RundownTemplate being used as there will be round 10 screens eventually,
 # sharing the same template
@@ -19,7 +20,27 @@ ScreenManager:
 
 
 <DrawingScreen@MDScreen>
-    MyPaintWidget
+    BoxLayout
+        orientation: 'vertical'
+        MDIconButton:
+            icon: "arrow-left-bold-outline"
+
+            on_press: app.print_status()
+            on_release: app.root.current = 'lw'
+
+        Widget
+
+        BoxLayout
+            Widget
+            MyPaintWidget
+                background_color: 0.9, 0.9, 0.9, 1
+                size_hint_x: None
+                size_hint_y: None
+                height: 160
+                width: 622.22
+            Widget
+
+        Widget
 
 
 <LWRundown@MDScreen>
