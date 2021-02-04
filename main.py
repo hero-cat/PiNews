@@ -145,6 +145,7 @@ class TestApp(MDApp):
             self.re_enter_page(story_id)
             self.root.current = 'drawing'
 
+
         elif dp.tool == 'fill':
             self.current_widget.canvas.clear()
             with self.current_widget.canvas:
