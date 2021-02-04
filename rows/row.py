@@ -24,7 +24,7 @@ class Row(RecycleDataViewBehavior, BoxLayout):
         """Manually update the row labels from the class properties/app.rvdata"""
         if parent:
             if len(self.title) >= 15:
-                 tits = self.title[:15] + '\n' + self.title[15:]
+                tits = self.title[:15] + '\n' + self.title[15:]
 
             else:
                 tits = self.title
