@@ -33,13 +33,17 @@ class DrawingRepository:
     """This class houses all the DrawingWidget data"""
 
     drawings = {}
-    line_color = (0, 0, 0)
-    bg_color = (0.982, 0.982, 0.982)
-    line_width = 2
     tool = 'pencil'
+    pencil_width = 2
+    pencil_color = (1, 0, 0, .8)
+    pencil_bg_color = (0, 0, 0, 1)
+    fill_color = (1, 0, 0, .8)
+
+
 
     @staticmethod
     def add_drawing(story_id, tool, line_color, bg_color, width, points):
+
         drngs = DrawingRepository.drawings
 
         if story_id is not None:
@@ -53,7 +57,7 @@ class DrawingRepository:
                                        'pencil_drawings': []}
                 else:
                     drngs[story_id]['pencil_drawings'].append({'width': width,
-                                                               'line_color': line_color,
+                                                               'pencil_color': line_color,
                                                                'points': points})
             else:
                 # If no drawing yet exists in the repo
@@ -65,7 +69,7 @@ class DrawingRepository:
                     drngs[story_id] = {'tool': tool,
                                        'bg_color': (0.982, 0.982, 0.982),
                                        'pencil_drawings': [{'width': width,
-                                                            'line_color': line_color,
+                                                            'pencil_color': line_color,
                                                             'points': points}]}
 
     @staticmethod
@@ -78,25 +82,30 @@ class DrawingRepository:
 
     @staticmethod
     def change_line_color(color):
-        DrawingRepository.line_color = color
+        DrawingRepository.pencil_color = color
 
     @staticmethod
     def change_bg_color(color):
-        DrawingRepository.bg_color = color
+        DrawingRepository.pencil_bg_color = color
+
+    @staticmethod
+    def change_fill_color(color):
+        DrawingRepository.fill_color = color
 
     @staticmethod
     def change_width(width):
-        DrawingRepository.line_width = int(width)
+        DrawingRepository.pencil_width = int(width)
 
     @staticmethod
     def get_width():
-        return DrawingRepository.line_width
+        return DrawingRepository.pencil_width
 
     @staticmethod
     def change_tool(tool):
         DrawingRepository.tool = tool
+        print(tool)
         if tool == 'fill':
-            DrawingRepository.change_bg_color(DrawingRepository.line_color)
+            DrawingRepository.change_fill_color(DrawingRepository.pencil_color)
 
     @staticmethod
     def clear_all():
@@ -117,21 +126,28 @@ class ClickableBox(F.ButtonBehavior, F.RelativeLayout):
         drawings = DrawingRepository.get_drawing(story_id)
 
         if drawings is not None:
-            with self.canvas:
-                rgb1 = drawings['bg_color']
-                Color(rgb1[0], rgb1[1], rgb1[2])
-                Rectangle(size=self.size)
-
-            for drawinz in drawings['pencil_drawings']:
-
-                print(drawinz['points'])
-                newlist = [(x * .66) for x in drawinz['points']]
-                print(newlist)
+            if drawings['tool'] != 'pencil':
+                print('printing rexct')
                 with self.canvas:
-                    rgb = drawinz['line_color']
-                    F.Color(rgb[0], rgb[1], rgb[2])
+                    rgb3 = drawings['bg_color']
+                    Color(rgb3[0], rgb3[1], rgb3[2])
+                    Rectangle(size=self.size)
 
-                    F.Line(width=2, points=newlist)
+            else:
+                with self.canvas:
+                    rgb1 = drawings['bg_color']
+                    Color(rgb1[0], rgb1[1], rgb1[2])
+                    Rectangle(size=self.size)
+
+                for drawinz in drawings['pencil_drawings']:
+
+                    newlist = [(x * .66) for x in drawinz['points']]
+
+                    with self.canvas:
+                        rgb = drawinz['pencil_color']
+                        F.Color(rgb[0], rgb[1], rgb[2])
+
+                        F.Line(width=2, points=newlist)
 
         else:
             self.canvas.clear()
@@ -151,13 +167,13 @@ class ClickableBox(F.ButtonBehavior, F.RelativeLayout):
 #         # IS this slowing it down?
 #         if DrawingRepository.tool == 'pencil':
 #             with self.canvas:
-#                 rgb = DrawingRepository.line_color
+#                 rgb = DrawingRepository.pencil_color
 #                 Color(rgb[0], rgb[1], rgb[2])
-#                 Line(width=DrawingRepository.line_width, points=points)
+#                 Line(width=DrawingRepository.pencil_width, points=points)
 #
 #         elif DrawingRepository.tool == 'fill':
 #             with self.canvas:
-#                 rgb = DrawingRepository.bg_color
+#                 rgb = DrawingRepository.pencil_bg_color
 #                 Color(rgb[0], rgb[1], rgb[2])
 #                 Rectangle(size=self.size)
 #         else:
@@ -176,13 +192,13 @@ class ClickableBox(F.ButtonBehavior, F.RelativeLayout):
 #
 #         if drawings is not None:
 #             with self.canvas:
-#                 rgb1 = drawings['bg_color']
+#                 rgb1 = drawings['pencil_bg_color']
 #                 Color(rgb1[0], rgb1[1], rgb1[2])
 #                 Rectangle(size=self.size)
 #
 #             for drawinz in drawings['pencil_drawings']:
 #                 with self.canvas:
-#                     rgb = drawinz['line_color']
+#                     rgb = drawinz['pencil_color']
 #                     Color(rgb[0], rgb[1], rgb[2])
 #                     Line(width=drawinz['width'], points=drawinz['points'])
 #         else:
@@ -222,7 +238,7 @@ class ClickableBox(F.ButtonBehavior, F.RelativeLayout):
 #                 self.line_points = []
 #
 #             if self.story_id is not None:
-#                 dp.add_drawing(self.story_id, dp.tool, dp.line_color, dp.bg_color, dp.line_width, self.line_points[:])
+#                 dp.add_drawing(self.story_id, dp.tool, dp.pencil_color, dp.pencil_bg_color, dp.pencil_width, self.line_points[:])
 #                 self.line_points = []
 #
 #             return True

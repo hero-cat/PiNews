@@ -12,9 +12,9 @@ from kivymd.uix.dialog import MDDialog
 
 class ColorChoice(MDDialog):
     @staticmethod
-    def change_color(color):
-        DrawingRepository.change_line_color(color)
-        DrawingRepository.change_bg_color(color)
+    def change_fill_color(color):
+        DrawingRepository.change_fill_color(color)
+
 
 
 class WidthChoice(MDDialog):

@@ -22,8 +22,20 @@ class TestApp(MDApp):
     counter = 0
     line_width = KP.NumericProperty(2)
 
+    default_data = F.ListProperty()
+    data_gmb_six = F.ListProperty()
+    data_gmb_six_thirty = F.ListProperty()
+    data_gmb_seven = F.ListProperty()
+    data_gmb_eight = F.ListProperty()
+    data_gmb_nine = F.ListProperty()
+    data_lk = F.ListProperty()
+    data_tm = F.ListProperty()
+    data_lw = F.ListProperty()
+    username = F.StringProperty(None)
+    password = F.StringProperty(None)
+
     current_widget = KP.ObjectProperty()
-    current_tool = KP.StringProperty('pencil')
+
 
     story_id = KP.StringProperty()
 
@@ -59,16 +71,17 @@ class TestApp(MDApp):
 
     def change_tool(self, tool):
         """Choose between pencil, fill, eraser"""
-        DrawingRepository.change_tool(tool)
-        self.current_tool = tool
+        dp = DrawingRepository
+        dp.change_tool(tool)
+
 
     def color_btn_color(self, color):
         """Change colour button background colour"""
-        self.root.ids.lw_rundown.ids.lw.ids.color_button.md_bg_color = color
-
-    def color_btn_text(self, color):
-        """Change colour button text colour"""
-        self.root.ids.lw_rundown.ids.lw.ids.color_button.text_color = color
+        self.root.ids.lw_rundown.ids.lw.ids.fill_button.text_color = color
+    #
+    # def color_btn_text(self, color):
+    #     """Change colour button text colour"""
+    #     self.root.ids.lw_rundown.ids.lw.ids.color_button.text_color = color
 
     def clear_all_drawings(self):
         """.clear() all visible DrawingWidgets from RV and empty stored drawings"""
@@ -92,7 +105,7 @@ class TestApp(MDApp):
                 newlist = [(x * .66) for x in drawinz['points']]
                 print(newlist)
                 with self.current_widget.canvas:
-                    rgb = drawinz['line_color']
+                    rgb = drawinz['pencil_color']
                     F.Color(rgb[0], rgb[1], rgb[2])
 
                     F.Line(width=2, points=newlist)
@@ -113,7 +126,7 @@ class TestApp(MDApp):
 
             for drawinz in drawings['pencil_drawings']:
                 with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
-                    rgb = drawinz['line_color']
+                    rgb = drawinz['pencil_color']
                     F.Color(rgb[0], rgb[1], rgb[2])
                     F.Line(width=drawinz['width'], points=drawinz['points'])
 
@@ -126,21 +139,54 @@ class TestApp(MDApp):
 
 
     def choice(self, story_id):
+        dp = DrawingRepository
 
-        if self.current_tool == 'pencil':
+        if dp.tool == 'pencil':
             self.re_enter_page(story_id)
             self.root.current = 'drawing'
 
-        elif self.current_tool == 'fill':
+        elif dp.tool == 'fill':
             self.current_widget.canvas.clear()
             with self.current_widget.canvas:
-                lc = DrawingRepository.line_color
-                F.Color(lc[0], lc[1], lc[2])
+                dp = DrawingRepository
+                fc = DrawingRepository.fill_color
+                F.Color(fc[0], fc[1], fc[2])
                 F.Rectangle(size=self.current_widget.size)
+                dp.add_drawing(self.story_id, dp.tool, dp.pencil_color, dp.fill_color, dp.pencil_width, [])
 
         else:
             # eraser
             self.current_widget.canvas.clear()
+
+
+
+
+
+
+
+
+class FillButton(F.MDIconButton):
+    # A separate class for the fill button to enable double tap/change color
+    popups = Popups()
+
+
+    def on_touch_down(self, touch):
+        app = TestApp.get_running_app()
+        toolbar = TestApp.get_running_app().root.ids.lw_rundown.ids.lw.ids
+
+
+        if touch.is_double_tap:
+            self.popups.select_color()
+
+        else:
+            app.change_tool('fill')
+            self.text_color = (DrawingRepository.fill_color)
+            toolbar.pencil_button.text_color = (0, 0, 0, .4)
+            toolbar.eraser_button.text_color = (0, 0, 0, .4)
+
+
+
+
 
 
 class MyPaintPage(F.RelativeLayout):
@@ -197,7 +243,7 @@ class MyPaintPage(F.RelativeLayout):
                 self.line_points = []
 
             if self.story_id is not None:
-                dp.add_drawing(self.story_id, dp.tool, dp.line_color, dp.bg_color, dp.line_width, self.line_points[:])
+                dp.add_drawing(self.story_id, dp.tool, dp.pencil_color, dp.pencil_bg_color, dp.pencil_width, self.line_points[:])
                 self.line_points = []
 
 
@@ -206,7 +252,16 @@ class MyPaintPage(F.RelativeLayout):
 
 
 
+class LoginScreen(F.MDScreen):
+    username = 'joe'
+    password = 'aaa'
 
+    def login(self, login_text, password_text):
+        if login_text == self.username and password_text == self.password:
+            self.parent.current = 'menu'
+
+        else:
+            self.parent.current = 'menu'
 
 
 
