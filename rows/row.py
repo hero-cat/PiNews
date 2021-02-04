@@ -35,41 +35,46 @@ class DrawingRepository:
     drawings = {}
     tool = 'pencil'
     pencil_width = 2
-    pencil_color = (1, 0, 0, .8)
-    pencil_bg_color = (0, 0, 0, 1)
+    pencil_color = (0, 0, 0, .8)
+    pencil_bg_color = (1, 1, 1, 1)
     fill_color = (1, 0, 0, .8)
+
+    drawing_color = (1, 1, 1)
 
 
 
     @staticmethod
-    def add_drawing(story_id, tool, line_color, bg_color, width, points):
+    def add_drawing(story_id, tool, color, width, points):
 
         drngs = DrawingRepository.drawings
 
         if story_id is not None:
 
             if story_id in drngs:
-                # if a drawing already exists against the story_id
+                # if a drawing already exists against the current_story_id
 
                 if tool != 'pencil':
+                    print('backing')
                     drngs[story_id] = {'tool': tool,
-                                       'bg_color': bg_color,
+                                       'bg_color': color,
                                        'pencil_drawings': []}
                 else:
+                    print('front')
+                    drngs[story_id]['tool'] = tool
                     drngs[story_id]['pencil_drawings'].append({'width': width,
-                                                               'pencil_color': line_color,
+                                                               'pencil_color': color,
                                                                'points': points})
             else:
                 # If no drawing yet exists in the repo
                 if tool != 'pencil':
                     drngs[story_id] = {'tool': tool,
-                                       'bg_color': bg_color,
+                                       'bg_color': color,
                                        'pencil_drawings': []}
                 else:
                     drngs[story_id] = {'tool': tool,
                                        'bg_color': (0.982, 0.982, 0.982),
                                        'pencil_drawings': [{'width': width,
-                                                            'pencil_color': line_color,
+                                                            'pencil_color': color,
                                                             'points': points}]}
 
     @staticmethod
@@ -93,7 +98,11 @@ class DrawingRepository:
         DrawingRepository.fill_color = color
 
     @staticmethod
-    def change_width(width):
+    def change_drawing_color(color):
+        DrawingRepository.drawing_color = color
+
+    @staticmethod
+    def change_pencil_width(width):
         DrawingRepository.pencil_width = int(width)
 
     @staticmethod
@@ -120,17 +129,17 @@ class ClickableBox(F.ButtonBehavior, F.RelativeLayout):
 
     def on_story_id(self, _, story_id):
         """Property event handler; this method is called automatically
-        when the story_id property changes. This is how RecycleView redraws drawings
+        when the current_story_id property changes. This is how RecycleView redraws drawings
         against the correct row.
         """
         drawings = DrawingRepository.get_drawing(story_id)
 
         if drawings is not None:
             if drawings['tool'] != 'pencil':
-                print('printing rexct')
+
                 with self.canvas:
-                    rgb3 = drawings['bg_color']
-                    Color(rgb3[0], rgb3[1], rgb3[2])
+                    bgc = drawings['bg_color']
+                    Color(bgc[0], bgc[1], bgc[2])
                     Rectangle(size=self.size)
 
             else:
@@ -155,7 +164,7 @@ class ClickableBox(F.ButtonBehavior, F.RelativeLayout):
 #
 # class DrawingWidget(RelativeLayout):
 #     """This class needs to be as efficient as possible so the drawing is as smooth as can be"""
-#     story_id = KP.StringProperty(None, allownone=True)
+#     current_story_id = KP.StringProperty(None, allownone=True)
 #     line_points = KP.ListProperty()
 #
 #     def __init__(self, **kwargs):
@@ -183,12 +192,12 @@ class ClickableBox(F.ButtonBehavior, F.RelativeLayout):
 #                 Color(0.982, 0.982, 0.982, 1)
 #                 Rectangle(size=self.size)
 #
-#     def on_story_id(self, _, story_id):
+#     def on_story_id(self, _, current_story_id):
 #         """Property event handler; this method is called automatically
-#         when the story_id property changes. This is how RecycleView redraws drawings
+#         when the current_story_id property changes. This is how RecycleView redraws drawings
 #         against the correct row.
 #         """
-#         drawings = DrawingRepository.get_drawing(story_id)
+#         drawings = DrawingRepository.get_drawing(current_story_id)
 #
 #         if drawings is not None:
 #             with self.canvas:
@@ -237,8 +246,8 @@ class ClickableBox(F.ButtonBehavior, F.RelativeLayout):
 #             if len(self.line_points) <= 2:
 #                 self.line_points = []
 #
-#             if self.story_id is not None:
-#                 dp.add_drawing(self.story_id, dp.tool, dp.pencil_color, dp.pencil_bg_color, dp.pencil_width, self.line_points[:])
+#             if self.current_story_id is not None:
+#                 dp.add_drawing(self.current_story_id, dp.tool, dp.pencil_color, dp.pencil_bg_color, dp.pencil_width, self.line_points[:])
 #                 self.line_points = []
 #
 #             return True

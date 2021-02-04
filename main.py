@@ -9,6 +9,7 @@ from rows.row import Row, DrawingRepository
 from popups.popups import Popups
 from kivy.factory import Factory as F
 from pprint import pprint as p
+from kivy.uix import screenmanager as sm
 
 
 class TestApp(MDApp):
@@ -37,7 +38,7 @@ class TestApp(MDApp):
     current_widget = KP.ObjectProperty()
 
 
-    story_id = KP.StringProperty()
+    current_story_id = KP.StringProperty()
 
     # AWS connection
     # with open("/Users/joseedwa/PycharmProjects/xyz/aws_creds.json") as aws_creds:
@@ -75,13 +76,15 @@ class TestApp(MDApp):
         dp.change_tool(tool)
 
 
-    def color_btn_color(self, color):
+    def fill_color_btn(self, color):
         """Change colour button background colour"""
         self.root.ids.lw_rundown.ids.lw.ids.fill_button.text_color = color
-    #
-    # def color_btn_text(self, color):
-    #     """Change colour button text colour"""
-    #     self.root.ids.lw_rundown.ids.lw.ids.color_button.text_color = color
+
+
+    def drawing_color_btn(self, bg_color, font_color):
+        """Change colour button background colour"""
+        self.root.ids.drawing_screen.ids.drawing_color_button.md_bg_color = bg_color
+        self.root.ids.drawing_screen.ids.drawing_color_button.text_color = font_color
 
     def clear_all_drawings(self):
         """.clear() all visible DrawingWidgets from RV and empty stored drawings"""
@@ -92,18 +95,23 @@ class TestApp(MDApp):
 
 
 
-    def go_back(self):
+    def back_to_main_page(self):
         # Back to RV
 
-        drawings = DrawingRepository.get_drawing(self.story_id)
+
+        drawings = DrawingRepository.get_drawing(self.current_story_id)
 
         if drawings is not None:
+            with self.current_widget.canvas:
+                bgc = drawings['bg_color']
+                F.Color(bgc[0], bgc[1], bgc[2])
+                F.Rectangle(size=self.current_widget.size)
+
 
             for drawinz in drawings['pencil_drawings']:
 
-                print(drawinz['points'])
                 newlist = [(x * .66) for x in drawinz['points']]
-                print(newlist)
+
                 with self.current_widget.canvas:
                     rgb = drawinz['pencil_color']
                     F.Color(rgb[0], rgb[1], rgb[2])
@@ -112,20 +120,26 @@ class TestApp(MDApp):
 
 
     def send_story_id(self, story_id):
-        # Send PW page a story_id. Without this PW can't update the Drawing Repo
+        # Send PW page a current_story_id. Without this PW can't update the Drawing Repo
         self.root.ids.drawing_screen.ids.mypaintpage.story_id = story_id
 
 
 
 
-    def re_enter_page(self, story_id):
+    def enter_drawing_page(self, story_id):
+        # Enter drawing page, if drawing exists, write it to canvas. else clean canvas for enw drawing
         drawings = DrawingRepository.get_drawing(story_id)
 
         if drawings is not None:
             self.root.ids.drawing_screen.ids.mypaintpage.canvas.clear()
+            with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
+                F.Color(.95, .95, .95, 1)
+                F.Rectangle(size=(933.33, 240))
+
 
             for drawinz in drawings['pencil_drawings']:
                 with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
+
                     rgb = drawinz['pencil_color']
                     F.Color(rgb[0], rgb[1], rgb[2])
                     F.Line(width=drawinz['width'], points=drawinz['points'])
@@ -142,18 +156,20 @@ class TestApp(MDApp):
         dp = DrawingRepository
 
         if dp.tool == 'pencil':
-            self.re_enter_page(story_id)
+            self.enter_drawing_page(story_id)
+            self.root.transition = sm.NoTransition()
             self.root.current = 'drawing'
+
 
 
         elif dp.tool == 'fill':
             self.current_widget.canvas.clear()
             with self.current_widget.canvas:
                 dp = DrawingRepository
-                fc = DrawingRepository.fill_color
+                fc = DrawingRepository.drawing_color
                 F.Color(fc[0], fc[1], fc[2])
                 F.Rectangle(size=self.current_widget.size)
-                dp.add_drawing(self.story_id, dp.tool, dp.pencil_color, dp.fill_color, dp.pencil_width, [])
+                dp.add_drawing(self.current_story_id, dp.tool, dp.drawing_color, dp.pencil_width, [])
 
         else:
             # eraser
@@ -177,7 +193,7 @@ class FillButton(F.MDIconButton):
 
 
         if touch.is_double_tap:
-            self.popups.select_color()
+            self.popups.select_fill_color()
 
         else:
             app.change_tool('fill')
@@ -197,6 +213,8 @@ class MyPaintPage(F.RelativeLayout):
     story_id = KP.StringProperty(None, allownone=True)
     line_points = KP.ListProperty()
 
+
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         # Ensure that canvas instructions are in sync with properties
@@ -211,9 +229,23 @@ class MyPaintPage(F.RelativeLayout):
 
 
     def draw_on_canvas(self, _, points):
-        with self.canvas:
-            F.Color(0,0,0)
-            F.Line(width=2, points=points)
+
+        if DrawingRepository.tool == 'pencil':
+            with self.canvas:
+                rgb = DrawingRepository.drawing_color
+                F.Color(rgb[0], rgb[1], rgb[2])
+                F.Line(width=2, points=points)
+
+        elif DrawingRepository.tool == 'fill':
+            with self.canvas:
+                rgb = DrawingRepository.drawing_color
+                F.Color(rgb[0], rgb[1], rgb[2])
+                F.Rectangle(size=self.size)
+
+        else:  # eraser
+            with self.canvas:
+                F.Color(1, 1, 1)
+                F.Rectangle(size=self.size)
 
 
     def on_touch_down(self, touch):
@@ -244,7 +276,8 @@ class MyPaintPage(F.RelativeLayout):
                 self.line_points = []
 
             if self.story_id is not None:
-                dp.add_drawing(self.story_id, dp.tool, dp.pencil_color, dp.pencil_bg_color, dp.pencil_width, self.line_points[:])
+                dp.add_drawing(self.story_id, dp.tool, dp.drawing_color, dp.pencil_width, self.line_points[:])
+
                 self.line_points = []
 
 

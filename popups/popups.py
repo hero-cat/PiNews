@@ -9,29 +9,46 @@ from kivymd.uix.dialog import MDDialog
 # Popups below are called to change the drawing color and pencil width
 
 
-
-class ColorChoice(MDDialog):
+class ColorChoiceFill(MDDialog):
     @staticmethod
     def change_fill_color(color):
-        DrawingRepository.change_fill_color(color)
+        DrawingRepository.change_drawing_color(color)
 
 
-
-class WidthChoice(MDDialog):
+class ColorChoiceDrawing(MDDialog):
     @staticmethod
-    def change_width(width):
-        DrawingRepository.change_width(width)
+    def change_drawing_color(color):
+        DrawingRepository.change_drawing_color(color)
+
+
+
+
+class WidthChoicePencil(MDDialog):
+    @staticmethod
+    def change_pencil_width(width):
+        DrawingRepository.change_pencil_width(width)
+
+
+
+
+
+
 
 
 class Popups:
     dialog = None
 
     @staticmethod
-    def select_color():
-        ColorChoice().open()
+    def select_fill_color():
+        ColorChoiceFill().open()
+
+    @staticmethod
+    def select_drawing_color():
+        ColorChoiceDrawing().open()
+
 
     @staticmethod
     def select_width():
-        WidthChoice().open()
+        WidthChoicePencil().open()
 
 

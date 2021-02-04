@@ -8,6 +8,12 @@
 ScreenManager:
     id: screen_manager
 
+    LWRundown
+        id: lw_rundown
+        name: 'lw'
+        manager: 'screen_manager'
+
+
     LoginScreen:
         id: login
         name: 'login'
@@ -18,10 +24,7 @@ ScreenManager:
         name: 'menu'
         manager: 'screen_manager'
 
-    LWRundown
-        id: lw_rundown
-        name: 'lw'
-        manager: 'screen_manager'
+
 
 
     DrawingScreen:
@@ -290,29 +293,142 @@ ScreenManager:
 
 
 <DrawingScreen@MDScreen>
+    id: dwscreen
+
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'blur.png'
+
     BoxLayout
         orientation: 'vertical'
-        MDIconButton:
-            icon: "arrow-left-bold-outline"
 
-            on_press: app.go_back()
-            on_release: app.root.current = 'lw'
-
+        # Top spacer
         Widget
+            size_hint_y: 1.5
 
+
+        # Middle layer
         BoxLayout
-            Widget
-            MyPaintPage:
-                id: mypaintpage
-#                story: app.
-                background_color: 0.9, 0.9, 0.9, 1
-                size_hint_x: None
-                size_hint_y: None
-                height: 240
-                width: 933.33
-            Widget
 
+            # Middle left spacer
+            Widget
+                size_hint_x: .1
+
+            # main housing
+            BoxLayout
+
+                id: main
+                orientation: 'vertical'
+                size_hint_x: None
+                width: 970
+                size_hint_y: None
+                height: 500
+
+
+                canvas.before:
+                    Color:
+                        rgb: .8, .8 , .8
+                    Rectangle:
+                        pos: main.pos
+                        size: main.size
+
+                # toolbar
+                BoxLayout
+
+                    Widget
+
+
+                    # Colour + Width select
+                    BoxLayout:
+                        orientation: 'vertical'
+                        Widget:
+                            size_hint_y: .1
+                        MDRaisedButton:
+                            id: drawing_color_button
+                            md_bg_color: 0, 0, 0, 1
+                            text: '  COLOUR  '
+                            text_color: 1, 1, 1, 1
+                            font_size: 11
+                            size_hint_y: .5
+                            on_release: app.popups.select_drawing_color()
+                        Widget:
+                            size_hint_y: .1
+                        MDRaisedButton:
+                            md_bg_color: 0, 0, 0, 1
+                            text: 'THICKNESS'
+                            text_color: 1, 1, 1, 1
+                            font_size: 11
+                            size_hint_y: .5
+                            on_release: app.popups.select_width()
+                        Widget:
+                            size_hint_y: .1
+
+
+                    MDIconButton
+                        id: dw_pencil_btn
+                        icon: "pencil"
+                        theme_text_color: "Custom"
+                        text_color: 1, 1, 1
+                        on_press: self.text_color = 1, 1, 1
+                        on_press: dw_fill_btn.text_color = 0, 0, 0
+                        on_release: app.change_tool('pencil')
+
+
+                    MDIconButton
+                        id: dw_fill_btn
+                        icon: "format-color-fill"
+                        theme_text_color: "Custom"
+                        text_color: 0, 0, 0
+                        on_press: self.text_color = 1, 1, 1
+                        on_press: dw_pencil_btn.text_color = 0, 0, 0
+                        on_release: app.change_tool('fill')
+
+
+                    MDIconButton
+                        icon: "close-box"
+
+                    Widget
+
+                # Drawing housing
+                BoxLayout
+                    size_hint_y: None
+                    height: 240
+                    Widget
+
+                    # Drawing area
+                    MyPaintPage:
+                        id: mypaintpage
+                        background_color: 1, 1, 1
+                        size_hint_x: None
+                        size_hint_y: None
+                        height: 240
+                        width: 933.33
+
+                    Widget
+
+                #Bottom bar
+                BoxLayout:
+
+
+                    Widget:
+                        size_hint_x: 5
+                    MDIconButton:
+                        icon: "close-outline"
+                        on_press: app.root.current = 'lw'
+                    MDIconButton:
+                        icon: "check-outline"
+                        on_press: app.back_to_main_page()
+                        on_press: app.root.current = 'lw'
+
+            # Middle right spacer
+            Widget
+                size_hint_x: .1
+
+        # Bottom spacer
         Widget
+            size_hint_y: 2
 
 
 <ThinGap@Widget>

@@ -28,7 +28,7 @@
 
 #        background_color: 1, 1, 1, 1
         on_press: app.current_widget = self
-        on_press: app.story_id = root.story_id
+        on_press: app.current_story_id = root.story_id
         on_press: app.send_story_id(root.story_id)
         on_release: app.choice(root.story_id)
 #        on_release: app.re_enter_page(root.story_id)
