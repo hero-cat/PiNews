@@ -1,6 +1,6 @@
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
 from kivy.uix.boxlayout import BoxLayout
-from kivy import  properties as KP
+from kivy import properties as KP
 from kivy.graphics import Line, Color, Rectangle
 from kivy.uix.relativelayout import RelativeLayout
 from kivy.factory import Factory as F
@@ -41,7 +41,9 @@ class DrawingRepository:
 
     drawing_color = (1, 1, 1)
 
-
+    default_dict = {'tool': tool,
+                    'bg_color': drawing_color,
+                    'pencil_drawings': []}
 
     @staticmethod
     def add_drawing(story_id, tool, color, width, points):
@@ -103,6 +105,7 @@ class DrawingRepository:
 
     @staticmethod
     def change_pencil_width(width):
+
         DrawingRepository.pencil_width = int(width)
 
     @staticmethod
@@ -119,9 +122,6 @@ class DrawingRepository:
     @staticmethod
     def clear_all():
         DrawingRepository.drawings = {}
-
-
-
 
 
 class ClickableBox(F.ButtonBehavior, F.RelativeLayout):
@@ -149,14 +149,13 @@ class ClickableBox(F.ButtonBehavior, F.RelativeLayout):
                     Rectangle(size=self.size)
 
                 for drawinz in drawings['pencil_drawings']:
-
                     newlist = [(x * .66) for x in drawinz['points']]
 
                     with self.canvas:
                         rgb = drawinz['pencil_color']
                         F.Color(rgb[0], rgb[1], rgb[2])
 
-                        F.Line(width=2, points=newlist)
+                        F.Line(width=drawinz['width'], points=newlist)
 
         else:
             self.canvas.clear()

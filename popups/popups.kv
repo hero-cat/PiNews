@@ -141,8 +141,8 @@
 
 
 
-<WidthChoice>
-    pos_hint: {'top': .98}
+<WidthChoicePencil>
+    pos_hint: {'center': .98}
     MDBoxLayout:
         orientation: 'vertical'
         MDLabel:
@@ -153,7 +153,7 @@
             max: 10
             show_off: False
             value: app.line_width
-            on_touch_up: root.change_width(self.value), root.dismiss()
+            on_touch_up: root.change_pencil_width(self.value), root.dismiss()
             on_touch_up: app.line_width = int(self.value)
 
 

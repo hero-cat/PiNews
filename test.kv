@@ -324,20 +324,25 @@ ScreenManager:
                 size_hint_x: None
                 width: 970
                 size_hint_y: None
-                height: 500
+                height: 600
 
 
                 canvas.before:
                     Color:
-                        rgb: .8, .8 , .8
+                        rgb: 0.239, 0.4, 0.541
                     Rectangle:
                         pos: main.pos
                         size: main.size
+
+                MDLabel:
+                    id: drawing_screen_title
+                    text: 'test'
 
                 # toolbar
                 BoxLayout
 
                     Widget
+                        size_hint_x: .5
 
 
                     # Colour + Width select
@@ -347,19 +352,19 @@ ScreenManager:
                             size_hint_y: .1
                         MDRaisedButton:
                             id: drawing_color_button
-                            md_bg_color: 0, 0, 0, 1
-                            text: '  COLOUR  '
-                            text_color: 1, 1, 1, 1
-                            font_size: 11
+                            md_bg_color: 0.513, 0.627, 0.725, 1
+                            text: '   COLOUR   '
+#                            text_color: 0,0,0
+#                            font_size: 11
                             size_hint_y: .5
                             on_release: app.popups.select_drawing_color()
                         Widget:
                             size_hint_y: .1
                         MDRaisedButton:
-                            md_bg_color: 0, 0, 0, 1
+                            md_bg_color: 0.513, 0.627, 0.725, 1
                             text: 'THICKNESS'
-                            text_color: 1, 1, 1, 1
-                            font_size: 11
+#                            text_color: 0,0,0
+#                            font_size: 11
                             size_hint_y: .5
                             on_release: app.popups.select_width()
                         Widget:
@@ -371,16 +376,21 @@ ScreenManager:
                         icon: "pencil"
                         theme_text_color: "Custom"
                         text_color: 1, 1, 1
+                        pos_hint: {"center_x": .5, "center_y": .5}
+                        user_font_size: 64
                         on_press: self.text_color = 1, 1, 1
                         on_press: dw_fill_btn.text_color = 0, 0, 0
                         on_release: app.change_tool('pencil')
 
 
                     MDIconButton
+
                         id: dw_fill_btn
                         icon: "format-color-fill"
                         theme_text_color: "Custom"
                         text_color: 0, 0, 0
+                        pos_hint: {"center_x": .5, "center_y": .5}
+                        user_font_size: 64
                         on_press: self.text_color = 1, 1, 1
                         on_press: dw_pencil_btn.text_color = 0, 0, 0
                         on_release: app.change_tool('fill')
@@ -388,8 +398,12 @@ ScreenManager:
 
                     MDIconButton
                         icon: "close-box"
+                        pos_hint: {"center_x": .5, "center_y": .5}
+                        user_font_size: 64
+                        on_release: app.clear_current_drawing()
 
                     Widget
+                        size_hint_x: .5
 
                 # Drawing housing
                 BoxLayout
@@ -416,11 +430,15 @@ ScreenManager:
                         size_hint_x: 5
                     MDIconButton:
                         icon: "close-outline"
-                        on_press: app.root.current = 'lw'
+                        theme_text_color: "Custom"
+                        text_color: 0.988, 0.352, 0.329
+                        on_release: app.root.current = 'lw'
                     MDIconButton:
                         icon: "check-outline"
+                        theme_text_color: "Custom"
+                        text_color: 0.490, 0.988, 0.501
                         on_press: app.back_to_main_page()
-                        on_press: app.root.current = 'lw'
+                        on_release: app.root.current = 'lw'
 
             # Middle right spacer
             Widget
