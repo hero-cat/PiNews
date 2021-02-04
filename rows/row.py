@@ -23,7 +23,15 @@ class Row(RecycleDataViewBehavior, BoxLayout):
     def on_parent(self, instance, parent):
         """Manually update the row labels from the class properties/app.rvdata"""
         if parent:
-            self.ids.title_lbl.text = self.title
+            if len(self.title) >= 15:
+                 tits = self.title[:15] + '\n' + self.title[15:]
+
+            else:
+                tits = self.title
+
+
+
+            self.ids.title_lbl.text = tits
             self.ids.camera_lbl.text = self.camera
             self.ids.wig.story_id = self.story_id
             self.ids.backtime_lbl.text = self.backtime

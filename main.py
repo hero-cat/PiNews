@@ -163,18 +163,23 @@ class TestApp(MDApp):
     def focused_row_properties_update(self, widget, story_id, title, backtime):
         dp = DrawingRepository
 
+        # Update the Apps reference to the current row in focus
+
         self.current_widget = widget
         self.current_story_id = story_id
-
         self.root.ids.drawing_screen.ids.mypaintpage.story_id = story_id
 
+        # Send a header to the drawing page
         drawing_screen_page_header = title + ' @ ' + backtime
         self.root.ids.drawing_screen.ids.drawing_screen_title.text = drawing_screen_page_header
 
+        # Begin move to drawing page
         if dp.tool == 'pencil':
             self.enter_drawing_page(story_id)
             self.root.transition = sm.NoTransition()
             self.root.current = 'drawing'
+
+        # Or fill the notes widget with a color
         elif dp.tool == 'fill':
             self.current_widget.canvas.clear()
             with self.current_widget.canvas:
@@ -183,8 +188,9 @@ class TestApp(MDApp):
                 F.Color(fc[0], fc[1], fc[2])
                 F.Rectangle(size=self.current_widget.size)
                 dp.add_drawing(self.current_story_id, dp.tool, dp.drawing_color, dp.pencil_width, [])
+
+        # Or erase widget
         else:
-            # eraser
             self.current_widget.canvas.clear()
 
 
