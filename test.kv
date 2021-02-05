@@ -230,23 +230,23 @@ ScreenManager:
 
         BoxLayout:
             size_hint_y: 0.039
+            MDRaisedButton:
+                text: '   TIME   '
+                text_color: 1, 1, 1, 1
+                md_bg_color: 0.098, 0.407, 0.670, 1
+
+            Button:
+                text: '                        TITLE                         '
+                text_color: 1, 1, 1, 1
+#                md_bg_color: 0.098, 0.407, 0.670, 1
+
             MDRectangleFlatButton:
-                text: '  TIME  '
+                text: '   CAM   '
                 text_color: 1, 1, 1, 1
                 md_bg_color: 0.098, 0.407, 0.670, 1
 
             MDRectangleFlatButton:
-                text: '                       TITLE                        '
-                text_color: 1, 1, 1, 1
-                md_bg_color: 0.098, 0.407, 0.670, 1
-
-            MDRectangleFlatButton:
-                text: '  CAM  '
-                text_color: 1, 1, 1, 1
-                md_bg_color: 0.098, 0.407, 0.670, 1
-
-            MDRectangleFlatButton:
-                text: '                                  NOTES                                  '
+                text: '                                   NOTES                                   '
                 text_color: 1, 1, 1, 1
                 md_bg_color: 0.098, 0.407, 0.670, 1
                 on_release: root.status_update()
