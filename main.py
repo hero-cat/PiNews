@@ -54,7 +54,8 @@ class TestApp(MDApp):
         self.theme_cls.primary_palette = "Blue"
         self.pull_json_data(0)  # Pull data once
         Clock.schedule_interval(self.pull_json_data, 15.0)  # Pull data at 15s intervals
-
+        self.root.ids.drawing_screen.ids.dw_pencil_btn.text_color = (1,0,0)
+        self.root.ids.drawing_screen.ids.dw_fill_btn.text_color = (1, 0, 0)
 
     def pull_json_data(self, dt):
         # self.s3.download_file('hero-cat-test', 'test_rundown', 'test_rundown.json')
