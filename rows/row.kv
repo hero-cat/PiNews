@@ -30,6 +30,18 @@
         text: 'tets'
         size_hint_x: .4
         on_press: app.focused_row_properties_update(self, root.story_id, root.title, root.backtime)
+
+        # TEST PERFORMANCE - MAYBE WIDTH 2 WORKS BETTER
+        # REMOVE IF ANY PERFORMANCE ISSUES
+        canvas.after:
+            Color:
+                rgba: 0, 0, 0, 1
+            Line:
+                width: 1
+                rectangle: self.x, self.y, self.width, self.height
+
+
+
 #        on_release: app.notes_box_choice(root.story_id)
 #        on_release: app.re_enter_page(root.story_id)
 #        on_release: app.root.current = 'drawing'

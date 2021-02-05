@@ -433,6 +433,7 @@ ScreenManager:
                         icon: "close-outline"
                         theme_text_color: "Custom"
                         text_color: 0.988, 0.352, 0.329
+                        on_press: app.clear_current_drawing()
                         on_release: app.root.current = 'lw'
                     MDIconButton:
                         icon: "check-outline"

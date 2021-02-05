@@ -47,7 +47,7 @@ class DrawingRepository:
     pencil_bg_color = (1, 1, 1, 1)
     fill_color = (1, 0, 0, .8)
 
-    drawing_color = (1, 1, 1)
+    drawing_color = (0, 0, 0)
 
     default_dict = {'tool': tool,
                     'bg_color': drawing_color,
