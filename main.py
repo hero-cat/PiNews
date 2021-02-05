@@ -51,7 +51,7 @@ class TestApp(MDApp):
     #                   aws_secret_access_key=aws_secret_access_key)
 
     def build(self):
-        self.theme_cls.primary_palette = "Blue"
+        # self.theme_cls.primary_palette = "Blue"
         self.pull_json_data(0)  # Pull data once
         Clock.schedule_interval(self.pull_json_data, 15.0)  # Pull data at 15s intervals
 
@@ -192,6 +192,10 @@ class TestApp(MDApp):
         # Or erase widget
         else:
             self.current_widget.canvas.clear()
+
+
+
+
 
 
 

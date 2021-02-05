@@ -5,8 +5,14 @@ from kivy.graphics import Line, Color, Ellipse
 from kivy.uix.boxlayout import BoxLayout
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
+from kivy.factory import Factory as F
 
 # Popups below are called to change the drawing color and pencil width
+
+
+
+class Kontent(BoxLayout):
+    pass
 
 
 class ColorChoiceFill(MDDialog):
@@ -16,6 +22,7 @@ class ColorChoiceFill(MDDialog):
 
 
 class ColorChoiceDrawing(MDDialog):
+
     @staticmethod
     def change_drawing_color(color):
         DrawingRepository.change_drawing_color(color)
@@ -38,7 +45,6 @@ class WidthChoicePencil(MDDialog):
 
 
 
-
 class Popups:
     dialog = None
 
@@ -46,13 +52,22 @@ class Popups:
     def select_fill_color():
         ColorChoiceFill().open()
 
-    @staticmethod
-    def select_drawing_color():
-        ColorChoiceDrawing().open()
+    # @staticmethod
+    # def select_drawing_color():
+    #     ColorChoiceDrawing().open()
 
 
     @staticmethod
     def select_width():
         WidthChoicePencil().open()
+
+    # Have one method, passed a var like Kontent which is a variable for content_cls
+    def select_drawing_color(self):
+        if not self.dialog:
+            self.dialog = MDDialog(
+                type="custom",
+                content_cls=Kontent())
+
+        self.dialog.open()
 
 
