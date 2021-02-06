@@ -2,6 +2,7 @@ from kivy.config import Config
 Config.set('graphics', 'width', '700')
 Config.set('graphics', 'height', '1000')
 import json
+import boto3
 from kivy import properties as KP
 from kivy.clock import Clock
 from kivymd.app import MDApp
@@ -41,14 +42,14 @@ class TestApp(MDApp):
     current_story_id = KP.StringProperty()
 
     # AWS connection
-    # with open("/Users/joseedwa/PycharmProjects/xyz/aws_creds.json") as aws_creds:
-    #     aws_credentials = json.load(aws_creds)
-    #     aws_access_key_id = aws_credentials[0]['aws_access_key_id']
-    #     aws_secret_access_key = aws_credentials[0]['aws_secret_access_key']
-    #
-    # s3 = boto3.client('s3',
-    #                   aws_access_key_id=aws_access_key_id,
-    #                   aws_secret_access_key=aws_secret_access_key)
+    with open("/Users/joseedwa/PycharmProjects/xyz/aws_creds.json") as aws_creds:
+        aws_credentials = json.load(aws_creds)
+        aws_access_key_id = aws_credentials[0]['aws_access_key_id']
+        aws_secret_access_key = aws_credentials[0]['aws_secret_access_key']
+
+    s3 = boto3.client('s3',
+                      aws_access_key_id=aws_access_key_id,
+                      aws_secret_access_key=aws_secret_access_key)
 
     def build(self):
         # self.theme_cls.primary_palette = "Blue"
@@ -57,7 +58,7 @@ class TestApp(MDApp):
 
 
     def pull_json_data(self, dt):
-        # self.s3.download_file('hero-cat-test', 'test_rundown', 'test_rundown.json')
+        self.s3.download_file('hero-cat-test', 'test_rundown', 'test_rundown.json')
         with open('test_rundown.json') as json_file:
             fresh_data = json.load(json_file)
 
@@ -98,7 +99,8 @@ class TestApp(MDApp):
 
         self.root.ids.drawing_screen.ids.mypaintpage.canvas.clear()
 
-        DrawingRepository.drawings[self.current_story_id] = DrawingRepository.default_dict
+        # DrawingRepository.drawings[self.current_story_id] = DrawingRepository.default_dict
+        DrawingRepository.clear_drawing(self.current_story_id)
 
         with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
             F.Color(1, 1, 1)
@@ -191,6 +193,7 @@ class TestApp(MDApp):
 
         # Or erase widget
         else:
+            DrawingRepository.clear_drawing(self.current_story_id)
             self.current_widget.canvas.clear()
 
 

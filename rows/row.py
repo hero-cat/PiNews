@@ -50,7 +50,7 @@ class DrawingRepository:
     drawing_color = (0, 0, 0)
 
     default_dict = {'tool': tool,
-                    'bg_color': drawing_color,
+                    'bg_color': (1,1,1,1),
                     'pencil_drawings': []}
 
     @staticmethod
@@ -128,8 +128,15 @@ class DrawingRepository:
             DrawingRepository.change_fill_color(DrawingRepository.pencil_color)
 
     @staticmethod
+    def clear_drawing(story_id):
+        print('clrng')
+        DrawingRepository.drawings[story_id] = DrawingRepository.default_dict
+
+    @staticmethod
     def clear_all():
         DrawingRepository.drawings = {}
+
+
 
 
 class ClickableBox(F.ButtonBehavior, F.RelativeLayout):
