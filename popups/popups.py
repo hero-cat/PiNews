@@ -10,9 +10,13 @@ from kivy.factory import Factory as F
 # Popups below are called to change the drawing color and pencil width
 
 
-
-class Kontent(BoxLayout):
-    pass
+#
+# class Kontent(BoxLayout):
+#
+#     @staticmethod
+#     def change_drawing_color(color):
+#         print('t')
+#         DrawingRepository.change_drawing_color(color)
 
 
 class ColorChoiceFill(MDDialog):
@@ -26,7 +30,6 @@ class ColorChoiceDrawing(MDDialog):
     @staticmethod
     def change_drawing_color(color):
         DrawingRepository.change_drawing_color(color)
-
 
 
 
@@ -52,22 +55,24 @@ class Popups:
     def select_fill_color():
         ColorChoiceFill().open()
 
-    # @staticmethod
-    # def select_drawing_color():
-    #     ColorChoiceDrawing().open()
+    @staticmethod
+    def select_drawing_color():
+        ColorChoiceDrawing().open()
 
 
     @staticmethod
     def select_width():
         WidthChoicePencil().open()
 
-    # Have one method, passed a var like Kontent which is a variable for content_cls
-    def select_drawing_color(self):
-        if not self.dialog:
-            self.dialog = MDDialog(
-                type="custom",
-                content_cls=Kontent())
-
-        self.dialog.open()
+    # Custom popup
+    # # Have one method, passed a var like Kontent which is a variable for content_cls
+    # def select_drawing_color(self):
+    #     if not self.dialog:
+    #         self.dialog = MDDialog(
+    #             pos_hint = {'top': .7},
+    #             type="custom",
+    #             content_cls=Kontent())
+    #
+    #     self.dialog.open()
 
 

@@ -8,12 +8,6 @@
 ScreenManager:
     id: screen_manager
 
-    LWRundown
-        id: lw_rundown
-        name: 'lw'
-        manager: 'screen_manager'
-
-
     LoginScreen:
         id: login
         name: 'login'
@@ -24,14 +18,15 @@ ScreenManager:
         name: 'menu'
         manager: 'screen_manager'
 
-
-
+    LWRundown
+        id: lw_rundown
+        name: 'lw'
+        manager: 'screen_manager'
 
     DrawingScreen:
         id: drawing_screen
         name: 'drawing'
         manager: 'screen_manager'
-
 
 
 
@@ -146,7 +141,7 @@ ScreenManager:
         MDToolbar:
             size_hint_y: None
             height: 90
-            title: 'Test'
+            title: 'Loose Women'
 
 #            MDIconButton:
 #                icon: "arrow-left-bold-outline"
@@ -241,22 +236,22 @@ ScreenManager:
         BoxLayout:
             size_hint_y: 0.039
             MDRaisedButton:
-                text: '   TIME   '
+                text: '  TIME  '
                 text_color: 1, 1, 1, 1
                 md_bg_color: 0.098, 0.407, 0.670, 1
 
-            Button:
-                text: '                        TITLE                         '
-                text_color: 1, 1, 1, 1
-#                md_bg_color: 0.098, 0.407, 0.670, 1
-
-            MDRectangleFlatButton:
-                text: '   CAM   '
+            MDRaisedButton:
+                text: '                       TITLE                       '
                 text_color: 1, 1, 1, 1
                 md_bg_color: 0.098, 0.407, 0.670, 1
 
-            MDRectangleFlatButton:
-                text: '                                   NOTES                                   '
+            MDRaisedButton:
+                text: '  CAM   '
+                text_color: 1, 1, 1, 1
+                md_bg_color: 0.098, 0.407, 0.670, 1
+
+            MDRaisedButton:
+                text: '                                NOTES                                  '
                 text_color: 1, 1, 1, 1
                 md_bg_color: 0.098, 0.407, 0.670, 1
                 on_release: root.status_update()
@@ -264,6 +259,8 @@ ScreenManager:
         # ## ### RECYCLEVIEW ### ## #
         # ## ### RECYCLEVIEW ### ## #
         # ## ### RECYCLEVIEW ### ## #
+
+
         RecycleView
             data: app.rvdata
             viewclass: 'Row'
@@ -334,7 +331,7 @@ ScreenManager:
                 size_hint_x: None
                 width: 970
                 size_hint_y: None
-                height: 600
+                height: 500
 
 
                 canvas.before:
@@ -346,7 +343,7 @@ ScreenManager:
 
                 MDLabel:
                     id: drawing_screen_title
-                    text: 'test'
+                    color: 1,1,1,1
                     halign: 'center'
 
                 # toolbar

@@ -71,17 +71,120 @@
 
 
 
-<Kontent>
-    orientation: "vertical"
-    spacing: "12dp"
-    size_hint_y: None
-    height: "400dp"
-
-    ColorWheel
-
-
-
 <ColorChoiceDrawing>
+    pos_hint: {'top': .65}
+#    spacing: "12dp"
+#    size_hint_y: None
+#    height: "100dp"
+
+    black: 0, 0, 0, 1
+    white: 1, 1, 1, 1
+    MDBoxLayout
+
+        Widget
+
+        MDRaisedButton:
+            red: 0.941, 0, 0, 1
+            md_bg_color: self.red
+            on_release: root.change_drawing_color(self.red), root.dismiss()
+            on_release: app.drawing_color_btn(self.red, root.white)
+        MDRaisedButton:
+            orange: 1, 0.501, 0, 1
+            md_bg_color: self.orange
+            on_release: root.change_drawing_color(self.orange), root.dismiss()
+            on_release: app.drawing_color_btn(self.orange, root.black)
+        MDRaisedButton:
+            yellow: 1, 1, 0, 1
+            md_bg_color: self.yellow
+            on_release: root.change_drawing_color(self.yellow), root.dismiss()
+            on_release: app.drawing_color_btn(self.yellow, root.black)
+        MDRaisedButton:
+            green: 0.501, 1, 0, 1
+            md_bg_color: self.green
+            on_release: root.change_drawing_color(self.green), root.dismiss()
+            on_release: app.drawing_color_btn(self.green, root.black)
+        MDRaisedButton:
+            teal: 0, 1, 0.501, 1
+            md_bg_color: self.teal
+            on_release: root.change_drawing_color(self.teal), root.dismiss()
+            on_release: app.drawing_color_btn(self.teal, root.black)
+        MDRaisedButton:
+            turquoise: 0, 1, 1, 1
+            md_bg_color: self.turquoise
+            on_release: root.change_drawing_color(self.turquoise), root.dismiss()
+            on_release: app.drawing_color_btn(self.turquoise, root.black)
+
+
+
+        MDRaisedButton:
+            blue: 0, 0.501, 1, 1
+            md_bg_color: self.blue
+            on_release: root.change_drawing_color(self.blue), root.dismiss()
+            on_release: app.drawing_color_btn(self.blue, root.white)
+        MDRaisedButton:
+            navy: 0, 0, 1, 1
+            md_bg_color: self.navy
+            on_release: root.change_drawing_color(self.navy), root.dismiss()
+            on_release: app.drawing_color_btn(self.navy, root.white)
+        MDRaisedButton:
+            purple: 0.498, 0, 1, 1
+            md_bg_color: self.purple
+            on_release: root.change_drawing_color(self.purple), root.dismiss()
+            on_release: app.drawing_color_btn(self.purple, root.white)
+        MDRaisedButton:
+            pink: 1, 0, 1, 1
+            md_bg_color: self.pink
+            on_release: root.change_drawing_color(self.pink), root.dismiss()
+            on_release: app.drawing_color_btn(self.pink, root.black)
+        MDRaisedButton:
+            grey: 0.5, 0.5, 0.5, 1
+            md_bg_color: self.grey
+            on_release: root.change_drawing_color(self.grey), root.dismiss()
+            on_release: app.drawing_color_btn(self.grey, root.white)
+        MDRaisedButton:
+            black: 0, 0, 0, 1
+            md_bg_color: self.black
+            on_release: root.change_drawing_color(self.black), root.dismiss()
+            on_release: app.drawing_color_btn(self.black, root.white)
+        Widget
+
+
+
+
+    # grey
+#        BoxLayout
+#            size_hint_x: .2
+#            orientation: 'vertical'
+#            MDRaisedButton
+#                md_bg_color: 0, 0, 0, 1
+#
+#            MDRaisedButton
+#                md_bg_color: .16, .16, .16, 1
+#
+#            MDRaisedButton
+#                md_bg_color: .32, .32, .32, 1
+#
+#            MDRaisedButton
+#                md_bg_color: .48, .48, .48, 1
+#
+#            MDRaisedButton
+#                md_bg_color: .64, .64, .64, 1
+#
+#            MDRaisedButton
+#                md_bg_color: .8, .8, .8, 1
+#
+#            Widget:
+#                size_hint_y: .8
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -167,7 +270,7 @@
 
 
 <WidthChoicePencil>
-    pos_hint: {'top': .65}
+    pos_hint: {'top': .7}
     MDBoxLayout:
         orientation: 'vertical'
 #        MDLabel:

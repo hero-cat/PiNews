@@ -63,7 +63,7 @@ class TestApp(MDApp):
 
             self.rvdata = fresh_data
 
-        self.connection_status_update(str(self.counter))  # update status bar
+        self.connection_status_update(str(self.counter) + ' successful data pulls from AWS')  # update status bar
         self.counter += 1
 
     def connection_status_update(self, message):
