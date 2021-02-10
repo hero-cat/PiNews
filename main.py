@@ -2,15 +2,15 @@ from kivy.config import Config
 Config.set('graphics', 'width', '700')
 Config.set('graphics', 'height', '1000')
 import json
-import boto3
 from kivy import properties as KP
 from kivy.clock import Clock
 from kivymd.app import MDApp
 from rows.row import Row, DrawingRepository
 from popups.popups import Popups
 from kivy.factory import Factory as F
-from pprint import pprint as p
 from kivy.uix import screenmanager as sm
+import boto3
+import botocore
 
 
 class TestApp(MDApp):
@@ -38,31 +38,20 @@ class TestApp(MDApp):
 
     current_widget = KP.ObjectProperty()
 
-
     current_story_id = KP.StringProperty()
 
-    # AWS connection
-    # with open("/Users/joseedwa/PycharmProjects/xyz/aws_creds.json") as aws_creds:
-    with open("aws_creds.json") as aws_creds:
-        aws_credentials = json.load(aws_creds)
-        aws_access_key_id = aws_credentials[0]['aws_access_key_id']
-        aws_secret_access_key = aws_credentials[0]['aws_secret_access_key']
-
-    s3 = boto3.client('s3',
-                      aws_access_key_id=aws_access_key_id,
-                      aws_secret_access_key=aws_secret_access_key)
+    s3 = boto3.client('s3', config=botocore.config.Config(signature_version=botocore.UNSIGNED))
 
     def build(self):
         # self.theme_cls.primary_palette = "Blue"
         self.pull_json_data(0)  # Pull data once
         Clock.schedule_interval(self.pull_json_data, 15.0)  # Pull data at 15s intervals
 
-
     def pull_json_data(self, dt):
         self.s3.download_file('hero-cat-test', 'test_rundown', 'test_rundown.json')
+        print(self.counter)
         with open('test_rundown.json') as json_file:
             fresh_data = json.load(json_file)
-
             self.rvdata = fresh_data
 
         self.connection_status_update(str(self.counter) + ' successful data pulls from AWS')  # update status bar
