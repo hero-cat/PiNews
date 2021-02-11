@@ -112,7 +112,7 @@ class TestApp(MDApp):
 
         with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
             F.Color(1, 1, 1)
-            F.Rectangle(size=(933.33, 240))
+            F.Rectangle(size=(799.99, 180))
 
 
 
@@ -127,7 +127,7 @@ class TestApp(MDApp):
             with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
                 bgc = drawings['bg_color']
                 F.Color(bgc[0], bgc[1], bgc[2])
-                F.Rectangle(size=(933.33, 240))
+                F.Rectangle(size=(799.99, 180))
 
             # Loop through the drawings and add to canvas
             for drawinz in drawings['pencil_drawings']:
@@ -141,7 +141,7 @@ class TestApp(MDApp):
             self.root.ids.drawing_screen.ids.mypaintpage.canvas.clear()
             with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
                 F.Color(.95, .95, .95, 1)
-                F.Rectangle(size=(933.33, 240))
+                F.Rectangle(size=(799.99, 180))
 
 
 
@@ -243,7 +243,7 @@ class MyPaintPage(F.RelativeLayout):
 
         with self.canvas:
             F.Color(.95, .95, .95, 1)
-            F.Rectangle(size=(933.33, 240))
+            F.Rectangle(size=(799.99, 180))
 
 
 
