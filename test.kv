@@ -236,25 +236,28 @@ ScreenManager:
                 on_release: app.popups.clear_all_conf()
 #                on_release: app.clear_all_drawings()
 
-        BoxLayout:
+        MDBoxLayout:
+            spacing: 3
             size_hint_y: 0.039
+
             MDRaisedButton:
                 text: '  TIME  '
                 text_color: 1, 1, 1, 1
                 md_bg_color: 0.098, 0.407, 0.670, 1
 
             MDRaisedButton:
-                text: '                       TITLE                       '
+                text: '                         TITLE                         '
                 text_color: 1, 1, 1, 1
                 md_bg_color: 0.098, 0.407, 0.670, 1
 
             MDRaisedButton:
-                text: '  CAM   '
+                text: '   CAM    '
                 text_color: 1, 1, 1, 1
                 md_bg_color: 0.098, 0.407, 0.670, 1
 
             MDRaisedButton:
-                text: '                                NOTES                                  '
+                text: '                                  NOTES                                    '
+                halign: 'center'
                 text_color: 1, 1, 1, 1
                 md_bg_color: 0.098, 0.407, 0.670, 1
                 on_release: root.status_update()

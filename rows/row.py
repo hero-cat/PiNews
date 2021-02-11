@@ -142,6 +142,7 @@ class DrawingRepository:
 class ClickableBox(F.ButtonBehavior, F.RelativeLayout):
     story_id = KP.StringProperty(None, allownone=True)
 
+
     def on_story_id(self, _, story_id):
         """Property event handler; this method is called automatically
         when the current_story_id property changes. This is how RecycleView redraws drawings

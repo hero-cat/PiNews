@@ -30,6 +30,8 @@
         text: 'tets'
         size_hint_x: .4
         on_press: app.focused_row_properties_update(self, root.story_id, root.title, root.backtime)
+        on_release: print(self.height)
+        on_release: print(self.width)
 
         # TEST PERFORMANCE - MAYBE WIDTH 2 WORKS BETTER
         # REMOVE IF ANY PERFORMANCE ISSUES
