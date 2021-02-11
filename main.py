@@ -137,7 +137,7 @@ class TestApp(MDApp):
                     F.Line(width=drawinz['width'], points=drawinz['points'])
 
         else:
-            # If no drawing make canvas nice and clean
+            # If no drawing make canvas nice andw clean
             self.root.ids.drawing_screen.ids.mypaintpage.canvas.clear()
             with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
                 F.Color(.95, .95, .95, 1)
