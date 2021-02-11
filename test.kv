@@ -233,9 +233,11 @@ ScreenManager:
                 on_release: pencil_button.text_color = 0, 0, 0, .4
                 on_release: fill_button.text_color = 0, 0, 0, .4
                 on_release: app.change_tool('eraser')
+
+
             MDIconButton
                 icon: "close-box"
-                on_release: app.popups.clear_all_conf()
+                on_release: app.popups.clear_all_conf_popup()
 #                on_release: app.clear_all_drawings()
 
         MDBoxLayout:

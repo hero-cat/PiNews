@@ -308,8 +308,17 @@
             on_release: root.dismiss()
 
 
-<MandyLog>
-    id: mandy
+<ConfBox>
+    Widget
+
+    MDFlatButton
+        text: 'Cancel'
+        on_release: root.parent.parent.parent.dismiss()
+
+    MDRaisedButton
+        text: 'OK'
+        on_release: app.clear_all_drawings()
+        on_release: root.parent.parent.parent.dismiss()
 
 
 
