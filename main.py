@@ -83,10 +83,14 @@ class TestApp(MDApp):
         self.root.ids.lw_rundown.ids.lw.ids.fill_button.text_color = color
 
 
-    def drawing_color_btn(self, bg_color, font_color):
-        """Change drawing page colour button properties"""
-        self.root.ids.drawing_screen.ids.drawing_color_button.md_bg_color = bg_color
+    def button_color(self, color, font_color):
+        """Change colour button properties"""
+        if self.root.current == 'lw':
+            self.root.ids.lw_rundown.ids.lw.ids.fill_button.text_color = color
+
+        self.root.ids.drawing_screen.ids.drawing_color_button.md_bg_color = color
         self.root.ids.drawing_screen.ids.drawing_color_button.text_color = font_color
+
 
 
 
@@ -214,17 +218,18 @@ class FillButton(F.MDIconButton):
     popups = Popups()
 
 
+
     def on_touch_down(self, touch):
         app = TestApp.get_running_app()
         toolbar = TestApp.get_running_app().root.ids.lw_rundown.ids.lw.ids
 
 
         if touch.is_double_tap:
-            self.popups.select_fill_color()
+            self.popups.show_color_choice_popup()
 
         else:
             app.change_tool('fill')
-            self.text_color = (DrawingRepository.fill_color)
+            self.text_color = (DrawingRepository.drawing_color)
             toolbar.pencil_button.text_color = (0, 0, 0, .4)
             toolbar.eraser_button.text_color = (0, 0, 0, .4)
 
