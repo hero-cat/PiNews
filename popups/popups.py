@@ -41,9 +41,8 @@ class WidthChoicePencil(MDDialog):
 
 
 
-
-
-
+class ClearConfirmation(MDDialog):
+    pass
 
 
 
@@ -63,6 +62,12 @@ class Popups:
     @staticmethod
     def select_width():
         WidthChoicePencil().open()
+
+
+    @staticmethod
+    def clear_all_conf():
+        ClearConfirmation().open()
+
 
     # Custom popup
     # # Have one method, passed a var like Kontent which is a variable for content_cls

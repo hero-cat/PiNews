@@ -286,3 +286,56 @@
 
 
 
+
+
+
+<ClearConfirmation>
+    MDBoxLayout
+
+        MDLabel:
+            text: 'CLEAR ALL?'
+
+        MDRaisedButton:
+            text: 'CANCEL'
+            on_release: root.dismiss()
+
+        MDRaisedButton:
+            text: 'CLEAR'
+            on_press: app.clear_all_drawings()
+            on_release: root.dismiss()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

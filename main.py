@@ -11,6 +11,8 @@ from kivy.factory import Factory as F
 from kivy.uix import screenmanager as sm
 import boto3
 import botocore
+from kivy.core.window import WindowBase
+from kivy.uix.behaviors import FocusBehavior
 
 
 class TestApp(MDApp):
@@ -42,13 +44,23 @@ class TestApp(MDApp):
 
     s3 = boto3.client('s3', config=botocore.config.Config(signature_version=botocore.UNSIGNED))
 
+
+
     def build(self):
         # self.theme_cls.primary_palette = "Blue"
         self.pull_json_data(0)  # Pull data once
         Clock.schedule_interval(self.pull_json_data, 15.0)  # Pull data at 15s intervals
+        from kivy.base import EventLoop
+        EventLoop.window.bind(on_keyboard=self.hook_keyboard)
+
+    def hook_keyboard(self, window, key, *largs):
+        if key == 27:
+
+            self.root.current = 'menu'
+            return True
 
     def pull_json_data(self, dt):
-        self.s3.download_file('hero-cat-test', 'test_rundown', 'test_rundown.json')
+        # self.s3.download_file('hero-cat-test', 'test_rundown', 'test_rundown.json')
         print(self.counter)
         with open('test_rundown.json') as json_file:
             fresh_data = json.load(json_file)
@@ -76,11 +88,17 @@ class TestApp(MDApp):
         self.root.ids.drawing_screen.ids.drawing_color_button.md_bg_color = bg_color
         self.root.ids.drawing_screen.ids.drawing_color_button.text_color = font_color
 
+
+
     def clear_all_drawings(self):
         """.clear() all visible DrawingWidgets from RV and empty stored drawings"""
         DrawingRepository.clear_all()
         for row in self.root.ids.lw_rundown.ids.lw.ids.rv.children:
             row.ids.wig.canvas.clear()
+
+
+
+
 
 
 
@@ -191,8 +209,6 @@ class TestApp(MDApp):
 
 
 
-
-
 class FillButton(F.MDIconButton):
     # A separate class for the fill button to enable double tap/change color
     popups = Popups()
@@ -213,19 +229,12 @@ class FillButton(F.MDIconButton):
             toolbar.eraser_button.text_color = (0, 0, 0, .4)
 
 
-
-
-
-
 class MyPaintPage(F.RelativeLayout):
-
     # DRAWING PAGE
 
     story_id = KP.StringProperty(None, allownone=True)
 
     line_points = KP.ListProperty()
-
-
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

@@ -45,12 +45,14 @@ ScreenManager:
                 font_size: 28
                 hint_text: "USERNAME"
                 mode: "rectangle"
+                on_focus: self.show_keyboard()
             MDTextField:
                 id: password
                 font_size: 28
                 hint_text: "PASSWORD"
                 mode: "rectangle"
                 password: True
+                on_focus: self.show_keyboard()
 
             MDBoxLayout
                 Widget
@@ -88,15 +90,15 @@ ScreenManager:
             Widget:
             MDRaisedButton:
                 text: '  GMB   '
-                on_press: app.root.current = '0600'
+#                on_press: app.root.current = '0600'
             Widget:
             MDRaisedButton:
                 text: '    LK    '
-                on_press: app.root.current = 'lk'
+#                on_press: app.root.current = 'lk'
             Widget:
             MDRaisedButton:
                 text: '    TM    '
-                on_press: app.root.current = 'tm'
+#                on_press: app.root.current = 'tm'
             Widget
             MDRaisedButton:
                 text: '    LW    '
@@ -145,7 +147,7 @@ ScreenManager:
 
 #            MDIconButton:
 #                icon: "arrow-left-bold-outline"
-#                on_press: app.root.current = 'drawing'
+#                on_press: app.root.current = 'menu'
 #
 #            MDIconButton:
 #                icon: "power-on"
@@ -231,7 +233,8 @@ ScreenManager:
                 on_release: app.change_tool('eraser')
             MDIconButton
                 icon: "close-box"
-                on_release: app.clear_all_drawings()
+                on_release: app.popups.clear_all_conf()
+#                on_release: app.clear_all_drawings()
 
         BoxLayout:
             size_hint_y: 0.039
