@@ -60,8 +60,7 @@ class TestApp(MDApp):
             return True
 
     def pull_json_data(self, dt):
-        # self.s3.download_file('hero-cat-test', 'test_rundown', 'test_rundown.json')
-        print(self.counter)
+        self.s3.download_file('hero-cat-test', 'test_rundown', 'test_rundown.json')
         with open('test_rundown.json') as json_file:
             fresh_data = json.load(json_file)
             self.rvdata = fresh_data
@@ -125,6 +124,7 @@ class TestApp(MDApp):
         # Enter drawing page, if drawing exists, write it to canvas. else clean canvas for new drawing
         drawings = DrawingRepository.get_drawing(story_id)
 
+
         if drawings is not None:
             # Clear the widget and enter new BG color
             self.root.ids.drawing_screen.ids.mypaintpage.canvas.clear()
@@ -135,6 +135,7 @@ class TestApp(MDApp):
 
             # Loop through the drawings and add to canvas
             for drawinz in drawings['pencil_drawings']:
+
                 with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
                     pc = drawinz['pencil_color']
                     F.Color(pc[0], pc[1], pc[2])
@@ -312,7 +313,6 @@ class MyPaintPage(F.RelativeLayout):
 
 
     def clear_canvas(self):
-        print('clearing')
         self.canvas.clear()
 
 

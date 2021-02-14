@@ -49,9 +49,7 @@ class DrawingRepository:
 
     drawing_color = (0, 0, 0)
 
-    default_dict = {'tool': tool,
-                    'bg_color': (1,1,1,1),
-                    'pencil_drawings': []}
+
 
     @staticmethod
     def add_drawing(story_id, tool, color, width, points):
@@ -64,12 +62,10 @@ class DrawingRepository:
                 # if a drawing already exists against the current_story_id
 
                 if tool != 'pencil':
-                    print('backing')
                     drngs[story_id] = {'tool': tool,
                                        'bg_color': color,
                                        'pencil_drawings': []}
                 else:
-                    print('front')
                     drngs[story_id]['tool'] = tool
                     drngs[story_id]['pencil_drawings'].append({'width': width,
                                                                'pencil_color': color,
@@ -123,14 +119,15 @@ class DrawingRepository:
     @staticmethod
     def change_tool(tool):
         DrawingRepository.tool = tool
-        print(tool)
         if tool == 'fill':
             DrawingRepository.change_fill_color(DrawingRepository.pencil_color)
 
     @staticmethod
     def clear_drawing(story_id):
-        print('clrng')
-        DrawingRepository.drawings[story_id] = DrawingRepository.default_dict
+
+        DrawingRepository.drawings[story_id] = {'tool': 'pencil', 'bg_color': (1,1,1,1), 'pencil_drawings': []}
+
+
 
     @staticmethod
     def clear_all():
