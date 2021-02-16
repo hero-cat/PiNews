@@ -180,7 +180,7 @@ class ClickableBox(F.ButtonBehavior, F.RelativeLayout):
 
 #
 # class DrawingWidget(RelativeLayout):
-#     """This class needs to be as efficient as possible so the drawing is as smooth as can be"""
+#     """This class needs to be as efficiejhnt as possible so the drawing is as smooth as can be"""
 #     current_story_id = KP.StringProperty(None, allownone=True)
 #     line_points = KP.ListProperty()
 #

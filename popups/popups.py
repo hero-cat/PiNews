@@ -32,7 +32,7 @@ class Popups:
             self.color_popup = MDDialog(
                 type="custom",
                 size_hint_x = None,
-                width = "300dp",
+                width = "301dp",
                 content_cls=ColorChange())
         self.color_popup.open()
 

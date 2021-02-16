@@ -53,7 +53,7 @@ class TestApp(MDApp):
         Clock.schedule_interval(self.pull_json_data, 60.0)  # Pull data at 15s intervals
         from kivy.base import EventLoop
         EventLoop.window.bind(on_keyboard=self.hook_keyboard)
-        print(os.listdir('.'))
+
 
     def hook_keyboard(self, window, key, *largs):
         if key == 27:
