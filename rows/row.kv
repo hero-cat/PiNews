@@ -4,7 +4,7 @@
 
 <Row@BoxLayout>
     Button:
-        id: page_lbl
+        id: backtime_lbl
         font_size: 30
 
         size_hint_x: .1
@@ -18,10 +18,6 @@
         size_hint_x: .3
         background_color: 0.141, 0.580, 0.956, 1
 
-    Button:
-        id: total_lbl
-        size_hint_x: .1
-        background_color: 0.141, 0.580, 0.956, 1
 
     Button:
         id: camera_lbl
@@ -32,9 +28,7 @@
     ClickableBox:
         id: wig
         text: 'tets'
-        size_hint_x: None
-        #width: 527.99
-        width: 400
+        size_hint_x: .4
         on_press: app.focused_row_properties_update(self, root.story_id, root.title, root.backtime)
 
         # TEST PERFORMANCE - MAYBE WIDTH 2 WORKS BETTER

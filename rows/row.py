@@ -13,9 +13,6 @@ class Row(RecycleDataViewBehavior, BoxLayout):
     camera = KP.StringProperty()
     story_id = KP.StringProperty()
     backtime = KP.StringProperty()
-    page = KP.StringProperty()
-    totaltime = KP.StringProperty()
-
 
     def refresh_view_attrs(self, view, index, data):
         """Keep the index up to date"""
@@ -28,16 +25,16 @@ class Row(RecycleDataViewBehavior, BoxLayout):
         if parent:
             if len(self.title) >= 15:
                 tits = self.title[:15] + '\n' + self.title[15:]
+
             else:
                 tits = self.title
 
-            self.ids.page_lbl.text = self.page
+
+
             self.ids.title_lbl.text = tits
             self.ids.camera_lbl.text = self.camera
-            self.ids.total_lbl.text = self.totaltime
-
             self.ids.wig.story_id = self.story_id
-
+            self.ids.backtime_lbl.text = self.backtime
 
 
 class DrawingRepository:
@@ -148,11 +145,9 @@ class ClickableBox(F.ButtonBehavior, F.RelativeLayout):
         when the current_story_id property changes. This is how RecycleView redraws drawings
         against the correct row.
         """
-        print(self.height)
         drawings = DrawingRepository.get_drawing(story_id)
 
         if drawings is not None:
-
             if drawings['tool'] != 'pencil':
 
                 with self.canvas:
@@ -167,7 +162,7 @@ class ClickableBox(F.ButtonBehavior, F.RelativeLayout):
                     Rectangle(size=self.size)
 
                 for drawinz in drawings['pencil_drawings']:
-                    newlist = [(x * .5) for x in drawinz['points']]
+                    newlist = [(x * .66) for x in drawinz['points']]
 
                     with self.canvas:
                         rgb = drawinz['pencil_color']

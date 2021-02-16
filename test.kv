@@ -8,6 +8,11 @@
 ScreenManager:
     id: screen_manager
 
+    LWRundown
+        id: lw_rundown
+        name: 'lw'
+        manager: 'screen_manager'
+
     LoginScreen:
         id: login
         name: 'login'
@@ -18,21 +23,12 @@ ScreenManager:
         name: 'menu'
         manager: 'screen_manager'
 
-    LWRundown
-        id: lw_rundown
-        name: 'lw'
-        manager: 'screen_manager'
+
 
     DrawingScreen:
         id: drawing_screen
         name: 'drawing'
         manager: 'screen_manager'
-
-    TMRundown:
-        id: tm_rundown
-        name: 'tm'
-        manager: 'screen_manager'
-
 
 
 
@@ -104,7 +100,7 @@ ScreenManager:
             Widget:
             MDRaisedButton:
                 text: '    TM    '
-                on_press: app.root.current = 'tm'
+#                on_press: app.root.current = 'tm'
             Widget
             MDRaisedButton:
                 text: '    LW    '
@@ -249,17 +245,12 @@ ScreenManager:
             size_hint_y: 0.039
 
             MDRaisedButton:
-                text: '   PAGE   '
+                text: '   TIME    '
                 text_color: 1, 1, 1, 1
                 md_bg_color: 0.098, 0.407, 0.670, 1
 
             MDRaisedButton:
-                text: '                         TITLE                         '
-                text_color: 1, 1, 1, 1
-                md_bg_color: 0.098, 0.407, 0.670, 1
-
-            MDRaisedButton:
-                text: ' TOTAL  '
+                text: '                          TITLE                         '
                 text_color: 1, 1, 1, 1
                 md_bg_color: 0.098, 0.407, 0.670, 1
 
@@ -322,7 +313,6 @@ ScreenManager:
     id: dwscreen
 
     canvas.before:
-
         Rectangle:
             pos: self.pos
             size: self.size
@@ -351,7 +341,7 @@ ScreenManager:
                 size_hint_x: None
                 width: 850
                 size_hint_y: None
-                height: 500
+                height: 420
 
 
                 canvas.before:
@@ -437,7 +427,7 @@ ScreenManager:
                 # Drawing housing
                 BoxLayout
                     size_hint_y: None
-                    height: 240
+                    height: 180
                     Widget
 
                     # Drawing area
@@ -446,8 +436,8 @@ ScreenManager:
                         background_color: 1, 1, 1
                         size_hint_x: None
                         size_hint_y: None
-                        height: 240
-                        width: 800
+                        height: 180
+                        width: 799.99
 
                     Widget
 
@@ -543,16 +533,10 @@ ScreenManager:
         data: app.data_lk
 
 <TMRundown@MDScreen>
-    canvas.before:
-
-        Rectangle:
-            pos: self.pos
-            size: self.size
-            source: 'blur.png'
-#    RundownTemplate
-#        id: tm
-#        rundown: 'TM'
-#        data: app.data_tm
+    RundownTemplate
+        id: tm
+        rundown: 'TM'
+        data: app.data_tm
 
 <LWRundown@MDScreen>
     RundownTemplate
