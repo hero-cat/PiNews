@@ -176,7 +176,7 @@ class ClickableBox(F.ButtonBehavior, F.RelativeLayout):
 
         else:
             self.width = 300
-            self.canvas.clear()
+            #self.canvas.clear()
 
 #
 # class DrawingWidget(RelativeLayout):
