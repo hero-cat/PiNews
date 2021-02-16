@@ -2,14 +2,18 @@ from kivy.config import Config
 Config.set('graphics', 'width', '700')
 Config.set('graphics', 'height', '1000')
 import json
+import os
 from kivy import properties as KP
 from kivy.clock import Clock
 from kivymd.app import MDApp
 from rows.row import Row, DrawingRepository
 from popups.popups import Popups
 from kivy.factory import Factory as F
-from pprint import pprint as p
 from kivy.uix import screenmanager as sm
+import boto3
+import botocore
+from kivy.core.window import WindowBase
+from kivy.uix.behaviors import FocusBehavior
 
 
 class TestApp(MDApp):
@@ -37,33 +41,33 @@ class TestApp(MDApp):
 
     current_widget = KP.ObjectProperty()
 
-
     current_story_id = KP.StringProperty()
 
-    # AWS connection
-    # with open("/Users/joseedwa/PycharmProjects/xyz/aws_creds.json") as aws_creds:
-    #     aws_credentials = json.load(aws_creds)
-    #     aws_access_key_id = aws_credentials[0]['aws_access_key_id']
-    #     aws_secret_access_key = aws_credentials[0]['aws_secret_access_key']
-    #
-    # s3 = boto3.client('s3',
-    #                   aws_access_key_id=aws_access_key_id,
-    #                   aws_secret_access_key=aws_secret_access_key)
+    s3 = boto3.client('s3', config=botocore.config.Config(signature_version=botocore.UNSIGNED))
+
+
 
     def build(self):
-        self.theme_cls.primary_palette = "Blue"
+        # self.theme_cls.primary_palette = "Blue"
         self.pull_json_data(0)  # Pull data once
-        Clock.schedule_interval(self.pull_json_data, 15.0)  # Pull data at 15s intervals
+        Clock.schedule_interval(self.pull_json_data, 60.0)  # Pull data at 15s intervals
+        from kivy.base import EventLoop
+        EventLoop.window.bind(on_keyboard=self.hook_keyboard)
+        print(os.listdir('.'))
 
+    def hook_keyboard(self, window, key, *largs):
+        if key == 27:
+
+            self.root.current = 'menu'
+            return True
 
     def pull_json_data(self, dt):
-        # self.s3.download_file('hero-cat-test', 'test_rundown', 'test_rundown.json')
+        self.s3.download_file('hero-cat-test', 'test_rundown', 'test_rundown.json')
         with open('test_rundown.json') as json_file:
             fresh_data = json.load(json_file)
-
             self.rvdata = fresh_data
 
-        self.connection_status_update(str(self.counter))  # update status bar
+        self.connection_status_update(str(self.counter) + ' successful data pulls from AWS')  # update status bar
         self.counter += 1
 
     def connection_status_update(self, message):
@@ -72,19 +76,24 @@ class TestApp(MDApp):
 
     def change_tool(self, tool):
         """Choose between pencil, fill, eraser"""
-        dp = DrawingRepository
-        dp.change_tool(tool)
+        DrawingRepository.change_tool(tool)
 
 
     def fill_color_btn(self, color):
-        """Change colour button background colour"""
+        """Change main page fill button background colour"""
         self.root.ids.lw_rundown.ids.lw.ids.fill_button.text_color = color
 
 
-    def drawing_color_btn(self, bg_color, font_color):
-        """Change colour button background colour"""
-        self.root.ids.drawing_screen.ids.drawing_color_button.md_bg_color = bg_color
+    def button_color(self, color, font_color):
+        """Change colour button properties"""
+        if self.root.current == 'lw':
+            self.root.ids.lw_rundown.ids.lw.ids.fill_button.text_color = color
+
+        self.root.ids.drawing_screen.ids.drawing_color_button.md_bg_color = color
         self.root.ids.drawing_screen.ids.drawing_color_button.text_color = font_color
+
+
+
 
     def clear_all_drawings(self):
         """.clear() all visible DrawingWidgets from RV and empty stored drawings"""
@@ -95,69 +104,99 @@ class TestApp(MDApp):
 
 
 
-    def back_to_main_page(self):
-        # Back to RV
 
 
-        drawings = DrawingRepository.get_drawing(self.current_story_id)
-
-        if drawings is not None:
 
 
-            for drawinz in drawings['pencil_drawings']:
+    def clear_current_drawing(self):
 
-                newlist = [(x * .66) for x in drawinz['points']]
+        self.root.ids.drawing_screen.ids.mypaintpage.canvas.clear()
 
-                with self.current_widget.canvas:
-                    rgb = drawinz['pencil_color']
-                    F.Color(rgb[0], rgb[1], rgb[2])
+        # DrawingRepository.drawings[self.current_story_id] = DrawingRepository.default_dict
+        DrawingRepository.clear_drawing(self.current_story_id)
 
-                    F.Line(width=2, points=newlist)
-
-
-    def send_story_id(self, story_id):
-        # Send PW page a current_story_id. Without this PW can't update the Drawing Repo
-        self.root.ids.drawing_screen.ids.mypaintpage.story_id = story_id
+        with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
+            F.Color(1, 1, 1)
+            F.Rectangle(size=(799.99, 180))
 
 
 
 
     def enter_drawing_page(self, story_id):
-        # Enter drawing page, if drawing exists, write it to canvas. else clean canvas for enw drawing
+        # Enter drawing page, if drawing exists, write it to canvas. else clean canvas for new drawing
         drawings = DrawingRepository.get_drawing(story_id)
 
+
         if drawings is not None:
+            # Clear the widget and enter new BG color
             self.root.ids.drawing_screen.ids.mypaintpage.canvas.clear()
             with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
-                F.Color(.95, .95, .95, 1)
-                F.Rectangle(size=(933.33, 240))
+                bgc = drawings['bg_color']
+                F.Color(bgc[0], bgc[1], bgc[2])
+                F.Rectangle(size=(800, 240))
 
-
+            # Loop through the drawings and add to canvas
             for drawinz in drawings['pencil_drawings']:
-                with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
 
-                    rgb = drawinz['pencil_color']
-                    F.Color(rgb[0], rgb[1], rgb[2])
+                with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
+                    pc = drawinz['pencil_color']
+                    F.Color(pc[0], pc[1], pc[2])
                     F.Line(width=drawinz['width'], points=drawinz['points'])
 
         else:
+            # If no drawing make canvas nice andw clean
             self.root.ids.drawing_screen.ids.mypaintpage.canvas.clear()
             with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
                 F.Color(.95, .95, .95, 1)
-                F.Rectangle(size=(933.33, 240))
+                F.Rectangle(size=(800, 240))
 
 
 
-    def choice(self, story_id):
+    def back_to_main_page(self):
+        # Once finished on the drawing page head back to main page and rewrite/rescale the drawing to fit notes
+        drawings = DrawingRepository.get_drawing(self.current_story_id)
+
+        if drawings is not None:
+            with self.current_widget.canvas:
+                bgc = drawings['bg_color']
+                F.Color(bgc[0], bgc[1], bgc[2])
+                F.Rectangle(size=self.current_widget.size)
+
+            # Loop through each drawing and rescale it for the canvas
+            for drawinz in drawings['pencil_drawings']:
+
+                newlist = [(x * .5) for x in drawinz['points']]
+
+                with self.current_widget.canvas:
+                    pc = drawinz['pencil_color']
+                    F.Color(pc[0], pc[1], pc[2])
+                    F.Line(width=drawinz['width'], points=newlist)
+
+
+
+
+
+
+    def focused_row_properties_update(self, widget, story_id, title, backtime):
         dp = DrawingRepository
 
+        # Update the Apps reference to the current row in focus
+
+        self.current_widget = widget
+        self.current_story_id = story_id
+        self.root.ids.drawing_screen.ids.mypaintpage.story_id = story_id
+
+        # Send a header to the drawing page
+        drawing_screen_page_header = title + ' @ ' + backtime
+        self.root.ids.drawing_screen.ids.drawing_screen_title.text = drawing_screen_page_header
+
+        # Begin move to drawing page
         if dp.tool == 'pencil':
             self.enter_drawing_page(story_id)
             self.root.transition = sm.NoTransition()
             self.root.current = 'drawing'
 
-
-
+        # Or fill the notes widget with a color
         elif dp.tool == 'fill':
             self.current_widget.canvas.clear()
             with self.current_widget.canvas:
@@ -167,11 +206,10 @@ class TestApp(MDApp):
                 F.Rectangle(size=self.current_widget.size)
                 dp.add_drawing(self.current_story_id, dp.tool, dp.drawing_color, dp.pencil_width, [])
 
+        # Or erase widget
         else:
-            # eraser
+            DrawingRepository.clear_drawing(self.current_story_id)
             self.current_widget.canvas.clear()
-
-
 
 
 
@@ -183,33 +221,28 @@ class FillButton(F.MDIconButton):
     popups = Popups()
 
 
+
     def on_touch_down(self, touch):
         app = TestApp.get_running_app()
         toolbar = TestApp.get_running_app().root.ids.lw_rundown.ids.lw.ids
 
 
         if touch.is_double_tap:
-            self.popups.select_fill_color()
+            self.popups.show_color_choice_popup()
 
         else:
             app.change_tool('fill')
-            self.text_color = (DrawingRepository.fill_color)
+            self.text_color = (DrawingRepository.drawing_color)
             toolbar.pencil_button.text_color = (0, 0, 0, .4)
             toolbar.eraser_button.text_color = (0, 0, 0, .4)
 
 
-
-
-
-
 class MyPaintPage(F.RelativeLayout):
-
     # DRAWING PAGE
 
     story_id = KP.StringProperty(None, allownone=True)
+
     line_points = KP.ListProperty()
-
-
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -218,7 +251,7 @@ class MyPaintPage(F.RelativeLayout):
 
         with self.canvas:
             F.Color(.95, .95, .95, 1)
-            F.Rectangle(size=(933.33, 240))
+            F.Rectangle(size=(799.99, 180))
 
 
 
@@ -230,7 +263,7 @@ class MyPaintPage(F.RelativeLayout):
             with self.canvas:
                 rgb = DrawingRepository.drawing_color
                 F.Color(rgb[0], rgb[1], rgb[2])
-                F.Line(width=2, points=points)
+                F.Line(width=DrawingRepository.pencil_width, points=points)
 
         elif DrawingRepository.tool == 'fill':
             with self.canvas:
@@ -279,6 +312,10 @@ class MyPaintPage(F.RelativeLayout):
 
             return True
         return super().on_touch_up(touch)
+
+
+    def clear_canvas(self):
+        self.canvas.clear()
 
 
 
