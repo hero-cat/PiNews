@@ -148,9 +148,11 @@ class ClickableBox(F.ButtonBehavior, F.RelativeLayout):
         when the current_story_id property changes. This is how RecycleView redraws drawings
         against the correct row.
         """
+        print(self.height)
         drawings = DrawingRepository.get_drawing(story_id)
 
         if drawings is not None:
+
             if drawings['tool'] != 'pencil':
 
                 with self.canvas:

@@ -49,7 +49,7 @@ class TestApp(MDApp):
     def build(self):
         # self.theme_cls.primary_palette = "Blue"
         self.pull_json_data(0)  # Pull data once
-        Clock.schedule_interval(self.pull_json_data, 15.0)  # Pull data at 15s intervals
+        Clock.schedule_interval(self.pull_json_data, 60.0)  # Pull data at 15s intervals
         from kivy.base import EventLoop
         EventLoop.window.bind(on_keyboard=self.hook_keyboard)
 
@@ -131,7 +131,7 @@ class TestApp(MDApp):
             with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
                 bgc = drawings['bg_color']
                 F.Color(bgc[0], bgc[1], bgc[2])
-                F.Rectangle(size=(800, 180))
+                F.Rectangle(size=(800, 240))
 
             # Loop through the drawings and add to canvas
             for drawinz in drawings['pencil_drawings']:
@@ -146,7 +146,7 @@ class TestApp(MDApp):
             self.root.ids.drawing_screen.ids.mypaintpage.canvas.clear()
             with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
                 F.Color(.95, .95, .95, 1)
-                F.Rectangle(size=(800, 180))
+                F.Rectangle(size=(800, 240))
 
 
 
