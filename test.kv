@@ -8,11 +8,6 @@
 ScreenManager:
     id: screen_manager
 
-    LWRundown
-        id: lw_rundown
-        name: 'lw'
-        manager: 'screen_manager'
-
     LoginScreen:
         id: login
         name: 'login'
@@ -23,7 +18,10 @@ ScreenManager:
         name: 'menu'
         manager: 'screen_manager'
 
-
+    LWRundown
+        id: lw_rundown
+        name: 'lw'
+        manager: 'screen_manager'
 
     DrawingScreen:
         id: drawing_screen
@@ -245,12 +243,17 @@ ScreenManager:
             size_hint_y: 0.039
 
             MDRaisedButton:
-                text: '   TIME    '
+                text: '   PAGE    '
                 text_color: 1, 1, 1, 1
                 md_bg_color: 0.098, 0.407, 0.670, 1
 
             MDRaisedButton:
                 text: '                          TITLE                         '
+                text_color: 1, 1, 1, 1
+                md_bg_color: 0.098, 0.407, 0.670, 1
+
+            MDRaisedButton:
+                text: ' TOTAL  '
                 text_color: 1, 1, 1, 1
                 md_bg_color: 0.098, 0.407, 0.670, 1
 

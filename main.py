@@ -155,6 +155,7 @@ class TestApp(MDApp):
         drawings = DrawingRepository.get_drawing(self.current_story_id)
 
         if drawings is not None:
+            self.current_widget.width = 527.99
             with self.current_widget.canvas:
                 bgc = drawings['bg_color']
                 F.Color(bgc[0], bgc[1], bgc[2])

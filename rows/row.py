@@ -13,6 +13,9 @@ class Row(RecycleDataViewBehavior, BoxLayout):
     camera = KP.StringProperty()
     story_id = KP.StringProperty()
     backtime = KP.StringProperty()
+    page = KP.StringProperty()
+    totaltime = KP.StringProperty()
+
 
     def refresh_view_attrs(self, view, index, data):
         """Keep the index up to date"""
@@ -25,16 +28,16 @@ class Row(RecycleDataViewBehavior, BoxLayout):
         if parent:
             if len(self.title) >= 15:
                 tits = self.title[:15] + '\n' + self.title[15:]
-
             else:
                 tits = self.title
 
-
-
+            self.ids.page_lbl.text = self.page
             self.ids.title_lbl.text = tits
             self.ids.camera_lbl.text = self.camera
+            self.ids.total_lbl.text = self.totaltime
+
             self.ids.wig.story_id = self.story_id
-            self.ids.backtime_lbl.text = self.backtime
+
 
 
 class DrawingRepository:
@@ -156,6 +159,7 @@ class ClickableBox(F.ButtonBehavior, F.RelativeLayout):
                     Rectangle(size=self.size)
 
             else:
+                self.width = 527.99
                 with self.canvas:
                     rgb1 = drawings['bg_color']
                     Color(rgb1[0], rgb1[1], rgb1[2])
@@ -171,6 +175,7 @@ class ClickableBox(F.ButtonBehavior, F.RelativeLayout):
                         F.Line(width=drawinz['width'], points=newlist)
 
         else:
+            self.width = 300
             self.canvas.clear()
 
 #
