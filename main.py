@@ -2,6 +2,7 @@ from kivy.config import Config
 Config.set('graphics', 'width', '700')
 Config.set('graphics', 'height', '1000')
 import json
+import os
 from kivy import properties as KP
 from kivy.clock import Clock
 from kivymd.app import MDApp
@@ -52,6 +53,7 @@ class TestApp(MDApp):
         Clock.schedule_interval(self.pull_json_data, 60.0)  # Pull data at 15s intervals
         from kivy.base import EventLoop
         EventLoop.window.bind(on_keyboard=self.hook_keyboard)
+        print(os.listdir('.'))
 
     def hook_keyboard(self, window, key, *largs):
         if key == 27:

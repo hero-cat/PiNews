@@ -28,6 +28,12 @@ ScreenManager:
         name: 'drawing'
         manager: 'screen_manager'
 
+    TMRundown:
+        id: tm_rundown
+        name: 'tm'
+        manager: 'screen_manager'
+
+
 
 
 <LoginScreen>
@@ -98,7 +104,7 @@ ScreenManager:
             Widget:
             MDRaisedButton:
                 text: '    TM    '
-#                on_press: app.root.current = 'tm'
+                on_press: app.root.current = 'tm'
             Widget
             MDRaisedButton:
                 text: '    LW    '
@@ -316,6 +322,7 @@ ScreenManager:
     id: dwscreen
 
     canvas.before:
+
         Rectangle:
             pos: self.pos
             size: self.size
@@ -536,10 +543,16 @@ ScreenManager:
         data: app.data_lk
 
 <TMRundown@MDScreen>
-    RundownTemplate
-        id: tm
-        rundown: 'TM'
-        data: app.data_tm
+    canvas.before:
+
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'blur.png'
+#    RundownTemplate
+#        id: tm
+#        rundown: 'TM'
+#        data: app.data_tm
 
 <LWRundown@MDScreen>
     RundownTemplate
