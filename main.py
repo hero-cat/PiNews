@@ -131,7 +131,7 @@ class TestApp(MDApp):
             with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
                 bgc = drawings['bg_color']
                 F.Color(bgc[0], bgc[1], bgc[2])
-                F.Rectangle(size=(799.99, 180))
+                F.Rectangle(size=(800, 180))
 
             # Loop through the drawings and add to canvas
             for drawinz in drawings['pencil_drawings']:
@@ -146,7 +146,7 @@ class TestApp(MDApp):
             self.root.ids.drawing_screen.ids.mypaintpage.canvas.clear()
             with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
                 F.Color(.95, .95, .95, 1)
-                F.Rectangle(size=(799.99, 180))
+                F.Rectangle(size=(800, 180))
 
 
 
@@ -155,7 +155,6 @@ class TestApp(MDApp):
         drawings = DrawingRepository.get_drawing(self.current_story_id)
 
         if drawings is not None:
-            self.current_widget.width = 527.99
             with self.current_widget.canvas:
                 bgc = drawings['bg_color']
                 F.Color(bgc[0], bgc[1], bgc[2])
@@ -164,7 +163,7 @@ class TestApp(MDApp):
             # Loop through each drawing and rescale it for the canvas
             for drawinz in drawings['pencil_drawings']:
 
-                newlist = [(x * .66) for x in drawinz['points']]
+                newlist = [(x * .5) for x in drawinz['points']]
 
                 with self.current_widget.canvas:
                     pc = drawinz['pencil_color']

@@ -159,14 +159,13 @@ class ClickableBox(F.ButtonBehavior, F.RelativeLayout):
                     Rectangle(size=self.size)
 
             else:
-                self.width = 527.99
                 with self.canvas:
                     rgb1 = drawings['bg_color']
                     Color(rgb1[0], rgb1[1], rgb1[2])
                     Rectangle(size=self.size)
 
                 for drawinz in drawings['pencil_drawings']:
-                    newlist = [(x * .66) for x in drawinz['points']]
+                    newlist = [(x * .5) for x in drawinz['points']]
 
                     with self.canvas:
                         rgb = drawinz['pencil_color']
@@ -175,8 +174,7 @@ class ClickableBox(F.ButtonBehavior, F.RelativeLayout):
                         F.Line(width=drawinz['width'], points=newlist)
 
         else:
-            self.width = 300
-            #self.canvas.clear()
+            self.canvas.clear()
 
 #
 # class DrawingWidget(RelativeLayout):
