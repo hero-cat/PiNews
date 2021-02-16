@@ -13,6 +13,7 @@ ScreenManager:
         name: 'lw'
         manager: 'screen_manager'
 
+
     LoginScreen:
         id: login
         name: 'login'
@@ -25,10 +26,12 @@ ScreenManager:
 
 
 
+
     DrawingScreen:
         id: drawing_screen
         name: 'drawing'
         manager: 'screen_manager'
+
 
 
 
@@ -47,14 +50,12 @@ ScreenManager:
                 font_size: 28
                 hint_text: "USERNAME"
                 mode: "rectangle"
-                on_focus: self.show_keyboard()
             MDTextField:
                 id: password
                 font_size: 28
                 hint_text: "PASSWORD"
                 mode: "rectangle"
                 password: True
-                on_focus: self.show_keyboard()
 
             MDBoxLayout
                 Widget
@@ -92,15 +93,15 @@ ScreenManager:
             Widget:
             MDRaisedButton:
                 text: '  GMB   '
-#                on_press: app.root.current = '0600'
+                on_press: app.root.current = '0600'
             Widget:
             MDRaisedButton:
                 text: '    LK    '
-#                on_press: app.root.current = 'lk'
+                on_press: app.root.current = 'lk'
             Widget:
             MDRaisedButton:
                 text: '    TM    '
-#                on_press: app.root.current = 'tm'
+                on_press: app.root.current = 'tm'
             Widget
             MDRaisedButton:
                 text: '    LW    '
@@ -126,17 +127,7 @@ ScreenManager:
         Widget:
             size_hint_y: .7
 
-<Content>
-    orientation: "vertical"
-    spacing: "12dp"
-    size_hint_y: None
-    height: "120dp"
 
-    MDTextField:
-        hint_text: "City"
-
-    MDTextField:
-        hint_text: "Street"
 
 
 <RundownTemplate@MDScreen>
@@ -145,11 +136,11 @@ ScreenManager:
         MDToolbar:
             size_hint_y: None
             height: 90
-            title: 'Loose Women'
+            title: 'Test'
 
 #            MDIconButton:
 #                icon: "arrow-left-bold-outline"
-#                on_press: app.root.current = 'menu'
+#                on_press: app.root.current = 'drawing'
 #
 #            MDIconButton:
 #                icon: "power-on"
@@ -233,35 +224,29 @@ ScreenManager:
                 on_release: pencil_button.text_color = 0, 0, 0, .4
                 on_release: fill_button.text_color = 0, 0, 0, .4
                 on_release: app.change_tool('eraser')
-
-
             MDIconButton
                 icon: "close-box"
-                on_release: app.popups.clear_all_conf_popup()
-#                on_release: app.clear_all_drawings()
+                on_release: app.clear_all_drawings()
 
-        MDBoxLayout:
-            spacing: 3
+        BoxLayout:
             size_hint_y: 0.039
-
-            MDRaisedButton:
-                text: '   TIME    '
+            MDRectangleFlatButton:
+                text: '  TIME  '
                 text_color: 1, 1, 1, 1
                 md_bg_color: 0.098, 0.407, 0.670, 1
 
-            MDRaisedButton:
-                text: '                          TITLE                         '
+            MDRectangleFlatButton:
+                text: '                       TITLE                        '
                 text_color: 1, 1, 1, 1
                 md_bg_color: 0.098, 0.407, 0.670, 1
 
-            MDRaisedButton:
-                text: '   CAM    '
+            MDRectangleFlatButton:
+                text: '  CAM  '
                 text_color: 1, 1, 1, 1
                 md_bg_color: 0.098, 0.407, 0.670, 1
 
-            MDRaisedButton:
-                text: '                                  NOTES                                     '
-                halign: 'center'
+            MDRectangleFlatButton:
+                text: '                                  NOTES                                  '
                 text_color: 1, 1, 1, 1
                 md_bg_color: 0.098, 0.407, 0.670, 1
                 on_release: root.status_update()
@@ -269,8 +254,6 @@ ScreenManager:
         # ## ### RECYCLEVIEW ### ## #
         # ## ### RECYCLEVIEW ### ## #
         # ## ### RECYCLEVIEW ### ## #
-
-
         RecycleView
             data: app.rvdata
             viewclass: 'Row'
@@ -339,28 +322,22 @@ ScreenManager:
                 id: main
                 orientation: 'vertical'
                 size_hint_x: None
-                width: 850
+                width: 970
                 size_hint_y: None
-                height: 420
+                height: 500
 
 
                 canvas.before:
                     Color:
-                        rgb: 0.239, 0.4, 0.541
+                        rgb: .8, .8 , .8
                     Rectangle:
                         pos: main.pos
                         size: main.size
-
-                MDLabel:
-                    id: drawing_screen_title
-                    color: 1,1,1,1
-                    halign: 'center'
 
                 # toolbar
                 BoxLayout
 
                     Widget
-                        size_hint_x: .5
 
 
                     # Colour + Width select
@@ -370,24 +347,23 @@ ScreenManager:
                             size_hint_y: .1
                         MDRaisedButton:
                             id: drawing_color_button
-                            md_bg_color: 0.513, 0.627, 0.725, 1
-                            text: '   COLOUR   '
-#                            text_color: 0,0,0
-#                            font_size: 11
+                            md_bg_color: 0, 0, 0, 1
+                            text: '  COLOUR  '
+                            text_color: 1, 1, 1, 1
+                            font_size: 11
                             size_hint_y: .5
-                            on_release: app.popups.show_color_choice_popup()
+                            on_release: app.popups.select_drawing_color()
                         Widget:
                             size_hint_y: .1
                         MDRaisedButton:
-                            md_bg_color: 0.513, 0.627, 0.725, 1
+                            md_bg_color: 0, 0, 0, 1
                             text: 'THICKNESS'
-#                            text_color: 0,0,0
-#                            font_size: 11
+                            text_color: 1, 1, 1, 1
+                            font_size: 11
                             size_hint_y: .5
                             on_release: app.popups.select_width()
                         Widget:
                             size_hint_y: .1
-
 
 
                     MDIconButton
@@ -395,21 +371,16 @@ ScreenManager:
                         icon: "pencil"
                         theme_text_color: "Custom"
                         text_color: 1, 1, 1
-                        pos_hint: {"center_x": .5, "center_y": .5}
-                        user_font_size: 64
                         on_press: self.text_color = 1, 1, 1
                         on_press: dw_fill_btn.text_color = 0, 0, 0
                         on_release: app.change_tool('pencil')
 
 
                     MDIconButton
-
                         id: dw_fill_btn
                         icon: "format-color-fill"
                         theme_text_color: "Custom"
                         text_color: 0, 0, 0
-                        pos_hint: {"center_x": .5, "center_y": .5}
-                        user_font_size: 64
                         on_press: self.text_color = 1, 1, 1
                         on_press: dw_pencil_btn.text_color = 0, 0, 0
                         on_release: app.change_tool('fill')
@@ -417,17 +388,13 @@ ScreenManager:
 
                     MDIconButton
                         icon: "close-box"
-                        pos_hint: {"center_x": .5, "center_y": .5}
-                        user_font_size: 64
-                        on_release: app.clear_current_drawing()
 
                     Widget
-                        size_hint_x: .5
 
                 # Drawing housing
                 BoxLayout
                     size_hint_y: None
-                    height: 180
+                    height: 240
                     Widget
 
                     # Drawing area
@@ -436,8 +403,8 @@ ScreenManager:
                         background_color: 1, 1, 1
                         size_hint_x: None
                         size_hint_y: None
-                        height: 180
-                        width: 799.99
+                        height: 240
+                        width: 933.33
 
                     Widget
 
@@ -449,16 +416,11 @@ ScreenManager:
                         size_hint_x: 5
                     MDIconButton:
                         icon: "close-outline"
-                        theme_text_color: "Custom"
-                        text_color: 0.988, 0.352, 0.329
-                        on_press: app.clear_current_drawing()
-                        on_release: app.root.current = 'lw'
+                        on_press: app.root.current = 'lw'
                     MDIconButton:
                         icon: "check-outline"
-                        theme_text_color: "Custom"
-                        text_color: 0.490, 0.988, 0.501
                         on_press: app.back_to_main_page()
-                        on_release: app.root.current = 'lw'
+                        on_press: app.root.current = 'lw'
 
             # Middle right spacer
             Widget

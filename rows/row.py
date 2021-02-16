@@ -1,6 +1,6 @@
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
 from kivy.uix.boxlayout import BoxLayout
-from kivy import properties as KP
+from kivy import  properties as KP
 from kivy.graphics import Line, Color, Rectangle
 from kivy.uix.relativelayout import RelativeLayout
 from kivy.factory import Factory as F
@@ -23,15 +23,7 @@ class Row(RecycleDataViewBehavior, BoxLayout):
     def on_parent(self, instance, parent):
         """Manually update the row labels from the class properties/app.rvdata"""
         if parent:
-            if len(self.title) >= 15:
-                tits = self.title[:15] + '\n' + self.title[15:]
-
-            else:
-                tits = self.title
-
-
-
-            self.ids.title_lbl.text = tits
+            self.ids.title_lbl.text = self.title
             self.ids.camera_lbl.text = self.camera
             self.ids.wig.story_id = self.story_id
             self.ids.backtime_lbl.text = self.backtime
@@ -47,7 +39,7 @@ class DrawingRepository:
     pencil_bg_color = (1, 1, 1, 1)
     fill_color = (1, 0, 0, .8)
 
-    drawing_color = (0, 0, 0)
+    drawing_color = (1, 1, 1)
 
 
 
@@ -62,10 +54,12 @@ class DrawingRepository:
                 # if a drawing already exists against the current_story_id
 
                 if tool != 'pencil':
+                    print('backing')
                     drngs[story_id] = {'tool': tool,
                                        'bg_color': color,
                                        'pencil_drawings': []}
                 else:
+                    print('front')
                     drngs[story_id]['tool'] = tool
                     drngs[story_id]['pencil_drawings'].append({'width': width,
                                                                'pencil_color': color,
@@ -109,7 +103,6 @@ class DrawingRepository:
 
     @staticmethod
     def change_pencil_width(width):
-
         DrawingRepository.pencil_width = int(width)
 
     @staticmethod
@@ -119,15 +112,9 @@ class DrawingRepository:
     @staticmethod
     def change_tool(tool):
         DrawingRepository.tool = tool
+        print(tool)
         if tool == 'fill':
             DrawingRepository.change_fill_color(DrawingRepository.pencil_color)
-
-    @staticmethod
-    def clear_drawing(story_id):
-
-        DrawingRepository.drawings[story_id] = {'tool': 'pencil', 'bg_color': (1,1,1,1), 'pencil_drawings': []}
-
-
 
     @staticmethod
     def clear_all():
@@ -136,9 +123,9 @@ class DrawingRepository:
 
 
 
+
 class ClickableBox(F.ButtonBehavior, F.RelativeLayout):
     story_id = KP.StringProperty(None, allownone=True)
-
 
     def on_story_id(self, _, story_id):
         """Property event handler; this method is called automatically
@@ -162,13 +149,14 @@ class ClickableBox(F.ButtonBehavior, F.RelativeLayout):
                     Rectangle(size=self.size)
 
                 for drawinz in drawings['pencil_drawings']:
+
                     newlist = [(x * .66) for x in drawinz['points']]
 
                     with self.canvas:
                         rgb = drawinz['pencil_color']
                         F.Color(rgb[0], rgb[1], rgb[2])
 
-                        F.Line(width=drawinz['width'], points=newlist)
+                        F.Line(width=2, points=newlist)
 
         else:
             self.canvas.clear()
