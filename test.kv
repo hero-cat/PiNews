@@ -259,7 +259,7 @@ ScreenManager:
                 md_bg_color: 0.098, 0.407, 0.670, 1
 
             MDRaisedButton:
-                text: ' TOTAL  '
+                text: '  TOTAL  '
                 text_color: 1, 1, 1, 1
                 md_bg_color: 0.098, 0.407, 0.670, 1
 
@@ -269,7 +269,7 @@ ScreenManager:
                 md_bg_color: 0.098, 0.407, 0.670, 1
 
             MDRaisedButton:
-                text: '                                  NOTES                                      '
+                text: '                         NOTES                          '
                 halign: 'center'
                 text_color: 1, 1, 1, 1
                 md_bg_color: 0.098, 0.407, 0.670, 1
@@ -461,8 +461,11 @@ ScreenManager:
                         icon: "close-outline"
                         theme_text_color: "Custom"
                         text_color: 0.988, 0.352, 0.329
-                        on_press: app.clear_current_drawing()
+                        on_press: app.back_to_main_page()
                         on_release: app.root.current = 'lw'
+
+                    Widget
+                        size_hint_x: .1
                     MDIconButton:
                         icon: "check-outline"
                         theme_text_color: "Custom"
@@ -553,6 +556,11 @@ ScreenManager:
 #        id: tm
 #        rundown: 'TM'
 #        data: app.data_tm
+
+    Image:
+        source: 'blur.png'
+
+
 
 <LWRundown@MDScreen>
     RundownTemplate
