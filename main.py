@@ -50,7 +50,7 @@ class TestApp(MDApp):
     def build(self):
         # self.theme_cls.primary_palette = "Blue"
         self.pull_json_data(0)  # Pull data once
-        Clock.schedule_interval(self.pull_json_data, 60.0)  # Pull data at 15s intervals
+        Clock.schedule_interval(self.pull_json_data, 15.0)  # Pull data at 15s intervals
         from kivy.base import EventLoop
         EventLoop.window.bind(on_keyboard=self.hook_keyboard)
 
@@ -62,6 +62,7 @@ class TestApp(MDApp):
             return True
 
     def pull_json_data(self, dt):
+        print('pull' + str(self.counter))
         self.s3.download_file('hero-cat-test', 'test_rundown', 'test_rundown.json')
         with open('test_rundown.json') as json_file:
             fresh_data = json.load(json_file)

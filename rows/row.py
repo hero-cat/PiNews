@@ -38,9 +38,16 @@ class Row(RecycleDataViewBehavior, BoxLayout):
 
             self.ids.wig.story_id = self.story_id
 
-
+            if 'COMMERCIAL' in tits:
+                print('comm break')
 
             if self.focus == 'true':
+                self.ids.page_lbl.background_color = 0, 1, 0, 1
+                self.ids.title_lbl.background_color = 0, 1, 0, 1
+                self.ids.camera_lbl.background_color = 0, 1, 0, 1
+                self.ids.total_lbl.background_color = 0, 1, 0, 1
+
+            elif 'COMMERCIAL' in tits:
                 self.ids.page_lbl.background_color = 1, 0, 0, 1
                 self.ids.title_lbl.background_color = 1, 0, 0, 1
                 self.ids.camera_lbl.background_color = 1, 0, 0, 1
