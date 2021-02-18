@@ -2,7 +2,6 @@ from kivy.uix.recycleview.views import RecycleDataViewBehavior
 from kivy.uix.boxlayout import BoxLayout
 from kivy import properties as KP
 from kivy.graphics import Line, Color, Rectangle
-from kivy.uix.relativelayout import RelativeLayout
 from kivy.factory import Factory as F
 
 
@@ -15,6 +14,7 @@ class Row(RecycleDataViewBehavior, BoxLayout):
     backtime = KP.StringProperty()
     page = KP.StringProperty()
     totaltime = KP.StringProperty()
+    focus = KP.StringProperty()
 
 
     def refresh_view_attrs(self, view, index, data):
@@ -22,9 +22,6 @@ class Row(RecycleDataViewBehavior, BoxLayout):
         self.index = index
 
         super().refresh_view_attrs(view, index, data)
-
-
-
 
     def on_parent(self, instance, parent):
         """Manually update the row labels from the class properties/app.rvdata"""
@@ -41,7 +38,9 @@ class Row(RecycleDataViewBehavior, BoxLayout):
 
             self.ids.wig.story_id = self.story_id
 
-            if self.backtime == '12:45:33':
+
+
+            if self.focus == 'true':
                 self.ids.page_lbl.background_color = 1, 0, 0, 1
                 self.ids.title_lbl.background_color = 1, 0, 0, 1
                 self.ids.camera_lbl.background_color = 1, 0, 0, 1
