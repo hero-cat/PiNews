@@ -45,7 +45,9 @@ class TestApp(MDApp):
 
     s3 = boto3.client('s3', config=botocore.config.Config(signature_version=botocore.UNSIGNED))
 
+    dir_get_counter = 0
 
+    kivy_dir = os.getcwd()
 
     def build(self):
         # self.theme_cls.primary_palette = "Blue"
@@ -53,6 +55,16 @@ class TestApp(MDApp):
         Clock.schedule_interval(self.pull_json_data, 15.0)  # Pull data at 15s intervals
         from kivy.base import EventLoop
         EventLoop.window.bind(on_keyboard=self.hook_keyboard)
+        self.kivy_dir = os.getcwd() if len(os.listdir(getattr(self, 'user_data_dir'))) == 0 else self.user_data_dir
+        print('reached')
+
+    def dir_get(self, *args):
+        '''Provides a way for the .kv to load files.'''
+        path_list = [self.kivy_dir]
+        for arg in args:
+            path_list.append(arg)
+        self.dir_get_counter += 1
+        return os.path.join(*path_list)
 
 
     def hook_keyboard(self, window, key, *largs):
