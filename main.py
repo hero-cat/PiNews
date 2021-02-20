@@ -48,10 +48,11 @@ class TestApp(MDApp):
 
     def build(self):
         # self.theme_cls.primary_palette = "Blue"
-        self.pull_json_data(0)  # Pull data once
+        #self.pull_json_data(0)  # Pull data once
         #Clock.schedule_interval(self.pull_json_data, 15.0)  # Pull data at 15s intervals
         #from kivy.base import EventLoop
         #EventLoop.window.bind(on_keyboard=self.hook_keyboard)
+        pass
 
 
 
@@ -64,12 +65,13 @@ class TestApp(MDApp):
     def pull_json_data(self, dt):
         #print('pull' + str(self.counter))
         #self.s3.download_file('hero-cat-test', 'test_rundown', 'test_rundown.json')
-        with open('test_rundown.json') as json_file:
-            fresh_data = json.load(json_file)
-            self.rvdata = fresh_data
+        # with open('test_rundown.json') as json_file:
+        #     fresh_data = json.load(json_file)
+        #     self.rvdata = fresh_data
 
         #self.connection_status_update(str(self.counter) + ' successful data pulls from AWS')  # update status bar
         #self.counter += 1
+        pass
 
     def connection_status_update(self, message):
         """Update status bar"""
@@ -325,16 +327,16 @@ class MyPaintPage(F.RelativeLayout):
 
 
 class LoginScreen(F.MDScreen):
-    username = 'joe'
-    password = 'aaa'
-
-    def login(self, login_text, password_text):
-        if login_text == self.username and password_text == self.password:
-            self.parent.current = 'menu'
-
-        else:
-            self.parent.current = 'menu'
-
+    # username = 'joe'
+    # password = 'aaa'
+    #
+    # def login(self, login_text, password_text):
+    #     if login_text == self.username and password_text == self.password:
+    #         self.parent.current = 'menu'
+    #
+    #     else:
+    #         self.parent.current = 'menu'
+    pass
 
 
 if __name__ == '__main__':
