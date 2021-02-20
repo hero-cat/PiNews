@@ -8,6 +8,11 @@
 ScreenManager:
     id: screen_manager
 
+    TMRundown:
+        id: tm_rundown
+        name: 'tm'
+        manager: 'screen_manager'
+
     LoginScreen:
         id: login
         name: 'login'
@@ -28,10 +33,7 @@ ScreenManager:
         name: 'drawing'
         manager: 'screen_manager'
 
-    TMRundown:
-        id: tm_rundown
-        name: 'tm'
-        manager: 'screen_manager'
+
 
 
 
@@ -560,7 +562,7 @@ ScreenManager:
         Rectangle:
             pos: self.pos
             size: self.size
-            source: app.dir_get('image.png')
+            source: 'blur.png'
 #    RundownTemplate
 #        id: tm
 #        rundown: 'TM'
