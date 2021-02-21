@@ -8,10 +8,53 @@
 ScreenManager:
     id: screen_manager
 
-    TMRundown:
-        id: tm_rundown
-        name: 'tm'
+    MenuScreen
+        id: menu_screen
+        name: 'menu_screen'
         manager: 'screen_manager'
+
+    CanvasScreen
+        id: canvas_before
+        name: 'canvas_before'
+        manager: 'screen_manager'
+
+    ImageScreen:
+        id: image
+        name: 'image'
+        manager: 'screen_manager'
+
+
+<MenuScreen@MDScreen>:
+    MDBoxLayout
+        MDRaisedButton:
+            text: 'image'
+            on_press: app.root.current = 'image'
+
+        Widget
+
+        MDRaisedButton:
+            text: 'canvas.before'
+            on_press: app.root.current = 'canvas_before'
+
+
+<CanvasScreen@MDScreen>
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'blur.png'
+
+<ImageScreen@MDScreen>
+
+
+    Image:
+        source: 'blur.png'
+
+
+#    TMRundown:
+#        id: tm_rundown
+#        name: 'tm'
+#        manager: 'screen_manager'
 
 #    LoginScreen:
 #        id: login
@@ -553,13 +596,13 @@ ScreenManager:
 #        rundown: 'LK'
 #        data: app.data_lk
 
-<TMRundown@MDScreen>
-    canvas.before:
-
-        Rectangle:
-            pos: self.pos
-            size: self.size
-            source: 'blur.png'
+#<TMRundown@MDScreen>
+#    canvas.before:
+#
+#        Rectangle:
+#            pos: self.pos
+#            size: self.size
+#            source: 'blur.png'
 #    RundownTemplate
 #        id: tm
 #        rundown: 'TM'
