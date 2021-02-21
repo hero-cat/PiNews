@@ -224,5 +224,27 @@ class TestApp(MDApp):
 
 
 
+
+#class FillButton(F.MDIconButton):
+    # A separate class for the fill button to enable double tap/change color
+    #popups = Popups()
+
+
+
+    # def on_touch_down(self, touch):
+    #     app = TestApp.get_running_app()
+    #     toolbar = TestApp.get_running_app().root.ids.lw_rundown.ids.lw.ids
+    #
+    #
+    #     if touch.is_double_tap:
+    #         self.popups.show_color_choice_popup()
+    #
+    #     else:
+    #         app.change_tool('fill')
+    #         self.text_color = (DrawingRepository.drawing_color)
+    #         toolbar.pencil_button.text_color = (0, 0, 0, .4)
+    #         toolbar.eraser_button.text_color = (0, 0, 0, .4)
+
+
 if __name__ == '__main__':
     TestApp().run()
