@@ -328,5 +328,18 @@ class TestApp(MDApp):
 
 
 
+# class LoginScreen(F.MDScreen):
+#     # username = 'joe'
+#     # password = 'aaa'
+#     #
+#     # def login(self, login_text, password_text):
+#     #     if login_text == self.username and password_text == self.password:
+#     #         self.parent.current = 'menu'
+#     #
+#     #     else:
+#     #         self.parent.current = 'menu'
+#
+#
+
 if __name__ == '__main__':
     TestApp().run()
