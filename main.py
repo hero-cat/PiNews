@@ -234,7 +234,11 @@ class FillButton(F.MDIconButton):
 
 
         if touch.is_double_tap:
-            self.popups.show_color_choice_popup()
+            app.change_tool('fill')
+            self.text_color = (DrawingRepository.drawing_color)
+            toolbar.pencil_button.text_color = (0, 0, 0, .4)
+            toolbar.eraser_button.text_color = (0, 0, 0, .4)
+
 
         else:
             app.change_tool('fill')
