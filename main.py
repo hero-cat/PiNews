@@ -6,8 +6,8 @@ import json
 from kivy import properties as KP
 from kivy.clock import Clock
 from kivymd.app import MDApp
-from rows.row import Row, DrawingRepository
-from popups.popups import Popups
+# from rows.row import Row, DrawingRepository
+# from popups.popups import Popups
 from kivy.factory import Factory as F
 #from kivy.uix import screenmanager as sm
 #import boto3
@@ -225,8 +225,8 @@ class TestApp(MDApp):
 
 class FillButton(F.MDIconButton):
     # A separate class for the fill button to enable double tap/change color
-    popups = Popups()
-
+    #popups = Popups()
+    pass
 
 
     # def on_touch_down(self, touch):
