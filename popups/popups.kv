@@ -1,0 +1,413 @@
+#:include rows/row.kv
+
+
+<ColorChange>
+    orientation: "vertical"
+    size_hint_y: None
+    height: "160dp"
+
+    black: 0, 0, 0, 1
+    white: 1, 1, 1, 1
+
+    MDBoxLayout:
+        orientation: 'vertical'
+        MDBoxLayout
+            MDRaisedButton:
+                red: 0.941, 0, 0, 1
+                md_bg_color: self.red
+                on_press: root.change_color(self.red), app.button_color(self.red, root.white)
+                on_release: root.parent.parent.parent.dismiss()
+            MDRaisedButton:
+                orange: 1, 0.501, 0, 1
+                md_bg_color: self.orange
+                on_press: root.change_color(self.orange), app.button_color(self.orange, root.white)
+                on_release: root.parent.parent.parent.dismiss()
+            MDRaisedButton:
+                yellow: 1, 1, 0, 1
+                md_bg_color: self.yellow
+                on_press: root.change_color(self.yellow), app.button_color(self.yellow, root.white)
+                on_release: root.parent.parent.parent.dismiss()
+            MDRaisedButton:
+                green: 0.501, 1, 0, 1
+                md_bg_color: self.green
+                on_press: root.change_color(self.green), app.button_color(self.green, root.white)
+                on_release: root.parent.parent.parent.dismiss()
+
+        MDBoxLayout
+            MDRaisedButton:
+                teal: 0, 1, 0.501, 1
+                md_bg_color: self.teal
+                on_press: root.change_color(self.teal), app.button_color(self.teal, root.white)
+                on_release: root.parent.parent.parent.dismiss()
+            MDRaisedButton:
+                turquoise: 0, 1, 1, 1
+                md_bg_color: self.turquoise
+                on_press: root.change_color(self.turquoise), app.button_color(self.turquoise, root.white)
+                on_release: root.parent.parent.parent.dismiss()
+            MDRaisedButton:
+                blue: 0, 0.501, 1, 1
+                md_bg_color: self.blue
+                on_press: root.change_color(self.blue), app.button_color(self.blue, root.white)
+                on_release: root.parent.parent.parent.dismiss()
+            MDRaisedButton:
+                navy: 0, 0, 1, 1
+                md_bg_color: self.navy
+                on_press: root.change_color(self.navy), app.button_color(self.navy, root.white)
+                on_release: root.parent.parent.parent.dismiss()
+
+        MDBoxLayout
+            MDRaisedButton:
+                purple: 0.498, 0, 1, 1
+                md_bg_color: self.purple
+                on_press: root.change_color(self.purple), app.button_color(self.purple, root.white)
+                on_release: root.parent.parent.parent.dismiss()
+            MDRaisedButton:
+                pink: 1, 0, 1, 1
+                md_bg_color: self.pink
+                on_press: root.change_color(self.pink), app.button_color(self.pink, root.white)
+                on_release: root.parent.parent.parent.dismiss()
+            MDRaisedButton:
+                grey: 0.5, 0.5, 0.5, 1
+                md_bg_color: self.grey
+                on_press: root.change_color(self.grey), app.button_color(self.grey, root.white)
+                on_release: root.parent.parent.parent.dismiss()
+            MDRaisedButton:
+                black: 0, 0, 0, 1
+                md_bg_color: self.black
+                on_press: root.change_color(self.black), app.button_color(self.black, root.white)
+                on_release: root.parent.parent.parent.dismiss()
+        Widget
+
+
+<WidthChoicePencil>
+    pos_hint: {'top': .6}
+    MDBoxLayout:
+        orientation: 'vertical'
+        MDSlider:
+            min: 1
+            max: 10
+            show_off: False
+            value: app.line_width
+            on_touch_up: root.change_pencil_width(self.value), root.dismiss()
+            on_touch_up: app.line_width = int(self.value)
+
+
+<ConfBox>
+    size_hint_y: None
+    height: "120dp"
+
+    Widget
+
+    MDFlatButton
+        text: 'Cancel'
+        on_release: root.parent.parent.parent.dismiss()
+
+    MDRaisedButton
+        text: 'OK'
+        on_release: app.clear_all_drawings()
+        on_release: root.parent.parent.parent.dismiss()
+
+
+
+
+
+
+
+#<ColorChoiceFill>
+#    pos_hint: {'top': .98}
+#    text: 'test'
+#    black: 0, 0, 0, 1
+#    white: 1, 1, 1, 1
+#    MDBoxLayout:
+#        orientation: 'vertical'
+#        MDBoxLayout
+#            MDRaisedButton:
+#                red: 0.941, 0, 0, 1
+#                md_bg_color: self.red
+#                on_release: root.change_fill_color(self.red), root.dismiss()
+#                on_release: app.fill_color_btn(self.red)
+#            MDRaisedButton:
+#                orange: 1, 0.501, 0, 1
+#                md_bg_color: self.orange
+#                on_release: root.change_fill_color(self.orange), root.dismiss()
+#                on_release: app.fill_color_btn(self.orange)
+#            MDRaisedButton:
+#                yellow: 1, 1, 0, 1
+#                md_bg_color: self.yellow
+#                on_release: root.change_fill_color(self.yellow), root.dismiss()
+#                on_release: app.fill_color_btn(self.yellow)
+#            MDRaisedButton:
+#                green: 0.501, 1, 0, 1
+#                md_bg_color: self.green
+#                on_release: root.change_fill_color(self.green), root.dismiss()
+#                on_release: app.fill_color_btn(self.green)
+#            MDRaisedButton:
+#                teal: 0, 1, 0.501, 1
+#                md_bg_color: self.teal
+#                on_release: root.change_fill_color(self.teal), root.dismiss()
+#                on_release: app.fill_color_btn(self.teal)
+#            MDRaisedButton:
+#                turquoise: 0, 1, 1, 1
+#                md_bg_color: self.turquoise
+#                on_release: root.change_fill_color(self.turquoise), root.dismiss()
+#                on_release: app.fill_color_btn(self.turquoise)
+#
+#        MDBoxLayout
+#            MDRaisedButton:
+#                blue: 0, 0.501, 1, 1
+#                md_bg_color: self.blue
+#                on_release: root.change_fill_color(self.blue), root.dismiss()
+#                on_release: app.fill_color_btn(self.blue)
+#            MDRaisedButton:
+#                navy: 0, 0, 1, 1
+#                md_bg_color: self.navy
+#                on_release: root.change_fill_color(self.navy), root.dismiss()
+#                on_release: app.fill_color_btn(self.navy)
+#            MDRaisedButton:
+#                purple: 0.498, 0, 1, 1
+#                md_bg_color: self.purple
+#                on_release: root.change_fill_color(self.purple), root.dismiss()
+#                on_release: app.fill_color_btn(self.purple)
+#            MDRaisedButton:
+#                pink: 1, 0, 1, 1
+#                md_bg_color: self.pink
+#                on_release: root.change_fill_color(self.pink), root.dismiss()
+#                on_release: app.fill_color_btn(self.pink)
+#            MDRaisedButton:
+#                grey: 0.5, 0.5, 0.5, 1
+#                md_bg_color: self.grey
+#                on_release: root.change_fill_color(self.grey), root.dismiss()
+#                on_release: app.fill_color_btn(self.grey)
+#            MDRaisedButton:
+#                black: 0, 0, 0, 1
+#                md_bg_color: self.black
+#                on_release: root.change_fill_color(self.black), root.dismiss()
+#                on_release: app.fill_color_btn(self.black)
+
+
+
+
+#<ColorChoiceDrawing>
+#    pos_hint: {'top': .65}
+##    spacing: "12dp"
+##    size_hint_y: None
+##    height: "100dp"
+#
+#    black: 0, 0, 0, 1
+#    white: 1, 1, 1, 1
+#    MDBoxLayout
+#
+#        Widget
+#
+#        MDRaisedButton:
+#            red: 0.941, 0, 0, 1
+#            md_bg_color: self.red
+#            on_release: root.change_drawing_color(self.red), root.dismiss()
+#            on_release: app.drawing_color_btn(self.red, root.white)
+#        MDRaisedButton:
+#            orange: 1, 0.501, 0, 1
+#            md_bg_color: self.orange
+#            on_release: root.change_drawing_color(self.orange), root.dismiss()
+#            on_release: app.drawing_color_btn(self.orange, root.black)
+#        MDRaisedButton:
+#            yellow: 1, 1, 0, 1
+#            md_bg_color: self.yellow
+#            on_release: root.change_drawing_color(self.yellow), root.dismiss()
+#            on_release: app.drawing_color_btn(self.yellow, root.black)
+#        MDRaisedButton:
+#            green: 0.501, 1, 0, 1
+#            md_bg_color: self.green
+#            on_release: root.change_drawing_color(self.green), root.dismiss()
+#            on_release: app.drawing_color_btn(self.green, root.black)
+#        MDRaisedButton:
+#            teal: 0, 1, 0.501, 1
+#            md_bg_color: self.teal
+#            on_release: root.change_drawing_color(self.teal), root.dismiss()
+#            on_release: app.drawing_color_btn(self.teal, root.black)
+#        MDRaisedButton:
+#            turquoise: 0, 1, 1, 1
+#            md_bg_color: self.turquoise
+#            on_release: root.change_drawing_color(self.turquoise), root.dismiss()
+#            on_release: app.drawing_color_btn(self.turquoise, root.black)
+#
+#
+#
+#        MDRaisedButton:
+#            blue: 0, 0.501, 1, 1
+#            md_bg_color: self.blue
+#            on_release: root.change_drawing_color(self.blue), root.dismiss()
+#            on_release: app.drawing_color_btn(self.blue, root.white)
+#        MDRaisedButton:
+#            navy: 0, 0, 1, 1
+#            md_bg_color: self.navy
+#            on_release: root.change_drawing_color(self.navy), root.dismiss()
+#            on_release: app.drawing_color_btn(self.navy, root.white)
+#        MDRaisedButton:
+#            purple: 0.498, 0, 1, 1
+#            md_bg_color: self.purple
+#            on_release: root.change_drawing_color(self.purple), root.dismiss()
+#            on_release: app.drawing_color_btn(self.purple, root.white)
+#        MDRaisedButton:
+#            pink: 1, 0, 1, 1
+#            md_bg_color: self.pink
+#            on_release: root.change_drawing_color(self.pink), root.dismiss()
+#            on_release: app.drawing_color_btn(self.pink, root.black)
+#        MDRaisedButton:
+#            grey: 0.5, 0.5, 0.5, 1
+#            md_bg_color: self.grey
+#            on_release: root.change_drawing_color(self.grey), root.dismiss()
+#            on_release: app.drawing_color_btn(self.grey, root.white)
+#        MDRaisedButton:
+#            black: 0, 0, 0, 1
+#            md_bg_color: self.black
+#            on_release: root.change_drawing_color(self.black), root.dismiss()
+#            on_release: app.drawing_color_btn(self.black, root.white)
+#        Widget
+
+
+
+
+    # grey
+#        BoxLayout
+#            size_hint_x: .2
+#            orientation: 'vertical'
+#            MDRaisedButton
+#                md_bg_color: 0, 0, 0, 1
+#
+#            MDRaisedButton
+#                md_bg_color: .16, .16, .16, 1
+#
+#            MDRaisedButton
+#                md_bg_color: .32, .32, .32, 1
+#
+#            MDRaisedButton
+#                md_bg_color: .48, .48, .48, 1
+#
+#            MDRaisedButton
+#                md_bg_color: .64, .64, .64, 1
+#
+#            MDRaisedButton
+#                md_bg_color: .8, .8, .8, 1
+#
+#            Widget:
+#                size_hint_y: .8
+
+
+
+
+
+
+
+
+
+
+
+
+
+#    pos_hint: {'top': .65}
+#    width_offset: 200
+#    black: 0, 0, 0, 1
+#    white: 1, 1, 1, 1
+#
+#
+#
+#    ColorWheel
+#    MDBoxLayout:
+#        orientation: 'vertical'
+#        BoxLayout
+#
+#
+#            MDRaisedButton:
+#                red: 0.941, 0, 0, 1
+#                md_bg_color: self.red
+#                on_release: root.change_drawing_color(self.red), root.dismiss()
+#                on_release: app.drawing_color_btn(self.red, root.white)
+#            MDRaisedButton:
+#                orange: 1, 0.501, 0, 1
+#                md_bg_color: self.orange
+#                on_release: root.change_drawing_color(self.orange), root.dismiss()
+#                on_release: app.drawing_color_btn(self.orange, root.black)
+#            MDRaisedButton:
+#                yellow: 1, 1, 0, 1
+#                md_bg_color: self.yellow
+#                on_rnelease: root.change_drawing_color(self.yellow), root.dismiss()
+#                on_release: app.drawing_color_btn(self.yellow, root.black)
+#            MDRaisedButton:
+#                green: 0.501, 1, 0, 1
+#                md_bg_color: self.green
+#                on_release: root.change_drawing_color(self.green), root.dismiss()
+#                on_release: app.drawing_color_btn(self.green, root.black)
+#            MDRaisedButton:
+#                teal: 0, 1, 0.501, 1
+#                md_bg_color: self.teal
+#                on_release: root.change_drawing_color(self.teal), root.dismiss()
+#                on_release: app.drawing_color_btn(self.teal, root.black)
+#            MDRaisedButton:
+#                turquoise: 0, 1, 1, 1
+#                md_bg_color: self.turquoise
+#                on_release: root.change_drawing_color(self.turquoise), root.dismiss()
+#                on_release: app.drawing_color_btn(self.turquoise, root.black)
+#
+#
+#
+#        BoxLayout
+#            MDRaisedButton:
+#                blue: 0, 0.501, 1, 1
+#                md_bg_color: self.blue
+#                on_release: root.change_drawing_color(self.blue), root.dismiss()
+#                on_release: app.drawing_color_btn(self.blue, root.white)
+#            MDRaisedButton:
+#                navy: 0, 0, 1, 1
+#                md_bg_color: self.navy
+#                on_release: root.change_drawing_color(self.navy), root.dismiss()
+#                on_release: app.drawing_color_btn(self.navy, root.white)
+#            MDRaisedButton:
+#                purple: 0.498, 0, 1, 1
+#                md_bg_color: self.purple
+#                on_release: root.change_drawing_color(self.purple), root.dismiss()
+#                on_release: app.drawing_color_btn(self.purple, root.white)
+#            MDRaisedButton:
+#                pink: 1, 0, 1, 1
+#                md_bg_color: self.pink
+#                on_release: root.change_drawing_color(self.pink), root.dismiss()
+#                on_release: app.drawing_color_btn(self.pink, root.black)
+#            MDRaisedButton:
+#                grey: 0.5, 0.5, 0.5, 1
+#                md_bg_color: self.grey
+#                on_release: root.change_drawing_color(self.grey), root.dismiss()
+#                on_release: app.drawing_color_btn(self.grey, root.white)
+#            MDRaisedButton:
+#                black: 0, 0, 0, 1
+#                md_bg_color: self.black
+#                on_release: root.change_drawing_color(self.black), root.dismiss()
+#                on_release: app.drawing_color_btn(self.black, root.white)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
