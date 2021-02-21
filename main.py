@@ -75,7 +75,8 @@ class TestApp(MDApp):
 
     def connection_status_update(self, message):
         """Update status bar"""
-        self.root.ids.lw_rundown.ids.lw.ids.conn_status.text = message
+        #self.root.ids.lw_rundown.ids.lw.ids.conn_status.text = message
+        pass
 
 
     def change_tool(self, tool):
