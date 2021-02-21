@@ -246,5 +246,87 @@ class TestApp(MDApp):
     #         toolbar.eraser_button.text_color = (0, 0, 0, .4)
 
 
+#class MyPaintPage(F.RelativeLayout):
+    # DRAWING PAGE
+
+    #story_id = KP.StringProperty(None, allownone=True)
+    #
+    # line_points = KP.ListProperty()
+    #
+    # def __init__(self, **kwargs):
+    #     super().__init__(**kwargs)
+    #     # Ensure that canvas instructions are in sync with properties
+    #     self.bind(line_points=self.draw_on_canvas)
+    #
+    #     with self.canvas:
+    #         F.Color(.95, .95, .95, 1)
+    #         F.Rectangle(size=(799.99, 180))
+    #
+    #
+    #
+    #
+    #
+    # def draw_on_canvas(self, _, points):
+    #
+    #     if DrawingRepository.tool == 'pencil':
+    #         with self.canvas:
+    #             rgb = DrawingRepository.drawing_color
+    #             F.Color(rgb[0], rgb[1], rgb[2])
+    #             F.Line(width=DrawingRepository.pencil_width, points=points)
+    #
+    #     elif DrawingRepository.tool == 'fill':
+    #         with self.canvas:
+    #             rgb = DrawingRepository.drawing_color
+    #             F.Color(rgb[0], rgb[1], rgb[2])
+    #             F.Rectangle(size=self.size)
+    #
+    #     else:  # eraser
+    #         with self.canvas:
+    #             F.Color(1, 1, 1)
+    #             F.Rectangle(size=self.size)
+    #
+    #
+    # def on_touch_down(self, touch):
+    #
+    #     if self.collide_point(*touch.pos):
+    #         touch.grab(self)
+    #         return True
+    #     return super().on_touch_down(touch)
+    #
+    #
+    # def on_touch_move(self, touch):
+    #     if touch.grab_current is self:
+    #         if self.collide_point(*touch.pos):
+    #             self.line_points.extend(self.to_local(*touch.pos))
+    #         return True
+    #     return super().on_touch_move(touch)
+    #
+    #
+    # def on_touch_up(self, touch):
+    #     dp = DrawingRepository
+    #     if touch.grab_current is self:
+    #         # Only add the final point if touch is released inside our boundaries.
+    #         if self.collide_point(*touch.pos):
+    #             self.line_points.extend(self.to_local(*touch.pos))
+    #
+    #         # Reject single-point drawings
+    #         if len(self.line_points) <= 2:
+    #             self.line_points = []
+    #
+    #         if self.story_id is not None:
+    #             dp.add_drawing(self.story_id, dp.tool, dp.drawing_color, dp.pencil_width, self.line_points[:])
+    #
+    #             self.line_points = []
+    #
+    #
+    #         return True
+    #     return super().on_touch_up(touch)
+    #
+    #
+    # def clear_canvas(self):
+    #     self.canvas.clear()
+
+
+
 if __name__ == '__main__':
     TestApp().run()
