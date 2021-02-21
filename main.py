@@ -7,7 +7,7 @@ from kivy import properties as KP
 from kivy.clock import Clock
 from kivymd.app import MDApp
 from rows.row import Row, DrawingRepository
-from popups.popups import Popups
+
 from kivy.factory import Factory as F
 from kivy.uix import screenmanager as sm
 import boto3
@@ -23,7 +23,7 @@ class TestApp(MDApp):
     """
 
     rvdata = KP.ListProperty()  # JSON data converted to list of dicts
-    popups = Popups()  # Popups used by the toolbar
+
     counter = 0
     line_width = KP.NumericProperty(2)
 

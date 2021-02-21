@@ -8,601 +8,564 @@
 ScreenManager:
     id: screen_manager
 
-    MenuScreen
+
+
+    LoginScreen:
+        id: login
+        name: 'login'
+        manager: 'screen_manager'
+
+    MenuScreen:
         id: menu_screen
-        name: 'menu_screen'
+        name: 'menu'
         manager: 'screen_manager'
 
-    CanvasScreen
-        id: canvas_before
-        name: 'canvas_before'
+    LWRundown
+        id: lw_rundown
+        name: 'lw'
         manager: 'screen_manager'
 
-    ImageScreen:
-        id: image
-        name: 'image'
+    DrawingScreen:
+        id: drawing_screen
+        name: 'drawing'
         manager: 'screen_manager'
+
+
+    TMRundown:
+        id: tm_rundown
+        name: 'tm'
+        manager: 'screen_manager'
+
+
+
+
+
+
+<LoginScreen>
+    MDBoxLayout:
+        Widget:
+            size_hint_x: .1
+
+        VertBox:
+            size_hint_x: .8
+            MDLabel:
+                text: 'Welcome to PiNews - Please login'
+                halign: 'center'
+            MDTextField:
+                id: login
+                font_size: 28
+                hint_text: "USERNAME"
+                mode: "rectangle"
+                on_focus: self.show_keyboard()
+            MDTextField:
+                id: password
+                font_size: 28
+                hint_text: "PASSWORD"
+                mode: "rectangle"
+                password: True
+                on_focus: self.show_keyboard()
+
+            MDBoxLayout
+                Widget
+                MDRaisedButton:
+                    text: 'CONNECT'
+                    on_press: root.login(login.text, password.text)
+                Widget
+            Widget
+                size_hint_y: 4
+
+        Widget:
+            size_hint_x: .1
+
+
 
 
 <MenuScreen@MDScreen>:
-    MDBoxLayout
-        MDRaisedButton:
-            text: 'image'
-            on_press: app.root.current = 'image'
+    BoxLayout:
+        orientation: 'vertical'
+        MDToolbar:
+            right_action_items: [["close", lambda x: app.stop()]]
+            title: 'PiNews'
+            size_hint_y: .1
+        Widget:
+            size_hint_y: .1
 
-        Widget
+        MDLabel:
+            text: 'CHOOSE A PRODUCTION'
+            font_size: 40
+            halign: 'center'
+            size_hint_y: .1
 
-        MDRaisedButton:
-            text: 'canvas.before'
-            on_press: app.root.current = 'canvas_before'
+        BoxLayout:
+            size_hint_y: .1
+            Widget:
+            MDRaisedButton:
+                text: '  GMB   '
+#                on_press: app.root.current = '0600'
+            Widget:
+            MDRaisedButton:
+                text: '    LK    '
+#                on_press: app.root.current = 'lk'
+            Widget:
+            MDRaisedButton:
+                text: '    TM    '
+                on_press: app.root.current = 'tm'
+            Widget
+            MDRaisedButton:
+                text: '    LW    '
+                on_press: app.root.current = 'lw'
+            Widget:
+
+        BoxLayout:
+            size_hint_y: .1
+            Widget:
+            MDRaisedButton:
+                text: 'CSTM_1'
+            Widget:
+            MDRaisedButton:
+                text: 'CSTM_2'
+            Widget:
+            MDRaisedButton:
+                text: 'CSTM_3'
+            Widget
+            MDRaisedButton:
+                text: 'CSTM_4'
+            Widget:
+
+        Widget:
+            size_hint_y: .7
+
+<Content>
+    orientation: "vertical"
+    spacing: "12dp"
+    size_hint_y: None
+    height: "120dp"
+
+    MDTextField:
+        hint_text: "City"
+
+    MDTextField:
+        hint_text: "Street"
 
 
-<CanvasScreen@MDScreen>
+<RundownTemplate@MDScreen>
+    BoxLayout:
+        orientation: 'vertical'
+        MDToolbar:
+            size_hint_y: None
+            height: 90
+            title: 'Loose Women'
+
+#            MDIconButton:
+#                icon: "arrow-left-bold-outline"
+#                on_press: app.root.current = 'menu'
+#
+#            MDIconButton:
+#                icon: "power-on"
+#                theme_text_color: "Custom"
+#                text_color: 1, 1, 1, 1
+#
+#
+#
+#
+#            MDIconButton:
+#                icon: "arrow-up"
+#
+#            MDIconButton:
+#                icon: "arrow-down"
+#
+#            MDIconButton:
+#                icon: "format-vertical-align-top"
+#
+#            MDIconButton:
+#                icon: "format-vertical-align-bottom"
+#
+#            MDIconButton:
+#                icon: "power-on"
+#                theme_text_color: "Custom"
+#                text_color: 1, 1, 1, 1
+#
+#            BoxLayout:
+#                orientation: 'vertical'
+#                Widget:
+#                    size_hint_y: .1
+#                MDRaisedButton:
+#                    id: color_button
+#                    md_bg_color: 0, 0, 0, 1
+#                    text: 'COLOUR'
+#                    text_color: 1, 1, 1, 1
+#                    font_size: 11
+#                    size_hint_y: .5
+#                    on_release: app.popups.select_color()
+#                Widget:
+#                    size_hint_y: .1
+#                MDRaisedButton:
+#                    md_bg_color: 0, 0, 0, 1
+#                    text: 'THICKNESS'
+#                    text_color: 1, 1, 1, 1
+#                    font_size: 11
+#                    size_hint_y: .5
+#                    size_hint_x: 1
+#                    on_release: app.popups.select_width()
+#                Widget:
+#                    size_hint_y: .1
+
+            MDIconButton
+                id: pencil_button
+                icon: "pencil"
+                theme_text_color: "Custom"
+                text_color: 1, 1, 1, 1
+                on_release: app.change_tool('pencil')
+                on_release: self.text_color = 1, 1, 1, 1
+                on_press: fill_button.text_color = 0, 0, 0, .4
+                on_release: eraser_button.text_color = 0, 0, 0, .4
+
+            FillButton
+                id: fill_button
+                icon: "format-color-fill"
+                theme_text_color: "Custom"
+                text_color: 0, 0, 0, .4
+#                on_press: app.call_colour_change()
+                on_press: app.change_tool('fill')
+#                on_release: self.text_color = 1, 0, 0, 1
+#                on_press: pencil_button.text_color = 0, 0, 0, 1
+#                on_press: eraser_button.text_color = 0, 0, 0, 1
+
+
+
+            MDIconButton
+                id: eraser_button
+                icon: "eraser"
+                theme_text_color: "Custom"
+                text_color: 0, 0, 0, .4
+                on_release: self.text_color = 1, 1, 1, 1
+                on_release: pencil_button.text_color = 0, 0, 0, .4
+                on_release: fill_button.text_color = 0, 0, 0, .4
+                on_release: app.change_tool('eraser')
+
+
+            MDIconButton
+                icon: "close-box"
+                on_release: app.popups.clear_all_conf_popup()
+#                on_release: app.clear_all_drawings()
+
+        MDBoxLayout:
+            spacing: 3
+            size_hint_y: 0.039
+
+            MDRaisedButton:
+                text: '   PAGE   '
+                text_color: 1, 1, 1, 1
+                md_bg_color: 0.098, 0.407, 0.670, 1
+
+            MDRaisedButton:
+                text: '                         TITLE                         '
+                text_color: 1, 1, 1, 1
+                md_bg_color: 0.098, 0.407, 0.670, 1
+
+            MDRaisedButton:
+                text: '  TOTAL  '
+                text_color: 1, 1, 1, 1
+                md_bg_color: 0.098, 0.407, 0.670, 1
+
+            MDRaisedButton:
+                text: '   CAM    '
+                text_color: 1, 1, 1, 1
+                md_bg_color: 0.098, 0.407, 0.670, 1
+
+            MDRaisedButton:
+                text: '                         NOTES                          '
+                halign: 'center'
+                text_color: 1, 1, 1, 1
+                md_bg_color: 0.098, 0.407, 0.670, 1
+                on_release: root.status_update()
+
+        # ## ### RECYCLEVIEW ### ## #
+        # ## ### RECYCLEVIEW ### ## #
+        # ## ### RECYCLEVIEW ### ## #
+
+
+        RecycleView
+            data: app.rvdata
+            viewclass: 'Row'
+            scroll_type: ['bars', 'content']
+            bar_width: 30
+            bar_inactive_color: [.7, .7, .7, .6]
+            RecycleBoxLayout:
+                id: rv
+
+                default_size: None, dp(80)
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                orientation: 'vertical'
+
+        MDBoxLayout:
+            size_hint_y: .001
+            canvas:
+                Color:
+                    rgb: 0.6, 0.6, 0.6
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+        MDBoxLayout:
+            size_hint_y: .02
+            canvas:
+                Color:
+                    rgb: 0.8, 0.8, 0.8
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            MDLabel:
+                id: conn_status
+                text: '  STATUS: '
+                font_size: 20
+
+
+
+
+<DrawingScreen@MDScreen>
+    id: dwscreen
+
     canvas.before:
+
+        Color:
+            rgba: 0.047, 0.2, 0.329, 1
+
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+#            source: 'blur.png'
+
+
+
+    BoxLayout
+        orientation: 'vertical'
+
+        # Top spacer
+        Widget
+            size_hint_y: 1.5
+
+
+        # Middle layer
+        BoxLayout
+
+            # Middle left spacer
+            Widget
+                size_hint_x: .1
+
+            # main housing
+            BoxLayout
+
+                id: main
+                orientation: 'vertical'
+                size_hint_x: None
+                width: 850
+                size_hint_y: None
+                height: 500
+
+
+                canvas.before:
+                    Color:
+                        rgb: 0.239, 0.4, 0.541
+                    Rectangle:
+                        pos: main.pos
+                        size: main.size
+
+                MDLabel:
+                    id: drawing_screen_title
+                    color: 1,1,1,1
+                    halign: 'center'
+
+                # toolbar
+                BoxLayout
+
+                    Widget
+                        size_hint_x: .5
+
+
+                    # Colour + Width select
+                    BoxLayout:
+                        orientation: 'vertical'
+                        Widget:
+                            size_hint_y: .1
+                        MDRaisedButton:
+                            id: drawing_color_button
+                            md_bg_color: 0.513, 0.627, 0.725, 1
+                            text: '   COLOUR   '
+#                            text_color: 0,0,0
+#                            font_size: 11
+                            size_hint_y: .5
+                            on_release: app.popups.show_color_choice_popup()
+                        Widget:
+                            size_hint_y: .1
+                        MDRaisedButton:
+                            md_bg_color: 0.513, 0.627, 0.725, 1
+                            text: 'THICKNESS'
+#                            text_color: 0,0,0
+#                            font_size: 11
+                            size_hint_y: .5
+                            on_release: app.popups.select_width()
+                        Widget:
+                            size_hint_y: .1
+
+
+
+                    MDIconButton
+                        id: dw_pencil_btn
+                        icon: "pencil"
+                        theme_text_color: "Custom"
+                        text_color: 1, 1, 1
+                        pos_hint: {"center_x": .5, "center_y": .5}
+                        user_font_size: 64
+                        on_press: self.text_color = 1, 1, 1
+                        on_press: dw_fill_btn.text_color = 0, 0, 0
+                        on_release: app.change_tool('pencil')
+
+
+                    MDIconButton
+
+                        id: dw_fill_btn
+                        icon: "format-color-fill"
+                        theme_text_color: "Custom"
+                        text_color: 0, 0, 0
+                        pos_hint: {"center_x": .5, "center_y": .5}
+                        user_font_size: 64
+                        on_press: self.text_color = 1, 1, 1
+                        on_press: dw_pencil_btn.text_color = 0, 0, 0
+                        on_release: app.change_tool('fill')
+
+
+                    MDIconButton
+                        icon: "close-box"
+                        pos_hint: {"center_x": .5, "center_y": .5}
+                        user_font_size: 64
+                        on_release: app.clear_current_drawing()
+
+                    Widget
+                        size_hint_x: .5
+
+                # Drawing housing
+                BoxLayout
+                    size_hint_y: None
+                    height: 240
+                    Widget
+
+                    # Drawing area
+                    MyPaintPage:
+                        id: mypaintpage
+                        background_color: 1, 1, 1
+                        size_hint_x: None
+                        size_hint_y: None
+                        height: 240
+                        width: 800
+
+                    Widget
+
+                #Bottom bar
+                BoxLayout:
+
+
+                    Widget:
+                        size_hint_x: 5
+                    MDIconButton:
+                        icon: "close-outline"
+                        theme_text_color: "Custom"
+                        text_color: 0.988, 0.352, 0.329
+                        on_press: app.back_to_main_page()
+                        on_release: app.root.current = 'lw'
+
+                    Widget
+                        size_hint_x: .1
+                    MDIconButton:
+                        icon: "check-outline"
+                        theme_text_color: "Custom"
+                        text_color: 0.490, 0.988, 0.501
+                        on_press: app.back_to_main_page()
+                        on_release: app.root.current = 'lw'
+
+            # Middle right spacer
+            Widget
+                size_hint_x: .1
+
+        # Bottom spacer
+        Widget
+            size_hint_y: 2
+
+
+<ThinGap@Widget>
+    size_hint_y: None
+    height: 3
+
+<VertBox@MDBoxLayout>
+    orientation: 'vertical'
+
+
+
+
+
+
+<SixRundown@MDScreen>
+    VertBox
+        GMBToolbar
+        ThinGap
+        RundownTemplate
+            id: six
+            rundown: '0600'
+            data: app.data_gmb_six
+
+<SixThirtyRundown@MDScreen>
+    VertBox
+        GMBToolbar
+        ThinGap
+        RundownTemplate
+            id: six_thirty
+            rundown: '0630'
+            data: app.data_gmb_six_thirty
+
+<SevenRundown@MDScreen>
+    VertBox
+        GMBToolbar
+        ThinGap
+        RundownTemplate
+            id: seven
+            rundown: '0700'
+            data: app.data_gmb_seven
+
+<EightRundown@MDScreen>
+    VertBox
+        GMBToolbar
+        ThinGap
+        RundownTemplate
+            id: eight
+            rundown: '0800'
+            data: app.data_gmb_eight
+
+<NineRundown@MDScreen>
+    VertBox
+        GMBToolbar
+        ThinGap
+        RundownTemplate
+            id: nine
+            rundown: '0900'
+            data: app.data_gmb_nine
+
+<LKRundown@MDScreen>
+    RundownTemplate
+        id: lk
+        rundown: 'LK'
+        data: app.data_lk
+
+<TMRundown@MDScreen>
+    canvas.before:
+
         Rectangle:
             pos: self.pos
             size: self.size
             source: 'blur.png'
-
-<ImageScreen@MDScreen>
-
-
-    Image:
-        source: 'blur.png'
-
-
-#    TMRundown:
-#        id: tm_rundown
-#        name: 'tm'
-#        manager: 'screen_manager'
-
-#    LoginScreen:
-#        id: login
-#        name: 'login'
-#        manager: 'screen_manager'
-#
-
-
-#    LWRundown
-#        id: lw_rundown
-#        name: 'lw'
-#        manager: 'screen_manager'
-#
-#    DrawingScreen:
-#        id: drawing_screen
-#        name: 'drawing'
-#        manager: 'screen_manager'
-
-
-
-
-
-
-#<LoginScreen>
-#    MDBoxLayout:
-#        Widget:
-#            size_hint_x: .1
-#
-#        VertBox:
-#            size_hint_x: .8
-#            MDLabel:
-#                text: 'Welcome to PiNews - Please login'
-#                halign: 'center'
-#            MDTextField:
-#                id: login
-#                font_size: 28
-#                hint_text: "USERNAME"
-#                mode: "rectangle"
-#                on_focus: self.show_keyboard()
-#            MDTextField:
-#                id: password
-#                font_size: 28
-#                hint_text: "PASSWORD"
-#                mode: "rectangle"
-#                password: True
-#                on_focus: self.show_keyboard()
-#
-#            MDBoxLayout
-#                Widget
-#                MDRaisedButton:
-#                    text: 'CONNECT'
-#                    on_press: root.login(login.text, password.text)
-#                Widget
-#            Widget
-#                size_hint_y: 4
-#
-#        Widget:
-#            size_hint_x: .1
-
-
-
-
-#<MenuScreen@MDScreen>:
-#    BoxLayout:
-#        orientation: 'vertical'
-#        MDToolbar:
-#            right_action_items: [["close", lambda x: app.stop()]]
-#            title: 'PiNews'
-#            size_hint_y: .1
-#        Widget:
-#            size_hint_y: .1
-#
-#        MDLabel:
-#            text: 'CHOOSE A PRODUCTION'
-#            font_size: 40
-#            halign: 'center'
-#            size_hint_y: .1
-#
-#        BoxLayout:
-#            size_hint_y: .1
-#            Widget:
-#            MDRaisedButton:
-#                text: '  GMB   '
-##                on_press: app.root.current = '0600'
-#            Widget:
-#            MDRaisedButton:
-#                text: '    LK    '
-##                on_press: app.root.current = 'lk'
-#            Widget:
-#            MDRaisedButton:
-#                text: '    TM    '
-#                on_press: app.root.current = 'tm'
-#            Widget
-#            MDRaisedButton:
-#                text: '    LW    '
-#                on_press: app.root.current = 'lw'
-#            Widget:
-#
-#        BoxLayout:
-#            size_hint_y: .1
-#            Widget:
-#            MDRaisedButton:
-#                text: 'CSTM_1'
-#            Widget:
-#            MDRaisedButton:
-#                text: 'CSTM_2'
-#            Widget:
-#            MDRaisedButton:
-#                text: 'CSTM_3'
-#            Widget
-#            MDRaisedButton:
-#                text: 'CSTM_4'
-#            Widget:
-#
-#        Widget:
-#            size_hint_y: .7
-
-#<Content>
-#    orientation: "vertical"
-#    spacing: "12dp"
-#    size_hint_y: None
-#    height: "120dp"
-#
-#    MDTextField:
-#        hint_text: "City"
-#
-#    MDTextField:
-#        hint_text: "Street"
-
-
-#<RundownTemplate@MDScreen>
-#    BoxLayout:
-#        orientation: 'vertical'
-#        MDToolbar:
-#            size_hint_y: None
-#            height: 90
-#            title: 'Loose Women'
-#
-##            MDIconButton:
-##                icon: "arrow-left-bold-outline"
-##                on_press: app.root.current = 'menu'
-##
-##            MDIconButton:
-##                icon: "power-on"
-##                theme_text_color: "Custom"
-##                text_color: 1, 1, 1, 1
-##
-##
-##
-##
-##            MDIconButton:
-##                icon: "arrow-up"
-##
-##            MDIconButton:
-##                icon: "arrow-down"
-##
-##            MDIconButton:
-##                icon: "format-vertical-align-top"
-##
-##            MDIconButton:
-##                icon: "format-vertical-align-bottom"
-##
-##            MDIconButton:
-##                icon: "power-on"
-##                theme_text_color: "Custom"
-##                text_color: 1, 1, 1, 1
-##
-##            BoxLayout:
-##                orientation: 'vertical'
-##                Widget:
-##                    size_hint_y: .1
-##                MDRaisedButton:
-##                    id: color_button
-##                    md_bg_color: 0, 0, 0, 1
-##                    text: 'COLOUR'
-##                    text_color: 1, 1, 1, 1
-##                    font_size: 11
-##                    size_hint_y: .5
-##                    on_release: app.popups.select_color()
-##                Widget:
-##                    size_hint_y: .1
-##                MDRaisedButton:
-##                    md_bg_color: 0, 0, 0, 1
-##                    text: 'THICKNESS'
-##                    text_color: 1, 1, 1, 1
-##                    font_size: 11
-##                    size_hint_y: .5
-##                    size_hint_x: 1
-##                    on_release: app.popups.select_width()
-##                Widget:
-##                    size_hint_y: .1
-#
-#            MDIconButton
-#                id: pencil_button
-#                icon: "pencil"
-#                theme_text_color: "Custom"
-#                text_color: 1, 1, 1, 1
-#                on_release: app.change_tool('pencil')
-#                on_release: self.text_color = 1, 1, 1, 1
-#                on_press: fill_button.text_color = 0, 0, 0, .4
-#                on_release: eraser_button.text_color = 0, 0, 0, .4
-#
-#            FillButton
-#                id: fill_button
-#                icon: "format-color-fill"
-#                theme_text_color: "Custom"
-#                text_color: 0, 0, 0, .4
-##                on_press: app.call_colour_change()
-#                on_press: app.change_tool('fill')
-##                on_release: self.text_color = 1, 0, 0, 1
-##                on_press: pencil_button.text_color = 0, 0, 0, 1
-##                on_press: eraser_button.text_color = 0, 0, 0, 1
-#
-#
-#
-#            MDIconButton
-#                id: eraser_button
-#                icon: "eraser"
-#                theme_text_color: "Custom"
-#                text_color: 0, 0, 0, .4
-#                on_release: self.text_color = 1, 1, 1, 1
-#                on_release: pencil_button.text_color = 0, 0, 0, .4
-#                on_release: fill_button.text_color = 0, 0, 0, .4
-#                on_release: app.change_tool('eraser')
-#
-#
-#            MDIconButton
-#                icon: "close-box"
-#                on_release: app.popups.clear_all_conf_popup()
-##                on_release: app.clear_all_drawings()
-#
-#        MDBoxLayout:
-#            spacing: 3
-#            size_hint_y: 0.039
-#
-#            MDRaisedButton:
-#                text: '   PAGE   '
-#                text_color: 1, 1, 1, 1
-#                md_bg_color: 0.098, 0.407, 0.670, 1
-#
-#            MDRaisedButton:
-#                text: '                         TITLE                         '
-#                text_color: 1, 1, 1, 1
-#                md_bg_color: 0.098, 0.407, 0.670, 1
-#
-#            MDRaisedButton:
-#                text: '  TOTAL  '
-#                text_color: 1, 1, 1, 1
-#                md_bg_color: 0.098, 0.407, 0.670, 1
-#
-#            MDRaisedButton:
-#                text: '   CAM    '
-#                text_color: 1, 1, 1, 1
-#                md_bg_color: 0.098, 0.407, 0.670, 1
-#
-#            MDRaisedButton:
-#                text: '                         NOTES                          '
-#                halign: 'center'
-#                text_color: 1, 1, 1, 1
-#                md_bg_color: 0.098, 0.407, 0.670, 1
-#                on_release: root.status_update()
-#
-#        # ## ### RECYCLEVIEW ### ## #
-#        # ## ### RECYCLEVIEW ### ## #
-#        # ## ### RECYCLEVIEW ### ## #
-#
-#
-#        RecycleView
-#            data: app.rvdata
-#            #viewclass: 'Row'
-#            scroll_type: ['bars', 'content']
-#            bar_width: 30
-#            bar_inactive_color: [.7, .7, .7, .6]
-#            RecycleBoxLayout:
-#                id: rv
-#
-#                default_size: None, dp(80)
-#                default_size_hint: 1, None
-#                size_hint_y: None
-#                height: self.minimum_height
-#                orientation: 'vertical'
-#
-#        MDBoxLayout:
-#            size_hint_y: .001
-#            canvas:
-#                Color:
-#                    rgb: 0.6, 0.6, 0.6
-#                Rectangle:
-#                    pos: self.pos
-#                    size: self.size
-#
-#        MDBoxLayout:
-#            size_hint_y: .02
-#            canvas:
-#                Color:
-#                    rgb: 0.8, 0.8, 0.8
-#                Rectangle:
-#                    pos: self.pos
-#                    size: self.size
-#
-#            MDLabel:
-#                id: conn_status
-#                text: '  STATUS: '
-#                font_size: 20
-
-
-
-#
-#<DrawingScreen@MDScreen>
-#    id: dwscreen
-#
-#    canvas.before:
-#
-#        Color:
-#            rgba: 0.047, 0.2, 0.329, 1
-#
-#        Rectangle:
-#            pos: self.pos
-#            size: self.size
-#
-##            source: 'blur.png'
-#
-#
-#
-#    BoxLayout
-#        orientation: 'vertical'
-#
-#        # Top spacer
-#        Widget
-#            size_hint_y: 1.5
-#
-#
-#        # Middle layer
-#        BoxLayout
-#
-#            # Middle left spacer
-#            Widget
-#                size_hint_x: .1
-#
-#            # main housing
-#            BoxLayout
-#
-#                id: main
-#                orientation: 'vertical'
-#                size_hint_x: None
-#                width: 850
-#                size_hint_y: None
-#                height: 500
-#
-#
-#                canvas.before:
-#                    Color:
-#                        rgb: 0.239, 0.4, 0.541
-#                    Rectangle:
-#                        pos: main.pos
-#                        size: main.size
-#
-#                MDLabel:
-#                    id: drawing_screen_title
-#                    color: 1,1,1,1
-#                    halign: 'center'
-#
-#                # toolbar
-#                BoxLayout
-#
-#                    Widget
-#                        size_hint_x: .5
-#
-#
-#                    # Colour + Width select
-#                    BoxLayout:
-#                        orientation: 'vertical'
-#                        Widget:
-#                            size_hint_y: .1
-#                        MDRaisedButton:
-#                            id: drawing_color_button
-#                            md_bg_color: 0.513, 0.627, 0.725, 1
-#                            text: '   COLOUR   '
-##                            text_color: 0,0,0
-##                            font_size: 11
-#                            size_hint_y: .5
-#                            on_release: app.popups.show_color_choice_popup()
-#                        Widget:
-#                            size_hint_y: .1
-#                        MDRaisedButton:
-#                            md_bg_color: 0.513, 0.627, 0.725, 1
-#                            text: 'THICKNESS'
-##                            text_color: 0,0,0
-##                            font_size: 11
-#                            size_hint_y: .5
-#                            on_release: app.popups.select_width()
-#                        Widget:
-#                            size_hint_y: .1
-#
-#
-#
-#                    MDIconButton
-#                        id: dw_pencil_btn
-#                        icon: "pencil"
-#                        theme_text_color: "Custom"
-#                        text_color: 1, 1, 1
-#                        pos_hint: {"center_x": .5, "center_y": .5}
-#                        user_font_size: 64
-#                        on_press: self.text_color = 1, 1, 1
-#                        on_press: dw_fill_btn.text_color = 0, 0, 0
-#                        on_release: app.change_tool('pencil')
-#
-#
-#                    MDIconButton
-#
-#                        id: dw_fill_btn
-#                        icon: "format-color-fill"
-#                        theme_text_color: "Custom"
-#                        text_color: 0, 0, 0
-#                        pos_hint: {"center_x": .5, "center_y": .5}
-#                        user_font_size: 64
-#                        on_press: self.text_color = 1, 1, 1
-#                        on_press: dw_pencil_btn.text_color = 0, 0, 0
-#                        on_release: app.change_tool('fill')
-#
-#
-#                    MDIconButton
-#                        icon: "close-box"
-#                        pos_hint: {"center_x": .5, "center_y": .5}
-#                        user_font_size: 64
-#                        on_release: app.clear_current_drawing()
-#
-#                    Widget
-#                        size_hint_x: .5
-#
-#                # Drawing housing
-#                BoxLayout
-#                    size_hint_y: None
-#                    height: 240
-#                    Widget
-#
-#                    # Drawing area
-#                    MyPaintPage:
-#                        id: mypaintpage
-#                        background_color: 1, 1, 1
-#                        size_hint_x: None
-#                        size_hint_y: None
-#                        height: 240
-#                        width: 800
-#
-#                    Widget
-#
-#                #Bottom bar
-#                BoxLayout:
-#
-#
-#                    Widget:
-#                        size_hint_x: 5
-#                    MDIconButton:
-#                        icon: "close-outline"
-#                        theme_text_color: "Custom"
-#                        text_color: 0.988, 0.352, 0.329
-#                        on_press: app.back_to_main_page()
-#                        on_release: app.root.current = 'lw'
-#
-#                    Widget
-#                        size_hint_x: .1
-#                    MDIconButton:
-#                        icon: "check-outline"
-#                        theme_text_color: "Custom"
-#                        text_color: 0.490, 0.988, 0.501
-#                        on_press: app.back_to_main_page()
-#                        on_release: app.root.current = 'lw'
-#
-#            # Middle right spacer
-#            Widget
-#                size_hint_x: .1
-#
-#        # Bottom spacer
-#        Widget
-#            size_hint_y: 2
-
-
-#<ThinGap@Widget>
-#    size_hint_y: None
-#    height: 3
-#
-#<VertBox@MDBoxLayout>
-#    orientation: 'vertical'
-#
-#
-#
-#
-#
-#
-#<SixRundown@MDScreen>
-#    VertBox
-#        GMBToolbar
-#        ThinGap
-#        RundownTemplate
-#            id: six
-#            rundown: '0600'
-#            data: app.data_gmb_six
-#
-#<SixThirtyRundown@MDScreen>
-#    VertBox
-#        GMBToolbar
-#        ThinGap
-#        RundownTemplate
-#            id: six_thirty
-#            rundown: '0630'
-#            data: app.data_gmb_six_thirty
-#
-#<SevenRundown@MDScreen>
-#    VertBox
-#        GMBToolbar
-#        ThinGap
-#        RundownTemplate
-#            id: seven
-#            rundown: '0700'
-#            data: app.data_gmb_seven
-#
-#<EightRundown@MDScreen>
-#    VertBox
-#        GMBToolbar
-#        ThinGap
-#        RundownTemplate
-#            id: eight
-#            rundown: '0800'
-#            data: app.data_gmb_eight
-#
-#<NineRundown@MDScreen>
-#    VertBox
-#        GMBToolbar
-#        ThinGap
-#        RundownTemplate
-#            id: nine
-#            rundown: '0900'
-#            data: app.data_gmb_nine
-#
-#<LKRundown@MDScreen>
-#    RundownTemplate
-#        id: lk
-#        rundown: 'LK'
-#        data: app.data_lk
-
-#<TMRundown@MDScreen>
-#    canvas.before:
-#
-#        Rectangle:
-#            pos: self.pos
-#            size: self.size
-#            source: 'blur.png'
 #    RundownTemplate
 #        id: tm
 #        rundown: 'TM'
@@ -617,8 +580,8 @@ ScreenManager:
 
 
 
-#<LWRundown@MDScreen>
-#    RundownTemplate
-#        id: lw
-#        rundown: 'LW'
-#        data: app.rvdata
+<LWRundown@MDScreen>
+    RundownTemplate
+        id: lw
+        rundown: 'LW'
+        data: app.rvdata
