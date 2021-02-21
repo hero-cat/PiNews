@@ -131,7 +131,8 @@ class TestApp(MDApp):
 
     def enter_drawing_page(self, story_id):
         # Enter drawing page, if drawing exists, write it to canvas. else clean canvas for new drawing
-        drawings = DrawingRepository.get_drawing(story_id)
+        #drawings = DrawingRepository.get_drawing(story_id)
+        pass
 
 
         # if drawings is not None:
@@ -161,8 +162,8 @@ class TestApp(MDApp):
 
     def back_to_main_page(self):
         # Once finished on the drawing page head back to main page and rewrite/rescale the drawing to fit notes
-        drawings = DrawingRepository.get_drawing(self.current_story_id)
-
+        #drawings = DrawingRepository.get_drawing(self.current_story_id)
+        pass
         # if drawings is not None:
         #     with self.current_widget.canvas:
         #         bgc = drawings['bg_color']
@@ -185,7 +186,8 @@ class TestApp(MDApp):
 
 
     def focused_row_properties_update(self, widget, story_id, title, backtime):
-        dp = DrawingRepository
+        #dp = DrawingRepository
+        pass
 
         # Update the Apps reference to the current row in focus
 
