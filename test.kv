@@ -13,15 +13,15 @@ ScreenManager:
         name: 'tm'
         manager: 'screen_manager'
 
-    LoginScreen:
-        id: login
-        name: 'login'
-        manager: 'screen_manager'
-
-    MenuScreen:
-        id: menu_screen
-        name: 'menu'
-        manager: 'screen_manager'
+#    LoginScreen:
+#        id: login
+#        name: 'login'
+#        manager: 'screen_manager'
+#
+#    MenuScreen:
+#        id: menu_screen
+#        name: 'menu'
+#        manager: 'screen_manager'
 
     LWRundown
         id: lw_rundown
@@ -38,111 +38,111 @@ ScreenManager:
 
 
 
-<LoginScreen>
-    MDBoxLayout:
-        Widget:
-            size_hint_x: .1
-
-        VertBox:
-            size_hint_x: .8
-            MDLabel:
-                text: 'Welcome to PiNews - Please login'
-                halign: 'center'
-            MDTextField:
-                id: login
-                font_size: 28
-                hint_text: "USERNAME"
-                mode: "rectangle"
-                on_focus: self.show_keyboard()
-            MDTextField:
-                id: password
-                font_size: 28
-                hint_text: "PASSWORD"
-                mode: "rectangle"
-                password: True
-                on_focus: self.show_keyboard()
-
-            MDBoxLayout
-                Widget
-                MDRaisedButton:
-                    text: 'CONNECT'
-                    on_press: root.login(login.text, password.text)
-                Widget
-            Widget
-                size_hint_y: 4
-
-        Widget:
-            size_hint_x: .1
-
-
+#<LoginScreen>
+#    MDBoxLayout:
+#        Widget:
+#            size_hint_x: .1
+#
+#        VertBox:
+#            size_hint_x: .8
+#            MDLabel:
+#                text: 'Welcome to PiNews - Please login'
+#                halign: 'center'
+#            MDTextField:
+#                id: login
+#                font_size: 28
+#                hint_text: "USERNAME"
+#                mode: "rectangle"
+#                on_focus: self.show_keyboard()
+#            MDTextField:
+#                id: password
+#                font_size: 28
+#                hint_text: "PASSWORD"
+#                mode: "rectangle"
+#                password: True
+#                on_focus: self.show_keyboard()
+#
+#            MDBoxLayout
+#                Widget
+#                MDRaisedButton:
+#                    text: 'CONNECT'
+#                    on_press: root.login(login.text, password.text)
+#                Widget
+#            Widget
+#                size_hint_y: 4
+#
+#        Widget:
+#            size_hint_x: .1
 
 
-<MenuScreen@MDScreen>:
-    BoxLayout:
-        orientation: 'vertical'
-        MDToolbar:
-            right_action_items: [["close", lambda x: app.stop()]]
-            title: 'PiNews'
-            size_hint_y: .1
-        Widget:
-            size_hint_y: .1
 
-        MDLabel:
-            text: 'CHOOSE A PRODUCTION'
-            font_size: 40
-            halign: 'center'
-            size_hint_y: .1
 
-        BoxLayout:
-            size_hint_y: .1
-            Widget:
-            MDRaisedButton:
-                text: '  GMB   '
-#                on_press: app.root.current = '0600'
-            Widget:
-            MDRaisedButton:
-                text: '    LK    '
-#                on_press: app.root.current = 'lk'
-            Widget:
-            MDRaisedButton:
-                text: '    TM    '
-                on_press: app.root.current = 'tm'
-            Widget
-            MDRaisedButton:
-                text: '    LW    '
-                on_press: app.root.current = 'lw'
-            Widget:
+#<MenuScreen@MDScreen>:
+#    BoxLayout:
+#        orientation: 'vertical'
+#        MDToolbar:
+#            right_action_items: [["close", lambda x: app.stop()]]
+#            title: 'PiNews'
+#            size_hint_y: .1
+#        Widget:
+#            size_hint_y: .1
+#
+#        MDLabel:
+#            text: 'CHOOSE A PRODUCTION'
+#            font_size: 40
+#            halign: 'center'
+#            size_hint_y: .1
+#
+#        BoxLayout:
+#            size_hint_y: .1
+#            Widget:
+#            MDRaisedButton:
+#                text: '  GMB   '
+##                on_press: app.root.current = '0600'
+#            Widget:
+#            MDRaisedButton:
+#                text: '    LK    '
+##                on_press: app.root.current = 'lk'
+#            Widget:
+#            MDRaisedButton:
+#                text: '    TM    '
+#                on_press: app.root.current = 'tm'
+#            Widget
+#            MDRaisedButton:
+#                text: '    LW    '
+#                on_press: app.root.current = 'lw'
+#            Widget:
+#
+#        BoxLayout:
+#            size_hint_y: .1
+#            Widget:
+#            MDRaisedButton:
+#                text: 'CSTM_1'
+#            Widget:
+#            MDRaisedButton:
+#                text: 'CSTM_2'
+#            Widget:
+#            MDRaisedButton:
+#                text: 'CSTM_3'
+#            Widget
+#            MDRaisedButton:
+#                text: 'CSTM_4'
+#            Widget:
+#
+#        Widget:
+#            size_hint_y: .7
 
-        BoxLayout:
-            size_hint_y: .1
-            Widget:
-            MDRaisedButton:
-                text: 'CSTM_1'
-            Widget:
-            MDRaisedButton:
-                text: 'CSTM_2'
-            Widget:
-            MDRaisedButton:
-                text: 'CSTM_3'
-            Widget
-            MDRaisedButton:
-                text: 'CSTM_4'
-            Widget:
-
-        Widget:
-            size_hint_y: .7
-
-<Content>
-    orientation: "vertical"
-    spacing: "12dp"
-    size_hint_y: None
-    height: "120dp"
-
-    MDTextField:
-        hint_text: "City"
-
-    MDTextField:
-        hint_text: "Street"
+#<Content>
+#    orientation: "vertical"
+#    spacing: "12dp"
+#    size_hint_y: None
+#    height: "120dp"
+#
+#    MDTextField:
+#        hint_text: "City"
+#
+#    MDTextField:
+#        hint_text: "Street"
 
 
 <RundownTemplate@MDScreen>
