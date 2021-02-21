@@ -195,7 +195,7 @@ ScreenManager:
 #                    text_color: 1, 1, 1, 1
 #                    font_size: 11
 #                    size_hint_y: .5
-#                    on_release: app.popups.select_color()
+#
 #                Widget:
 #                    size_hint_y: .1
 #                MDRaisedButton:
@@ -205,7 +205,7 @@ ScreenManager:
 #                    font_size: 11
 #                    size_hint_y: .5
 #                    size_hint_x: 1
-#                    on_release: app.popups.select_width()
+#
 #                Widget:
 #                    size_hint_y: .1
 
@@ -245,8 +245,7 @@ ScreenManager:
 
             MDIconButton
                 icon: "close-box"
-                #on_release: app.popups.clear_all_conf_popup()
-#                on_release: app.clear_all_drawings()
+
 
         MDBoxLayout:
             spacing: 3
@@ -398,7 +397,7 @@ ScreenManager:
 #                            text_color: 0,0,0
 #                            font_size: 11
                             size_hint_y: .5
-                            #on_release: app.popups.show_color_choice_popup()
+
                         Widget:
                             size_hint_y: .1
                         MDRaisedButton:
@@ -407,7 +406,7 @@ ScreenManager:
 #                            text_color: 0,0,0
 #                            font_size: 11
                             size_hint_y: .5
-                            #on_release: app.popups.select_width()
+
                         Widget:
                             size_hint_y: .1
 
