@@ -8,6 +8,7 @@ from kivy.clock import Clock
 from kivymd.app import MDApp
 from rows.row import Row, DrawingRepository
 
+
 from kivy.factory import Factory as F
 from kivy.uix import screenmanager as sm
 import boto3
@@ -52,6 +53,7 @@ class TestApp(MDApp):
         Clock.schedule_interval(self.pull_json_data, 15.0)  # Pull data at 15s intervals
         from kivy.base import EventLoop
         EventLoop.window.bind(on_keyboard=self.hook_keyboard)
+        print(self.root.ids)
 
 
 
@@ -221,25 +223,7 @@ class TestApp(MDApp):
 
 
 
-class FillButton(F.MDIconButton):
-    # A separate class for the fill button to enable double tap/change color
 
-
-
-
-    def on_touch_down(self, touch):
-        app = TestApp.get_running_app()
-        toolbar = TestApp.get_running_app().root.ids.lw_rundown.ids.lw.ids
-
-
-        if touch.is_double_tap:
-            self.popups.show_color_choice_popup()
-
-        else:
-            app.change_tool('fill')
-            self.text_color = (DrawingRepository.drawing_color)
-            toolbar.pencil_button.text_color = (0, 0, 0, .4)
-            toolbar.eraser_button.text_color = (0, 0, 0, .4)
 
 
 class MyPaintPage(F.RelativeLayout):
@@ -324,7 +308,7 @@ class MyPaintPage(F.RelativeLayout):
 
 
 
-class LoginScreen(F.MDScreen):
+class LoginScreen(F.Screen):
     username = 'joe'
     password = 'aaa'
 
