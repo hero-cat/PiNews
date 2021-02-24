@@ -1,0 +1,289 @@
+<ColorScreen@MDScreen>
+    id: color_screen
+    canvas.before:
+
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'blur.png'
+
+
+
+    BoxLayout
+        orientation: 'vertical'
+
+        # Top spacer
+        Widget
+            size_hint_y: 1.5
+
+
+        # Middle layer
+        BoxLayout
+
+            # Middle left spacer
+            Widget
+                size_hint_x: .1
+
+            # main housing
+            BoxLayout
+
+                id: main
+                orientation: 'vertical'
+                size_hint_x: None
+                width: 850
+                size_hint_y: None
+                height: 500
+
+                canvas.before:
+                    Color:
+                        rgb: 0,0,0,1
+                    Line:
+                        width: 2
+                        rectangle: self.x, self.y, self.width, self.height
+                    Color:
+                        rgb: 1,1,1,1
+                    Rectangle:
+                        pos: main.pos
+                        size: main.size
+
+
+                GridLayout:
+                    cols: 4
+                    Button:
+                        red: 0.941, 0, 0, 1
+                        background_normal: ''
+                        background_color: self.red
+                        on_press: app.popups.change_color(self.red)
+                        on_release: app.root.current = 'drawing'
+                    Button:
+                        orange: 1, 0.501, 0, 1
+                        background_normal: ''
+                        background_color: self.orange
+                    Button:
+                        yellow: 1, 1, 0, 1
+                        background_normal: ''
+                        background_color: self.yellow
+                    Button:
+                        green: 0.501, 1, 0, 1
+                        background_normal: ''
+                        background_color: self.green
+                    Button:
+                        teal: 0, 1, 0.501, 1
+                        background_normal: ''
+                        background_color: self.teal
+                    Button:
+                        turquoise: 0, 1, 1, 1
+                        background_normal: ''
+                        background_color: self.turquoise
+                    Button:
+                        blue: 0, 0.501, 1, 1
+                        background_normal: ''
+                        background_color: self.blue
+                    Button:
+                        navy: 0, 0, 1, 1
+                        background_normal: ''
+                        background_color: self.navy
+                    Button:
+                        purple: 0.498, 0, 1, 1
+                        background_normal: ''
+                        background_color: self.purple
+                    Button:
+                        pink: 1, 0, 1, 1
+                        background_normal: ''
+                        background_color: self.pink
+                    Button:
+                        grey: 0.5, 0.5, 0.5, 1
+                        background_normal: ''
+                        background_color: self.grey
+                    Button:
+                        black: 0, 0, 0, 1
+                        background_normal: ''
+                        background_color: self.black
+
+
+
+
+
+
+            # Middle right spacer
+            Widget
+                size_hint_x: .1
+
+        # Bottom spacer
+        Widget
+            size_hint_y: 2
+
+
+
+
+
+<WidthScreen@MDScreen>
+    id: width_screen
+    canvas.before:
+
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'blur.png'
+
+
+
+    BoxLayout
+        orientation: 'vertical'
+
+        # Top spacer
+        Widget
+            size_hint_y: 1.5
+
+
+        # Middle layer
+        BoxLayout
+
+            # Middle left spacer
+            Widget
+                size_hint_x: .1
+
+            # main housing
+            BoxLayout
+
+                id: main
+                orientation: 'vertical'
+                size_hint_x: None
+                width: 850
+                size_hint_y: None
+                height: 500
+
+                canvas.before:
+                    Color:
+                        rgb: 0,0,0,1
+                    Line:
+                        width: 2
+                        rectangle: self.x, self.y, self.width, self.height
+                    Color:
+                        rgb: 1,1,1,1
+                    Rectangle:
+                        pos: main.pos
+                        size: main.size
+
+
+
+
+                MDLabel
+                    id: slider_lbl
+                    halign: 'center'
+
+                MDSlider:
+                    min: 1
+                    max: 10
+                    show_off: False
+                    value: app.line_width
+                    on_touch_move: slider_lbl.text = str(int(self.value))
+
+                    on_touch_up: app.popups.change_width(self.value)
+
+                    on_touch_up: app.line_width = int(self.value)
+
+                    on_touch_up: app.root.current = 'drawing'
+
+
+
+                Widget
+
+
+
+
+            # Middle right spacer
+            Widget
+                size_hint_x: .1
+
+        # Bottom spacer
+        Widget
+            size_hint_y: 2
+
+
+
+
+
+
+<ClearAllConfScreen@MDScreen>
+    id: clear_all_conf_screen
+    canvas.before:
+
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'blur.png'
+
+
+
+    BoxLayout
+        orientation: 'vertical'
+
+        # Top spacer
+        Widget
+            size_hint_y: 1.5
+
+
+        # Middle layer
+        BoxLayout
+
+            # Middle left spacer
+            Widget
+                size_hint_x: .1
+
+            # main housing
+            BoxLayout
+
+                id: main
+                orientation: 'vertical'
+                size_hint_x: None
+                width: 600
+                size_hint_y: None
+                height: 200
+
+                canvas.before:
+                    Color:
+                        rgb: 0,0,0,1
+                    Line:
+                        width: 2
+                        rectangle: self.x, self.y, self.width, self.height
+                    Color:
+                        rgb: .9,.9,.9,1
+                    Rectangle:
+                        pos: main.pos
+                        size: main.size
+
+
+                MDLabel:
+                    text: 'Clear all drawings?'
+                    halign: 'center'
+
+                BoxLayout
+
+                    Widget
+                    MDRaisedButton
+                        text: 'Cancel'
+                        md_bg_color: .7,.7,.7,1
+                        on_release: app.root.current = 'lw'
+                    Widget
+                        size_hint_x: 2
+                    MDRaisedButton
+                        text: '  OK  '
+                        on_release: app.clear_all_drawings()
+                        on_release: app.root.current = 'lw'
+
+                    Widget
+
+
+                Widget
+                    size_hint_y: .3
+
+
+
+            # Middle right spacer
+            Widget
+                size_hint_x: .1
+
+        # Bottom spacer
+        Widget
+            size_hint_y: 2

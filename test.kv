@@ -395,6 +395,9 @@ ScreenManager:
 #        hint_text: "Street"
 #
 #
+
+
+
 <RundownTemplate@MDScreen>
     BoxLayout:
         orientation: 'vertical'
@@ -414,16 +417,30 @@ ScreenManager:
                 on_press: fill_button.text_color = 0, 0, 0, .4
                 on_release: eraser_button.text_color = 0, 0, 0, .4
 
-#            FillButton
-#                id: fill_button
-#                icon: "format-color-fill"
-#                theme_text_color: "Custom"
-#                text_color: 0, 0, 0, .4
-##                on_press: app.call_colour_change()
+            MDIconButton
+                id: fill_button
+                icon: "format-color-fill"
+                theme_text_color: "Custom"
+                text_color: 0, 0, 0, .4
+
+
+            MDIconButton
+#                background_normal: ''
+#                background_color: 0.129, 0.588, 0.952, 1
+#                size_hint_x: None
+#                width: 70
+
+                icon: "format-color-fill"
+                theme_text_color: "Custom"
+                text_color: 0, 0, 0, .4
+                on_press: app.fill_or_change()
+                on_release: app.fill_release('fill')
+
+#                on_press: app.call_colour_change()
 #                on_press: app.change_tool('fill')
-##                on_release: self.text_color = 1, 0, 0, 1
-##                on_press: pencil_button.text_color = 0, 0, 0, 1
-##                on_press: eraser_button.text_color = 0, 0, 0, 1
+#                on_release: self.text_color = 1, 0, 0, 1
+#                on_press: pencil_button.text_color = 0, 0, 0, 1
+#                on_press: eraser_button.text_color = 0, 0, 0, 1
 
 
 

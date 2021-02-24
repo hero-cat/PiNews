@@ -15,7 +15,8 @@ import boto3
 import botocore
 from kivy.core.window import WindowBase
 from kivy.uix.behaviors import FocusBehavior
-
+import time
+from threading import Thread
 
 class TestApp(MDApp):
     """This program works by pulling a dynamic JSON file from AWS at regular intervals.
@@ -55,7 +56,7 @@ class TestApp(MDApp):
         Clock.schedule_interval(self.pull_json_data, 15.0)  # Pull data at 15s intervals
         from kivy.base import EventLoop
         EventLoop.window.bind(on_keyboard=self.hook_keyboard)
-        print(self.root.ids)
+
 
 
 
@@ -67,7 +68,6 @@ class TestApp(MDApp):
             return True
 
     def pull_json_data(self, dt):
-        print('pull' + str(self.counter))
         self.s3.download_file('hero-cat-test', 'test_rundown', 'test_rundown.json')
         with open('test_rundown.json') as json_file:
             fresh_data = json.load(json_file)
@@ -222,6 +222,52 @@ class TestApp(MDApp):
         else:
             DrawingRepository.clear_drawing(self.current_story_id)
             self.current_widget.canvas.clear()
+
+
+
+
+
+    start = None
+    end = None
+
+    send = True
+
+
+    def fill_or_change(self):
+        # create the thread to invoke other_func with arguments (2, 5)
+        t = Thread(target=self.other_func)
+        # set daemon to true so the thread dies when app is closed
+        t.daemon = True
+        # start the thread
+        t.start()
+
+
+    def other_func(self):
+        self.send = True
+
+        self.start = time.time()
+
+        while abs(int(self.start) - int(time.time())) < 2:
+            pass
+        else:
+            if self.send == True:
+                self.root.current = 'color_screen'
+
+
+
+
+
+
+    def fill_release(self, tool):
+
+        self.send = False
+
+        self.change_tool(tool)
+
+
+
+
+
 
 
 
