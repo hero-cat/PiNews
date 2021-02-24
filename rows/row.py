@@ -157,6 +157,9 @@ class DrawingRepository:
         DrawingRepository.drawings = {}
 
 
+    @staticmethod
+    def test():
+        print('twatfucker')
 
 
 class ClickableBox(F.ButtonBehavior, F.RelativeLayout):

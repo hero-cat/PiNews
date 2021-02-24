@@ -7,7 +7,7 @@ from kivy import properties as KP
 from kivy.clock import Clock
 from kivymd.app import MDApp
 from rows.row import Row, DrawingRepository
-
+from popups.popups import Popups
 
 from kivy.factory import Factory as F
 from kivy.uix import screenmanager as sm
@@ -46,6 +46,8 @@ class TestApp(MDApp):
 
     s3 = boto3.client('s3', config=botocore.config.Config(signature_version=botocore.UNSIGNED))
 
+
+    popups = Popups()
 
     def build(self):
         self.theme_cls.primary_palette = "Blue"

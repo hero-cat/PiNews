@@ -1,4 +1,5 @@
 #:include rows/row.kv
+#:include popups/popups.kv
 
 # todo: 1. send contents of new widget to row. when pop opens
 
@@ -60,7 +61,10 @@ ScreenManager:
 
 
 
-
+    LWRundown
+        id: lw_rundown
+        name: 'lw'
+        manager: 'screen_manager'
 
 
     LoginScreen:
@@ -73,23 +77,213 @@ ScreenManager:
         name: 'menu'
         manager: 'screen_manager'
 
-    LWRundown
-        id: lw_rundown
-        name: 'lw'
-        manager: 'screen_manager'
+
 
     DrawingScreen:
         id: drawing_screen
         name: 'drawing'
         manager: 'screen_manager'
 
-    TMRundown:
-        id: tm_rundown
-        name: 'tm'
+    ColorScreen:
+        id: color_screen
+        name: 'color_screen'
         manager: 'screen_manager'
-#
-#
-#
+
+
+    WidthScreen:
+        id: width_screen
+        name: 'width_screen'
+        manager: 'screen_manager'
+
+
+
+    ClearAllConfScreen:
+        id: clear_all_conf_screen
+        name: 'clear_all_conf_screen'
+        manager: 'screen_manager'
+
+
+
+
+<ColorScreen>
+
+<WidthScreen>
+
+<ClearAllConfScreen>
+
+
+<DrawingScreen@MDScreen>
+    id: dwscreen
+
+    canvas.before:
+
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'blur.png'
+
+
+
+    BoxLayout
+        orientation: 'vertical'
+
+        # Top spacer
+        Widget
+            size_hint_y: 1.5
+
+
+        # Middle layer
+        BoxLayout
+
+            # Middle left spacer
+            Widget
+                size_hint_x: .1
+
+            # main housing
+            BoxLayout
+
+                id: main
+                orientation: 'vertical'
+                size_hint_x: None
+                width: 850
+                size_hint_y: None
+                height: 500
+
+
+                canvas.before:
+                    Color:
+                        rgb: 0,0,0,1
+                    Line:
+                        width: 2
+                        rectangle: self.x, self.y, self.width, self.height
+                    Color:
+                        rgb: 0.239, 0.4, 0.541
+                    Rectangle:
+                        pos: main.pos
+                        size: main.size
+
+                MDLabel:
+                    id: drawing_screen_title
+                    color: 1,1,1,1
+                    halign: 'center'
+
+                # toolbar
+                BoxLayout
+
+                    Widget
+                        size_hint_x: .5
+
+
+                    # Colour + Width select
+                    BoxLayout:
+                        orientation: 'vertical'
+                        Widget:
+                            size_hint_y: .1
+                        MDRaisedButton:
+                            id: drawing_color_button
+                            md_bg_color: 0.513, 0.627, 0.725, 1
+                            text: '   COLOUR   '
+#                            text_color: 0,0,0
+#                            font_size: 11
+                            size_hint_y: .5
+                            on_release: app.root.current = 'color_screen'
+
+                        Widget:
+                            size_hint_y: .1
+                        MDRaisedButton:
+                            md_bg_color: 0.513, 0.627, 0.725, 1
+                            text: 'THICKNESS'
+#                            text_color: 0,0,0
+#                            font_size: 11
+                            size_hint_y: .5
+                            on_release: app.root.current = 'width_screen'
+
+                        Widget:
+                            size_hint_y: .1
+
+
+
+                    MDIconButton
+                        id: dw_pencil_btn
+                        icon: "pencil"
+                        theme_text_color: "Custom"
+                        text_color: 1, 1, 1
+                        pos_hint: {"center_x": .5, "center_y": .5}
+                        user_font_size: 64
+                        on_press: self.text_color = 1, 1, 1
+                        on_press: dw_fill_btn.text_color = 0, 0, 0
+                        on_release: app.change_tool('pencil')
+
+
+                    MDIconButton
+
+                        id: dw_fill_btn
+                        icon: "format-color-fill"
+                        theme_text_color: "Custom"
+                        text_color: 0, 0, 0
+                        pos_hint: {"center_x": .5, "center_y": .5}
+                        user_font_size: 64
+                        on_press: self.text_color = 1, 1, 1
+                        on_press: dw_pencil_btn.text_color = 0, 0, 0
+                        on_release: app.change_tool('fill')
+
+
+                    MDIconButton
+                        icon: "close-box"
+                        pos_hint: {"center_x": .5, "center_y": .5}
+                        user_font_size: 64
+                        on_release: app.clear_current_drawing()
+
+                    Widget
+                        size_hint_x: .5
+
+                # Drawing housing
+                BoxLayout
+                    size_hint_y: None
+                    height: 240
+                    Widget
+
+                    # Drawing area
+                    MyPaintPage:
+                        id: mypaintpage
+                        background_color: 1, 1, 1
+                        size_hint_x: None
+                        size_hint_y: None
+                        height: 240
+                        width: 800
+
+                    Widget
+
+                #Bottom bar
+                BoxLayout:
+
+
+                    Widget:
+                        size_hint_x: 5
+                    MDIconButton:
+                        icon: "close-outline"
+                        theme_text_color: "Custom"
+                        text_color: 0.988, 0.352, 0.329
+                        on_press: app.back_to_main_page()
+                        on_release: app.root.current = 'lw'
+
+                    Widget
+                        size_hint_x: .1
+                    MDIconButton:
+                        icon: "check-outline"
+                        theme_text_color: "Custom"
+                        text_color: 0.490, 0.988, 0.501
+                        on_press: app.back_to_main_page()
+                        on_release: app.root.current = 'lw'
+
+            # Middle right spacer
+            Widget
+                size_hint_x: .1
+
+        # Bottom spacer
+        Widget
+            size_hint_y: 2
+
 
 
 
@@ -209,59 +403,6 @@ ScreenManager:
             height: 90
             title: 'Loose Women'
 
-#            MDIconButton:
-#                icon: "arrow-left-bold-outline"
-#                on_press: app.root.current = 'menu'
-#
-#            MDIconButton:
-#                icon: "power-on"
-#                theme_text_color: "Custom"
-#                text_color: 1, 1, 1, 1
-#
-#
-#
-#
-#            MDIconButton:
-#                icon: "arrow-up"
-#
-#            MDIconButton:
-#                icon: "arrow-down"
-#
-#            MDIconButton:
-#                icon: "format-vertical-align-top"
-#
-#            MDIconButton:
-#                icon: "format-vertical-align-bottom"
-#
-#            MDIconButton:
-#                icon: "power-on"
-#                theme_text_color: "Custom"
-#                text_color: 1, 1, 1, 1
-#
-#            BoxLayout:
-#                orientation: 'vertical'
-#                Widget:
-#                    size_hint_y: .1
-#                MDRaisedButton:
-#                    id: color_button
-#                    md_bg_color: 0, 0, 0, 1
-#                    text: 'COLOUR'
-#                    text_color: 1, 1, 1, 1
-#                    font_size: 11
-#                    size_hint_y: .5
-#
-#                Widget:
-#                    size_hint_y: .1
-#                MDRaisedButton:
-#                    md_bg_color: 0, 0, 0, 1
-#                    text: 'THICKNESS'
-#                    text_color: 1, 1, 1, 1
-#                    font_size: 11
-#                    size_hint_y: .5
-#                    size_hint_x: 1
-#
-#                Widget:
-#                    size_hint_y: .1
 
             MDIconButton
                 id: pencil_button
@@ -299,6 +440,8 @@ ScreenManager:
 
             MDIconButton
                 icon: "close-box"
+                on_press: app.root.current = 'clear_all_conf_screen'
+
 
 
         MDBoxLayout:
@@ -378,171 +521,6 @@ ScreenManager:
 
 
 
-<DrawingScreen@MDScreen>
-    id: dwscreen
-
-    canvas.before:
-
-        Rectangle:
-            pos: self.pos
-            size: self.size
-            source: 'blur.png'
-
-
-
-    BoxLayout
-        orientation: 'vertical'
-
-        # Top spacer
-        Widget
-            size_hint_y: 1.5
-
-
-        # Middle layer
-        BoxLayout
-
-            # Middle left spacer
-            Widget
-                size_hint_x: .1
-
-            # main housing
-            BoxLayout
-
-                id: main
-                orientation: 'vertical'
-                size_hint_x: None
-                width: 850
-                size_hint_y: None
-                height: 500
-
-
-                canvas.before:
-                    Color:
-                        rgb: 0.239, 0.4, 0.541
-                    Rectangle:
-                        pos: main.pos
-                        size: main.size
-
-                MDLabel:
-                    id: drawing_screen_title
-                    color: 1,1,1,1
-                    halign: 'center'
-
-                # toolbar
-                BoxLayout
-
-                    Widget
-                        size_hint_x: .5
-
-
-                    # Colour + Width select
-                    BoxLayout:
-                        orientation: 'vertical'
-                        Widget:
-                            size_hint_y: .1
-                        MDRaisedButton:
-                            id: drawing_color_button
-                            md_bg_color: 0.513, 0.627, 0.725, 1
-                            text: '   COLOUR   '
-#                            text_color: 0,0,0
-#                            font_size: 11
-                            size_hint_y: .5
-
-                        Widget:
-                            size_hint_y: .1
-                        MDRaisedButton:
-                            md_bg_color: 0.513, 0.627, 0.725, 1
-                            text: 'THICKNESS'
-#                            text_color: 0,0,0
-#                            font_size: 11
-                            size_hint_y: .5
-
-                        Widget:
-                            size_hint_y: .1
-
-
-
-                    MDIconButton
-                        id: dw_pencil_btn
-                        icon: "pencil"
-                        theme_text_color: "Custom"
-                        text_color: 1, 1, 1
-                        pos_hint: {"center_x": .5, "center_y": .5}
-                        user_font_size: 64
-                        on_press: self.text_color = 1, 1, 1
-                        on_press: dw_fill_btn.text_color = 0, 0, 0
-                        on_release: app.change_tool('pencil')
-
-
-                    MDIconButton
-
-                        id: dw_fill_btn
-                        icon: "format-color-fill"
-                        theme_text_color: "Custom"
-                        text_color: 0, 0, 0
-                        pos_hint: {"center_x": .5, "center_y": .5}
-                        user_font_size: 64
-                        on_press: self.text_color = 1, 1, 1
-                        on_press: dw_pencil_btn.text_color = 0, 0, 0
-                        on_release: app.change_tool('fill')
-
-
-                    MDIconButton
-                        icon: "close-box"
-                        pos_hint: {"center_x": .5, "center_y": .5}
-                        user_font_size: 64
-                        on_release: app.clear_current_drawing()
-
-                    Widget
-                        size_hint_x: .5
-
-                # Drawing housing
-                BoxLayout
-                    size_hint_y: None
-                    height: 240
-                    Widget
-
-                    # Drawing area
-                    MyPaintPage:
-                        id: mypaintpage
-                        background_color: 1, 1, 1
-                        size_hint_x: None
-                        size_hint_y: None
-                        height: 240
-                        width: 800
-
-                    Widget
-
-                #Bottom bar
-                BoxLayout:
-
-
-                    Widget:
-                        size_hint_x: 5
-                    MDIconButton:
-                        icon: "close-outline"
-                        theme_text_color: "Custom"
-                        text_color: 0.988, 0.352, 0.329
-                        on_press: app.back_to_main_page()
-                        on_release: app.root.current = 'lw'
-
-                    Widget
-                        size_hint_x: .1
-                    MDIconButton:
-                        icon: "check-outline"
-                        theme_text_color: "Custom"
-                        text_color: 0.490, 0.988, 0.501
-                        on_press: app.back_to_main_page()
-                        on_release: app.root.current = 'lw'
-
-            # Middle right spacer
-            Widget
-                size_hint_x: .1
-
-        # Bottom spacer
-        Widget
-            size_hint_y: 2
-
 
 <ThinGap@Widget>
     size_hint_y: None
@@ -550,13 +528,17 @@ ScreenManager:
 
 <VertBox@MDBoxLayout>
     orientation: 'vertical'
-#
-#
-#
-#
-#
-#
-#
+
+
+
+<LWRundown@MDScreen>
+    RundownTemplate
+        id: lw
+        rundown: 'LW'
+        data: app.rvdata
+
+
+
 #<SixRundown@MDScreen>
 #    VertBox
 #        GMBToolbar
@@ -608,21 +590,11 @@ ScreenManager:
 #        rundown: 'LK'
 #        data: app.data_lk
 #
-<TMRundown@MDScreen>
-    canvas.before:
-
-        Rectangle:
-            pos: self.pos
-            size: self.size
-            source: 'blur.png'
+#<TMRundown@MDScreen>
+#    RundownTemplate
+#        id: tm
+#        rundown: 'TM'
+#        data: app.data_tm
 
 
 
-
-
-
-<LWRundown@MDScreen>
-    RundownTemplate
-        id: lw
-        rundown: 'LW'
-        data: app.rvdata
