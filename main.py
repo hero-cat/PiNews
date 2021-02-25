@@ -47,8 +47,10 @@ class TestApp(MDApp):
 
     s3 = boto3.client('s3', config=botocore.config.Config(signature_version=botocore.UNSIGNED))
 
-
     popups = Popups()
+
+    current_screen = None
+    current_root_id = 'self.root.ids.lw_screen.ids.lw_rundown.ids'
 
     def build(self):
         self.theme_cls.primary_palette = "Blue"
@@ -58,12 +60,9 @@ class TestApp(MDApp):
         EventLoop.window.bind(on_keyboard=self.hook_keyboard)
 
 
-
-
-
     def hook_keyboard(self, window, key, *largs):
         if key == 27:
-
+            self.root.transition = sm.SlideTransition()
             self.root.current = 'menu'
             return True
 
@@ -79,19 +78,13 @@ class TestApp(MDApp):
 
     def connection_status_update(self, message):
         """Update status bar"""
-        #self.root.ids.lw_rundown.ids.lw.ids.conn_status.text = message
-        pass
+        eval(self.current_root_id).conn_status.text = message
+
 
 
     def change_tool(self, tool):
         """Choose between pencil, fill, eraser"""
         DrawingRepository.change_tool(tool)
-
-
-
-    def fill_color_btn(self, color):
-        """Change main page fill button background colour"""
-        self.root.ids.lw_rundown.ids.lw.ids.fill_button.text_color = color
 
 
 
@@ -107,9 +100,11 @@ class TestApp(MDApp):
 
 
     def clear_all_drawings(self):
+        print(self.root.ids)
+
         """.clear() all visible DrawingWidgets from RV and empty stored drawings"""
         DrawingRepository.clear_all()
-        for row in self.root.ids.lw_rundown.ids.lw.ids.rv.children:
+        for row in self.root.ids.lw_screen.ids.lw_rundown.ids.rv.children:
             row.ids.wig.canvas.clear()
 
 
@@ -121,6 +116,8 @@ class TestApp(MDApp):
 
 
     def clear_current_drawing(self):
+
+
 
         self.root.ids.drawing_screen.ids.mypaintpage.canvas.clear()
 
@@ -224,53 +221,30 @@ class TestApp(MDApp):
             self.current_widget.canvas.clear()
 
 
+    def change_screen(self, destination):
+
+        if destination == 'current':
+            self.root.transition = sm.NoTransition()
+            self.root.current = self.current_screen
+
+        elif destination == 'clear_scrn':
+            self.root.transition = sm.NoTransition()
+            self.root.current = 'clear_all_conf_screen'
+
+        elif destination == 'color_scrn':
+            self.root.transition = sm.NoTransition()
+            self.root.current = 'color_screen'
 
 
 
-    start = None
-    end = None
-
-    send = True
-
-
-    def fill_or_change(self):
-        # create the thread to invoke other_func with arguments (2, 5)
-        t = Thread(target=self.other_func)
-        # set daemon to true so the thread dies when app is closed
-        t.daemon = True
-        # start the thread
-        t.start()
+    def change_color(self, color):
+        DrawingRepository.change_drawing_color(color)
+        if DrawingRepository.tool == 'fill':
+            eval(self.current_root_id).fill_button.text_color = color
 
 
-    def other_func(self):
-        self.send = True
-
-        self.start = time.time()
-
-        while abs(int(self.start) - int(time.time())) < 2:
-            pass
-        else:
-            if self.send == True:
-                self.root.current = 'color_screen'
-
-
-
-
-
-
-    def fill_release(self, tool):
-
-        self.send = False
-
-        self.change_tool(tool)
-
-
-
-
-
-
-
-
+    def change_width(self, width):
+        DrawingRepository.change_pencil_width(width)
 
 
 

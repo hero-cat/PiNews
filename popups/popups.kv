@@ -7,15 +7,12 @@
             size: self.size
             source: 'blur.png'
 
-
-
     BoxLayout
         orientation: 'vertical'
 
         # Top spacer
         Widget
             size_hint_y: 1.5
-
 
         # Middle layer
         BoxLayout
@@ -46,27 +43,32 @@
                         pos: main.pos
                         size: main.size
 
-
                 GridLayout:
                     cols: 4
                     Button:
                         red: 0.941, 0, 0, 1
                         background_normal: ''
                         background_color: self.red
-                        on_press: app.popups.change_color(self.red)
-                        on_release: app.root.current = 'drawing'
+                        on_press: app.change_color(self.red)
+                        on_release: app.change_screen('current')
                     Button:
                         orange: 1, 0.501, 0, 1
                         background_normal: ''
                         background_color: self.orange
+                        on_press: app.change_color(self.orange)
+                        on_release: app.change_screen('current')
                     Button:
                         yellow: 1, 1, 0, 1
                         background_normal: ''
                         background_color: self.yellow
+                        on_press: app.change_color(self.yellow)
+                        on_release: app.change_screen('current')
                     Button:
                         green: 0.501, 1, 0, 1
                         background_normal: ''
                         background_color: self.green
+                        on_press: app.change_color(self.green)
+                        on_release: app.change_screen('current')
                     Button:
                         teal: 0, 1, 0.501, 1
                         background_normal: ''
@@ -99,11 +101,6 @@
                         black: 0, 0, 0, 1
                         background_normal: ''
                         background_color: self.black
-
-
-
-
-
 
             # Middle right spacer
             Widget
@@ -183,14 +180,9 @@
 
                     on_touch_up: app.line_width = int(self.value)
 
-                    on_touch_up: app.root.current = 'drawing'
-
-
+                    on_touch_up: app.change_screen('current')
 
                 Widget
-
-
-
 
             # Middle right spacer
             Widget
@@ -264,13 +256,13 @@
                     MDRaisedButton
                         text: 'Cancel'
                         md_bg_color: .7,.7,.7,1
-                        on_release: app.root.current = 'lw'
+                        on_release: app.change_screen('current')
                     Widget
                         size_hint_x: 2
                     MDRaisedButton
                         text: '  OK  '
-                        on_release: app.clear_all_drawings()
-                        on_release: app.root.current = 'lw'
+                        on_press: app.clear_all_drawings()
+                        on_release: app.change_screen('current')
 
                     Widget
 
