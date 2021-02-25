@@ -25,7 +25,7 @@ class TestApp(MDApp):
 
     s3 = boto3.client('s3', config=botocore.config.Config(signature_version=botocore.UNSIGNED))
 
-    current_screen = KP.StringProperty()
+    current_screen = KP.StringProperty('lw_screen')
     current_root_id = KP.StringProperty('self.root.ids.lw_screen.ids.lw_rundown.ids')
     current_widget = KP.ObjectProperty()
     current_story_id = KP.StringProperty()
@@ -176,9 +176,28 @@ class TestApp(MDApp):
         DR.change_pencil_width(width)
         self.root.current = 'drawing_screen'
 
-    def determine_current_pos(self):
+    # def determine_current_pos(self):
+    #
+    #     list_len = len(self.rvdata)
+    #     item_pos = 0
+    #
+    #     for i, focus in enumerate(d['focus'] for d in reversed(self.rvdata)):
+    #         if focus == 'true':
+    #             item_pos = i
+    #             break
+    #
+    #     print('len: '+ str(list_len))
+    #     print('pos: ' + str(item_pos))
+    #
+    #
+    #     point = item_pos / list_len
+    #
+    #     print('point: ' + str(point))
+    #
+    #     return point
 
-        list_len = len(self.rvdata)
+
+    def scroll_to_current(self):
         item_pos = 0
 
         for i, focus in enumerate(d['focus'] for d in reversed(self.rvdata)):
@@ -186,27 +205,17 @@ class TestApp(MDApp):
                 item_pos = i
                 break
 
-        print('len: '+ str(list_len))
-        print('pos: ' + str(item_pos))
+        point = item_pos / len(self.rvdata)
+
+        eval(self.current_root_id).rvrt.scroll_y = point
 
 
-        point = item_pos / list_len
-
-        print('point: ' + str(point))
-
-        return point
-
-
-
-
-
-    def scroll_up(self):
-        self.determine_current_pos()
+    def scroll_to_top(self):
         eval(self.current_root_id).rvrt.scroll_y = 1
 
-    def scroll_down(self):
+    def scroll_to_bottom(self):
+        eval(self.current_root_id).rvrt.scroll_y = 0
 
-        eval(self.current_root_id).rvrt.scroll_y = self.determine_current_pos()
 
 
 class MyPaintPage(F.RelativeLayout):

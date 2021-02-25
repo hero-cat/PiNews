@@ -146,13 +146,22 @@ ScreenManager:
             height: 90
             title: root.rundown
 
-            Button
-                text: 'up'
-                on_release: app. scroll_up()
 
-            Button
-                text: 'down'
-                on_release: app. scroll_down()
+
+            MDIconButton:
+                icon: "format-vertical-align-top"
+                on_release: app.scroll_to_top()
+
+            MDIconButton:
+                icon: 'bullseye-arrow'
+                on_release: app.scroll_to_current()
+
+            MDIconButton:
+                icon: "format-vertical-align-bottom"
+                on_release: app.scroll_to_bottom()
+
+            Widget
+                size_hint_x: .05
 
             MDIconButton
                 id: pencil_button
