@@ -176,6 +176,38 @@ class TestApp(MDApp):
         DR.change_pencil_width(width)
         self.root.current = 'drawing_screen'
 
+    def determine_current_pos(self):
+
+        list_len = len(self.rvdata)
+        item_pos = 0
+
+        for i, focus in enumerate(d['focus'] for d in reversed(self.rvdata)):
+            if focus == 'true':
+                item_pos = i
+                break
+
+        print('len: '+ str(list_len))
+        print('pos: ' + str(item_pos))
+
+
+        point = item_pos / list_len
+
+        print('point: ' + str(point))
+
+        return point
+
+
+
+
+
+    def scroll_up(self):
+        self.determine_current_pos()
+        eval(self.current_root_id).rvrt.scroll_y = 1
+
+    def scroll_down(self):
+
+        eval(self.current_root_id).rvrt.scroll_y = self.determine_current_pos()
+
 
 class MyPaintPage(F.RelativeLayout):
     story_id = KP.StringProperty(None, allownone=True)

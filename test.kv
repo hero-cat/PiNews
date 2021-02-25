@@ -4,6 +4,11 @@
 ScreenManager:
     id: screen_manager
 
+    LWRundown
+        id: lw_screen
+        name: 'lw_screen'
+        manager: 'screen_manager'
+
     LoginScreen:
         id: login
         name: 'login'
@@ -14,10 +19,7 @@ ScreenManager:
         name: 'menu'
         manager: 'screen_manager'
 
-    LWRundown
-        id: lw_screen
-        name: 'lw_screen'
-        manager: 'screen_manager'
+
 
     TMRundown
         id: tm_screen
@@ -143,6 +145,15 @@ ScreenManager:
             size_hint_y: None
             height: 90
             title: root.rundown
+
+            Button
+                text: 'up'
+                on_release: app. scroll_up()
+
+            Button
+                text: 'down'
+                on_release: app. scroll_down()
+
             MDIconButton
                 id: pencil_button
                 icon: "pencil"
@@ -199,6 +210,7 @@ ScreenManager:
                 md_bg_color: 0.098, 0.407, 0.670, 1
                 on_release: root.status_update()
         RecycleView
+            id: rvrt
             data: app.rvdata
             viewclass: 'Row'
             scroll_type: ['bars', 'content']
