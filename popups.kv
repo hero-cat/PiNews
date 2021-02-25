@@ -1,12 +1,10 @@
 <ColorScreen@MDScreen>
     id: color_screen
     canvas.before:
-
         Rectangle:
             pos: self.pos
             size: self.size
             source: 'blur.png'
-
     BoxLayout
         orientation: 'vertical'
 
@@ -23,14 +21,12 @@
 
             # main housing
             BoxLayout
-
                 id: main
                 orientation: 'vertical'
                 size_hint_x: None
                 width: 850
                 size_hint_y: None
                 height: 500
-
                 canvas.before:
                     Color:
                         rgb: 0,0,0,1
@@ -50,57 +46,61 @@
                         background_normal: ''
                         background_color: self.red
                         on_press: app.change_color(self.red)
-                        on_release: app.change_screen('current')
                     Button:
                         orange: 1, 0.501, 0, 1
                         background_normal: ''
                         background_color: self.orange
                         on_press: app.change_color(self.orange)
-                        on_release: app.change_screen('current')
                     Button:
                         yellow: 1, 1, 0, 1
                         background_normal: ''
                         background_color: self.yellow
                         on_press: app.change_color(self.yellow)
-                        on_release: app.change_screen('current')
                     Button:
                         green: 0.501, 1, 0, 1
                         background_normal: ''
                         background_color: self.green
                         on_press: app.change_color(self.green)
-                        on_release: app.change_screen('current')
                     Button:
                         teal: 0, 1, 0.501, 1
                         background_normal: ''
                         background_color: self.teal
+                        on_press: app.change_color(self.teal)
                     Button:
                         turquoise: 0, 1, 1, 1
                         background_normal: ''
                         background_color: self.turquoise
+                        on_press: app.change_color(self.turquoise)
                     Button:
                         blue: 0, 0.501, 1, 1
                         background_normal: ''
                         background_color: self.blue
+                        on_press: app.change_color(self.blue)
                     Button:
                         navy: 0, 0, 1, 1
                         background_normal: ''
                         background_color: self.navy
+                        on_press: app.change_color(self.navy)
                     Button:
                         purple: 0.498, 0, 1, 1
                         background_normal: ''
                         background_color: self.purple
+                        on_press: app.change_color(self.purple)
                     Button:
                         pink: 1, 0, 1, 1
                         background_normal: ''
                         background_color: self.pink
+                        on_press: app.change_color(self.pink)
                     Button:
                         grey: 0.5, 0.5, 0.5, 1
                         background_normal: ''
                         background_color: self.grey
+                        on_press: app.change_color(self.grey)
                     Button:
                         black: 0, 0, 0, 1
                         background_normal: ''
                         background_color: self.black
+                        on_press: app.change_color(self.black)
 
             # Middle right spacer
             Widget
@@ -112,18 +112,13 @@
 
 
 
-
-
 <WidthScreen@MDScreen>
     id: width_screen
     canvas.before:
-
         Rectangle:
             pos: self.pos
             size: self.size
             source: 'blur.png'
-
-
 
     BoxLayout
         orientation: 'vertical'
@@ -131,7 +126,6 @@
         # Top spacer
         Widget
             size_hint_y: 1.5
-
 
         # Middle layer
         BoxLayout
@@ -142,14 +136,12 @@
 
             # main housing
             BoxLayout
-
                 id: main
                 orientation: 'vertical'
                 size_hint_x: None
                 width: 850
                 size_hint_y: None
                 height: 500
-
                 canvas.before:
                     Color:
                         rgb: 0,0,0,1
@@ -162,25 +154,18 @@
                         pos: main.pos
                         size: main.size
 
-
-
-
                 MDLabel
                     id: slider_lbl
+                    text: 'PENCIL DIAMETER'
                     halign: 'center'
-
                 MDSlider:
                     min: 1
                     max: 10
                     show_off: False
                     value: app.line_width
                     on_touch_move: slider_lbl.text = str(int(self.value))
-
-                    on_touch_up: app.popups.change_width(self.value)
-
-                    on_touch_up: app.line_width = int(self.value)
-
-                    on_touch_up: app.change_screen('current')
+                    on_touch_move: app.line_width = int(self.value)
+                    on_touch_up: app.change_width(self.value)
 
                 Widget
 
@@ -193,20 +178,13 @@
             size_hint_y: 2
 
 
-
-
-
-
 <ClearAllConfScreen@MDScreen>
     id: clear_all_conf_screen
     canvas.before:
-
         Rectangle:
             pos: self.pos
             size: self.size
             source: 'blur.png'
-
-
 
     BoxLayout
         orientation: 'vertical'
@@ -214,7 +192,6 @@
         # Top spacer
         Widget
             size_hint_y: 1.5
-
 
         # Middle layer
         BoxLayout
@@ -245,7 +222,6 @@
                         pos: main.pos
                         size: main.size
 
-
                 MDLabel:
                     text: 'Clear all drawings?'
                     halign: 'center'
@@ -266,11 +242,8 @@
 
                     Widget
 
-
                 Widget
                     size_hint_y: .3
-
-
 
             # Middle right spacer
             Widget

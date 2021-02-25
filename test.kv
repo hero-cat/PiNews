@@ -1,5 +1,5 @@
 #:include rows/row.kv
-#:include popups/popups.kv
+#:include popups.kv
 
 ScreenManager:
     id: screen_manager
@@ -19,9 +19,14 @@ ScreenManager:
         name: 'lw_screen'
         manager: 'screen_manager'
 
+    TMRundown
+        id: tm_screen
+        name: 'tm_screen'
+        manager: 'screen_manager'
+
     DrawingScreen:
         id: drawing_screen
-        name: 'drawing'
+        name: 'drawing_screen'
         manager: 'screen_manager'
 
     ColorScreen:
@@ -44,7 +49,6 @@ ScreenManager:
     MDBoxLayout:
         Widget:
             size_hint_x: .1
-
         VertBox:
             size_hint_x: .8
             MDLabel:
@@ -63,7 +67,6 @@ ScreenManager:
                 mode: "rectangle"
                 password: True
                 on_focus: self.show_keyboard()
-
             MDBoxLayout
                 Widget
                 MDRaisedButton:
@@ -72,10 +75,8 @@ ScreenManager:
                 Widget
             Widget
                 size_hint_y: 4
-
         Widget:
             size_hint_x: .1
-
 
 
 <MenuScreen@MDScreen>:
@@ -87,13 +88,11 @@ ScreenManager:
             size_hint_y: .1
         Widget:
             size_hint_y: .1
-
         MDLabel:
             text: 'CHOOSE A PRODUCTION'
             font_size: 40
             halign: 'center'
             size_hint_y: .1
-
         BoxLayout:
             size_hint_y: .1
             Widget:
@@ -107,7 +106,9 @@ ScreenManager:
             Widget:
             MDRaisedButton:
                 text: '    TM    '
-                on_press: app.root.current = 'tm'
+                on_press: app.current_screen = 'tm_screen'
+                on_press: app.current_root_id = 'self.root.ids.tm_screen.ids.tm_rundown.ids'
+                on_release: app.root.current = 'tm_screen'
             Widget
             MDRaisedButton:
                 text: '    LW    '
@@ -115,7 +116,6 @@ ScreenManager:
                 on_press: app.current_root_id = 'self.root.ids.lw_screen.ids.lw_rundown.ids'
                 on_release: app.root.current = 'lw_screen'
             Widget:
-
         BoxLayout:
             size_hint_y: .1
             Widget:
@@ -131,21 +131,18 @@ ScreenManager:
             MDRaisedButton:
                 text: 'CSTM_4'
             Widget:
-
         Widget:
             size_hint_y: .7
 
 
 <RundownTemplate@MDScreen>
+    rundown: 'default'
     BoxLayout:
         orientation: 'vertical'
         MDToolbar:
             size_hint_y: None
             height: 90
-            title: 'Loose Women'
-
-
-
+            title: root.rundown
             MDIconButton
                 id: pencil_button
                 icon: "pencil"
@@ -155,17 +152,15 @@ ScreenManager:
                 on_release: self.text_color = 1, 1, 1, 1
                 on_press: fill_button.text_color = 0, 0, 0, .4
                 on_release: eraser_button.text_color = 0, 0, 0, .4
-
             MDIconButton
                 id: fill_button
                 icon: "format-color-fill"
                 theme_text_color: "Custom"
                 text_color: 0, 0, 0, .4
                 on_press: app.change_tool('fill')
-                on_press: app.change_screen('color_scrn')
+                on_press: app.change_screen('color_screen')
                 on_release: pencil_button.text_color = 0, 0, 0, .4
                 on_release: eraser_button.text_color = 0, 0, 0, .4
-
             MDIconButton
                 id: eraser_button
                 icon: "eraser"
@@ -175,51 +170,34 @@ ScreenManager:
                 on_release: self.text_color = 1, 1, 1, 1
                 on_release: pencil_button.text_color = 0, 0, 0, .4
                 on_release: fill_button.text_color = 0, 0, 0, .4
-
-
             MDIconButton
                 icon: "close-box"
-#                on_press: app.root.transition = NoTransition()
-#                on_release: app.root.current = 'clear_all_conf_screen'
-                on_press: app.change_screen('clear_scrn')
-
+                on_press: app.change_screen('clear_all_conf_screen')
         MDBoxLayout:
             spacing: 3
             size_hint_y: 0.039
-
             MDRaisedButton:
                 text: '   PAGE   '
                 text_color: 1, 1, 1, 1
                 md_bg_color: 0.098, 0.407, 0.670, 1
-
             MDRaisedButton:
                 text: '                         TITLE                         '
                 text_color: 1, 1, 1, 1
                 md_bg_color: 0.098, 0.407, 0.670, 1
-
             MDRaisedButton:
                 text: '  TOTAL  '
                 text_color: 1, 1, 1, 1
                 md_bg_color: 0.098, 0.407, 0.670, 1
-
             MDRaisedButton:
                 text: '   CAM    '
                 text_color: 1, 1, 1, 1
                 md_bg_color: 0.098, 0.407, 0.670, 1
-
             MDRaisedButton:
                 text: '                         NOTES                          '
                 halign: 'center'
                 text_color: 1, 1, 1, 1
                 md_bg_color: 0.098, 0.407, 0.670, 1
                 on_release: root.status_update()
-
-
-        # ## ### RECYCLEVIEW ### ## #
-        # ## ### RECYCLEVIEW ### ## #
-        # ## ### RECYCLEVIEW ### ## #
-
-
         RecycleView
             data: app.rvdata
             viewclass: 'Row'
@@ -228,13 +206,11 @@ ScreenManager:
             bar_inactive_color: [.7, .7, .7, .6]
             RecycleBoxLayout:
                 id: rv
-
                 default_size: None, dp(80)
                 default_size_hint: 1, None
                 size_hint_y: None
                 height: self.minimum_height
                 orientation: 'vertical'
-
         MDBoxLayout:
             size_hint_y: .001
             canvas:
@@ -243,7 +219,6 @@ ScreenManager:
                 Rectangle:
                     pos: self.pos
                     size: self.size
-
         MDBoxLayout:
             size_hint_y: .02
             canvas:
@@ -252,7 +227,6 @@ ScreenManager:
                 Rectangle:
                     pos: self.pos
                     size: self.size
-
             MDLabel:
                 id: conn_status
                 text: '  STATUS: '
@@ -260,15 +234,11 @@ ScreenManager:
 
 
 <DrawingScreen@MDScreen>
-    id: dwscreen
-
     canvas.before:
-
         Rectangle:
             pos: self.pos
             size: self.size
             source: 'blur.png'
-
     BoxLayout
         orientation: 'vertical'
 
@@ -285,7 +255,6 @@ ScreenManager:
 
             # main housing
             BoxLayout
-
                 id: main
                 orientation: 'vertical'
                 size_hint_x: None
@@ -304,7 +273,6 @@ ScreenManager:
                     Rectangle:
                         pos: main.pos
                         size: main.size
-
                 MDLabel:
                     id: drawing_screen_title
                     color: 1,1,1,1
@@ -312,33 +280,19 @@ ScreenManager:
 
                 # toolbar
                 BoxLayout
-
                     Widget
                         size_hint_x: .5
-
-                    # Colour + Width select
-                    BoxLayout:
-                        orientation: 'vertical'
-                        Widget:
-                            size_hint_y: .1
-                        MDRaisedButton:
-                            id: drawing_color_button
-                            md_bg_color: 0.513, 0.627, 0.725, 1
-                            text: '   COLOUR   '
-                            size_hint_y: .5
-                            on_release: app.root.current = 'color_screen'
-
-                        Widget:
-                            size_hint_y: .1
-                        MDRaisedButton:
-                            md_bg_color: 0.513, 0.627, 0.725, 1
-                            text: 'THICKNESS'
-                            size_hint_y: .5
-                            on_release: app.root.current = 'width_screen'
-
-                        Widget:
-                            size_hint_y: .1
-
+                    MDIconButton
+                        icon: "album"
+                        on_release: app.root.current = 'width_screen'
+                    Button:
+                        id: drawing_color_button
+                        background_normal: ''
+                        background_color: 1, 0 ,1 ,1
+                        size_hint: None, None
+                        size: 40, 40
+                        pos_hint: {'x':.2, 'y':.3}
+                        on_release: app.root.current = 'color_screen'
                     MDIconButton
                         id: dw_pencil_btn
                         icon: "pencil"
@@ -349,9 +303,7 @@ ScreenManager:
                         on_press: self.text_color = 1, 1, 1
                         on_press: dw_fill_btn.text_color = 0, 0, 0
                         on_release: app.change_tool('pencil')
-
                     MDIconButton
-
                         id: dw_fill_btn
                         icon: "format-color-fill"
                         theme_text_color: "Custom"
@@ -361,23 +313,18 @@ ScreenManager:
                         on_press: self.text_color = 1, 1, 1
                         on_press: dw_pencil_btn.text_color = 0, 0, 0
                         on_release: app.change_tool('fill')
-
-
                     MDIconButton
                         icon: "close-box"
                         pos_hint: {"center_x": .5, "center_y": .5}
                         user_font_size: 64
                         on_release: app.clear_current_drawing()
-
                     Widget
                         size_hint_x: .5
-
                 # Drawing housing
                 BoxLayout
                     size_hint_y: None
                     height: 240
                     Widget
-
                     # Drawing area
                     MyPaintPage:
                         id: mypaintpage
@@ -386,13 +333,9 @@ ScreenManager:
                         size_hint_y: None
                         height: 240
                         width: 800
-
                     Widget
-
                 #Bottom bar
                 BoxLayout:
-
-
                     Widget:
                         size_hint_x: 5
                     MDIconButton:
@@ -401,7 +344,6 @@ ScreenManager:
                         text_color: 0.988, 0.352, 0.329
                         on_press: app.back_to_main_page()
                         on_release: app.change_screen('current')
-
                     Widget
                         size_hint_x: .1
                     MDIconButton:
@@ -410,22 +352,19 @@ ScreenManager:
                         text_color: 0.490, 0.988, 0.501
                         on_press: app.back_to_main_page()
                         on_release: app.change_screen('current')
-
             # Middle right spacer
             Widget
                 size_hint_x: .1
-
         # Bottom spacer
         Widget
             size_hint_y: 2
 
 
 
-
-
 <ThinGap@Widget>
     size_hint_y: None
     height: 3
+
 
 <VertBox@MDBoxLayout>
     orientation: 'vertical'
@@ -438,6 +377,12 @@ ScreenManager:
         rundown: 'LW'
         data: app.rvdata
 
+
+<TMRundown@MDScreen>
+    RundownTemplate
+        id: tm_rundown
+        rundown: 'TM'
+        data: app.rvdata
 
 
 #<SixRundown@MDScreen>
@@ -491,11 +436,7 @@ ScreenManager:
 #        rundown: 'LK'
 #        data: app.data_lk
 #
-#<TMRundown@MDScreen>
-#    RundownTemplate
-#        id: tm
-#        rundown: 'TM'
-#        data: app.data_tm
+
 
 
 

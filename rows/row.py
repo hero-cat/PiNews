@@ -70,7 +70,7 @@ class DrawingRepository:
     pencil_bg_color = (1, 1, 1, 1)
     fill_color = (1, 0, 0, .8)
 
-    drawing_color = (0, 0, 0)
+    drawing_color = (0, 0, 0, 1)
 
 
 
