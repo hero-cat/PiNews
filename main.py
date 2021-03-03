@@ -12,6 +12,7 @@ import boto3
 import botocore
 from threading import Thread
 
+
 colors = {
         "Teal": {
             "50": "e4f8f9",
@@ -53,7 +54,7 @@ colors = {
             "FlatButtonDown": "cccccc",
         },
         "Dark": {
-            "StatusBar": "000000",
+            "StatusBar": "940000",
             "AppBar": "212121",
             "Background": "303030",
             "CardsDialogs": "424242",
@@ -89,9 +90,9 @@ class TestApp(MDApp):
         self.theme_cls.colors = colors
         # self.theme_cls.main_background_color = (0.5, 0.5, 0.5)
         #
-        # self.theme_cls.theme_style = "Dark"
+        self.theme_cls.theme_style = "Dark"
         #
-        # self.theme_cls.primary_palette = "Gray"
+        #self.theme_cls.primary_palette = "Gray"
 
 
         # ‘Red’, ‘Pink’, ‘Purple’, ‘DeepPurple’, ‘Indigo’, ‘Blue’, ‘LightBlue’, ‘Cyan’, ‘Teal’, ‘Green’, ‘LightGreen’, ‘Lime’, ‘Yellow’, ‘Amber’, ‘Orange’, ‘DeepOrange’, ‘Brown’, ‘Gray’, ‘BlueGray’.

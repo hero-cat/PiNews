@@ -5,6 +5,7 @@ from kivy.graphics import Line, Color, Rectangle
 from kivy.factory import Factory as F
 
 
+
 class Row(RecycleDataViewBehavior, BoxLayout):
     # Copy description from Slicker
     index = KP.NumericProperty()
