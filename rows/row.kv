@@ -1,38 +1,57 @@
-<Row@BoxLayout>
-    Button:
+<CustomButton@Button>
+    background_normal: ""
+
+    canvas.after:
+        Color:
+            rgba: 0, 0, 0, 1
+        Line:
+            width: 2
+            rectangle: self.x, self.y, self.width, self.height
+
+
+<Row@MDBoxLayout>
+    CustomButton:
         id: page_lbl
         font_size: 30
-
         size_hint_x: .1
-        background_color: 0.141, 0.580, 0.956, 1
 
-    Button:
+    CustomButton:
         id: title_lbl
         multiline: True
         halign: 'center'
         font_size: 25
         size_hint_x: .3
-        background_color: 0.141, 0.580, 0.956, 1
+        #background_color: 0.5, 0.5, 0.5, 1
 
-    Button:
+
+    CustomButton:
         id: total_lbl
         size_hint_x: .1
-        background_color: 0.141, 0.580, 0.956, 1
 
-    Button:
+        #background_color: 0.5, .5, 0.55, 1
+
+    CustomButton:
         id: camera_lbl
         size_hint_x: .1
-        background_color: 0.141, 0.580, 0.956, 1
+        #background_color: 1, 0, 0, 1
 
     ClickableBox:
         id: wig
+
         text: 'tets'
         size_hint_x: None
         width: 400
         on_press: app.focused_row_properties_update(self, root.story_id, root.title, root.backtime)
+
+
+
+
         canvas.after:
+
+
             Color:
                 rgba: 0, 0, 0, 1
             Line:
-                width: 1
+                width: 2
                 rectangle: self.x, self.y, self.width, self.height
+

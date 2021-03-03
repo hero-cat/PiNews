@@ -4,10 +4,7 @@
 ScreenManager:
     id: screen_manager
 
-    LWRundown
-        id: lw_screen
-        name: 'lw_screen'
-        manager: 'screen_manager'
+
 
     LoginScreen:
         id: login
@@ -19,7 +16,10 @@ ScreenManager:
         name: 'menu'
         manager: 'screen_manager'
 
-
+    LWRundown
+        id: lw_screen
+        name: 'lw_screen'
+        manager: 'screen_manager'
 
     TMRundown
         id: tm_screen
@@ -49,13 +49,22 @@ ScreenManager:
 
 <LoginScreen>
     MDBoxLayout:
+        canvas.before:
+            Color:
+                rgba: .3, .3, .3, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
         Widget:
             size_hint_x: .1
         VertBox:
             size_hint_x: .8
             MDLabel:
-                text: 'Welcome to PiNews - Please login'
+                text: 'RUNDOWN \nREADER'
                 halign: 'center'
+                font_size: 60
+                color: 1, 1, 1, 1
             MDTextField:
                 id: login
                 font_size: 28
@@ -83,55 +92,69 @@ ScreenManager:
 
 <MenuScreen@MDScreen>:
     BoxLayout:
+        canvas.before:
+            Color:
+                rgba: .3, .3, .3, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
         orientation: 'vertical'
-        MDToolbar:
-            right_action_items: [["close", lambda x: app.stop()]]
-            title: 'PiNews'
-            size_hint_y: .1
-        Widget:
-            size_hint_y: .1
-        MDLabel:
-            text: 'CHOOSE A PRODUCTION'
-            font_size: 40
-            halign: 'center'
-            size_hint_y: .1
+#        MDToolbar:
+#            right_action_items: [["close", lambda x: app.stop()]]
+#            title: 'PiNews'
+#            size_hint_y: .1
+#        Widget:
+#            size_hint_y: .1
+#        MDLabel:
+#            text: 'CHOOSE A PRODUCTION'
+#            font_size: 40
+#            halign: 'center'
+#            size_hint_y: .1
         BoxLayout:
             size_hint_y: .1
             Widget:
-            MDRaisedButton:
+            MDRectangleFlatButton:
                 text: '  GMB   '
                 on_press: app.root.current = '0600'
+                text_color: 1, 1, 1, 1
             Widget:
-            MDRaisedButton:
+            MDRectangleFlatButton:
                 text: '    LK    '
                 on_press: app.root.current = 'lk'
+                text_color: 1, 1, 1, 1
             Widget:
-            MDRaisedButton:
+            MDRectangleFlatButton:
                 text: '    TM    '
                 on_press: app.current_screen = 'tm_screen'
                 on_press: app.current_root_id = 'self.root.ids.tm_screen.ids.tm_rundown.ids'
                 on_release: app.root.current = 'tm_screen'
+                text_color: 1, 1, 1, 1
             Widget
-            MDRaisedButton:
+            MDRectangleFlatButton:
                 text: '    LW    '
                 on_press: app.current_screen = 'lw_screen'
                 on_press: app.current_root_id = 'self.root.ids.lw_screen.ids.lw_rundown.ids'
                 on_release: app.root.current = 'lw_screen'
+                text_color: 1, 1, 1, 1
             Widget:
         BoxLayout:
             size_hint_y: .1
             Widget:
-            MDRaisedButton:
+            MDRectangleFlatButton:
                 text: 'CSTM_1'
+                text_color: 1, 1, 1, 1
             Widget:
-            MDRaisedButton:
+            MDRectangleFlatButton:
                 text: 'CSTM_2'
+                text_color: 1, 1, 1, 1
             Widget:
-            MDRaisedButton:
+            MDRectangleFlatButton:
                 text: 'CSTM_3'
+                text_color: 1, 1, 1, 1
             Widget
-            MDRaisedButton:
+            MDRectangleFlatButton:
                 text: 'CSTM_4'
+                text_color: 1, 1, 1, 1
             Widget:
         Widget:
             size_hint_y: .7
@@ -141,12 +164,30 @@ ScreenManager:
     rundown: 'default'
     BoxLayout:
         orientation: 'vertical'
-        MDToolbar:
+
+        MDBoxLayout:
             size_hint_y: None
             height: 90
-            title: root.rundown
+            #md_bg_color: .2, .2, .2, 1
+            #title: root.rundown
+            canvas.before:
+                Color:
+                    rgba: .19, .19, .19, 1
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+
+            MDLabel:
+                text: root.rundown
+                color: 1,1,1,1
 
 
+            MDIconButton:
+                id: toggle_focus_btn
+                icon: "alpha-f-box-outline"
+                theme_text_color: "Custom"
+                text_color: 1, 1, 1, 1
+                on_release: app.toggle_current_story_focus()
 
             MDIconButton:
                 icon: "format-vertical-align-top"
@@ -196,28 +237,33 @@ ScreenManager:
         MDBoxLayout:
             spacing: 3
             size_hint_y: 0.039
-            MDRaisedButton:
+
+
+            MDRectangleFlatButton:
+                #size_hint_x: 2
                 text: '   PAGE   '
                 text_color: 1, 1, 1, 1
-                md_bg_color: 0.098, 0.407, 0.670, 1
-            MDRaisedButton:
-                text: '                         TITLE                         '
+                md_bg_color: .1, .1, .1, 1
+            MDRectangleFlatButton:
+                text: '                          TITLE                         '
                 text_color: 1, 1, 1, 1
-                md_bg_color: 0.098, 0.407, 0.670, 1
-            MDRaisedButton:
+                md_bg_color: .1, .1, .1, 1
+            MDRectangleFlatButton:
                 text: '  TOTAL  '
                 text_color: 1, 1, 1, 1
-                md_bg_color: 0.098, 0.407, 0.670, 1
-            MDRaisedButton:
+                md_bg_color: .1, .1, .1, 1
+            MDRectangleFlatButton:
                 text: '   CAM    '
                 text_color: 1, 1, 1, 1
-                md_bg_color: 0.098, 0.407, 0.670, 1
-            MDRaisedButton:
-                text: '                         NOTES                          '
-                halign: 'center'
+                md_bg_color: .1, .1, .1, 1
+            MDRectangleFlatButton:
+                text: '                         NOTES                        '
                 text_color: 1, 1, 1, 1
-                md_bg_color: 0.098, 0.407, 0.670, 1
-                on_release: root.status_update()
+                md_bg_color: .1, .1, .1, 1
+        Widget:
+            size_hint_y: None
+            height: 4
+
         RecycleView
             id: rvrt
             data: app.rvdata
@@ -395,7 +441,7 @@ ScreenManager:
 <LWRundown@MDScreen>
     RundownTemplate
         id: lw_rundown
-        rundown: 'LW'
+        rundown: ' LW'
         data: app.rvdata
 
 

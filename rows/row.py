@@ -42,22 +42,22 @@ class Row(RecycleDataViewBehavior, BoxLayout):
                 print('comm break')
 
             if self.focus == 'true':
-                self.ids.page_lbl.background_color = 0, 1, 0, 1
-                self.ids.title_lbl.background_color = 0, 1, 0, 1
-                self.ids.camera_lbl.background_color = 0, 1, 0, 1
-                self.ids.total_lbl.background_color = 0, 1, 0, 1
+                self.ids.page_lbl.background_color = 0, 1, 0, .3
+                self.ids.title_lbl.background_color = 0, 1, 0, .3
+                self.ids.camera_lbl.background_color = 0, 1, 0, .3
+                self.ids.total_lbl.background_color = 0, 1, 0, .3
 
             elif 'COMMERCIAL' in tits:
-                self.ids.page_lbl.background_color = 1, 0, 0, 1
-                self.ids.title_lbl.background_color = 1, 0, 0, 1
-                self.ids.camera_lbl.background_color = 1, 0, 0, 1
-                self.ids.total_lbl.background_color = 1, 0, 0, 1
+                self.ids.page_lbl.background_color = 1, 0, 0, .3
+                self.ids.title_lbl.background_color = 1, 0, 0, .3
+                self.ids.camera_lbl.background_color = 1, 0, 0, .3
+                self.ids.total_lbl.background_color = 1, 0, 0, .3
 
             else:
-                self.ids.page_lbl.background_color = 0.141, 0.580, 0.956, 1
-                self.ids.title_lbl.background_color = 0.141, 0.580, 0.956, 1
-                self.ids.camera_lbl.background_color = 0.141, 0.580, 0.956, 1
-                self.ids.total_lbl.background_color = 0.141, 0.580, 0.956, 1
+                self.ids.page_lbl.background_color = .19, .19, .19, 1
+                self.ids.title_lbl.background_color = .19, .19, .19, 1
+                self.ids.camera_lbl.background_color = .19, .19, .19, 1
+                self.ids.total_lbl.background_color = .19, .19, .19, 1
 
 
 class DrawingRepository:
@@ -166,6 +166,7 @@ class ClickableBox(F.ButtonBehavior, F.RelativeLayout):
     story_id = KP.StringProperty(None, allownone=True)
 
 
+
     def on_story_id(self, _, story_id):
         """Property event handler; this method is called automatically
         when the current_story_id property changes. This is how RecycleView redraws drawings
@@ -175,6 +176,7 @@ class ClickableBox(F.ButtonBehavior, F.RelativeLayout):
         drawings = DrawingRepository.get_drawing(story_id)
 
         if drawings is not None:
+
 
             if drawings['tool'] != 'pencil':
 
@@ -199,7 +201,12 @@ class ClickableBox(F.ButtonBehavior, F.RelativeLayout):
                         F.Line(width=drawinz['width'], points=newlist)
 
         else:
+            # THIS COULD BE BULLSHIT FOR PERFORMANCE....!!!
             self.canvas.clear()
+            # with self.canvas:
+            #     Color(.19, .19, .19, 1)
+            #     Rectangle(size=self.size)
+
 
 #
 # class DrawingWidget(RelativeLayout):

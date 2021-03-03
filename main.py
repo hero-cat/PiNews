@@ -12,8 +12,61 @@ import boto3
 import botocore
 from threading import Thread
 
+colors = {
+        "Teal": {
+            "50": "e4f8f9",
+            "100": "bdedf0",
+            "200": "97e2e8",
+            "300": "79d5de",
+            "400": "6dcbd6",
+            "500": "6ac2cf",
+            "600": "63b2bc",
+            "700": "5b9ca3",
+            "800": "54888c",
+            "900": "486363",
+            "A100": "bdedf0",
+            "A200": "97e2e8",
+            "A400": "6dcbd6",
+            "A700": "5b9ca3",
+        },
+        "Blue": {
+            "50": "e3f3f8",
+            "100": "b9e1ee",
+            "200": "91cee3",
+            "300": "72bad6",
+            "400": "62acce",
+            "500": "589fc6",
+            "600": "5191b8",
+            "700": "487fa5",
+            "800": "426f91",
+            "900": "35506d",
+            "A100": "b9e1ee",
+            "A200": "91cee3",
+            "A400": "62acce",
+            "A700": "487fa5",
+        },
+        "Light": {
+            "StatusBar": "E0E0E0",
+            "AppBar": "F5F5F5",
+            "Background": "FAFAFA",
+            "CardsDialogs": "FFFFFF",
+            "FlatButtonDown": "cccccc",
+        },
+        "Dark": {
+            "StatusBar": "000000",
+            "AppBar": "212121",
+            "Background": "303030",
+            "CardsDialogs": "424242",
+            "FlatButtonDown": "999999",
+        }
+    }
+
 
 class TestApp(MDApp):
+
+
+
+
     rvdata = KP.ListProperty()  # JSON data converted to list of dicts
 
     counter = 0
@@ -30,11 +83,27 @@ class TestApp(MDApp):
     current_widget = KP.ObjectProperty()
     current_story_id = KP.StringProperty()
 
+    focus_current_story = True
+
     def build(self):
+        self.theme_cls.colors = colors
+        # self.theme_cls.main_background_color = (0.5, 0.5, 0.5)
+        #
+        # self.theme_cls.theme_style = "Dark"
+        #
+        # self.theme_cls.primary_palette = "Gray"
+
+
+        # ‘Red’, ‘Pink’, ‘Purple’, ‘DeepPurple’, ‘Indigo’, ‘Blue’, ‘LightBlue’, ‘Cyan’, ‘Teal’, ‘Green’, ‘LightGreen’, ‘Lime’, ‘Yellow’, ‘Amber’, ‘Orange’, ‘DeepOrange’, ‘Brown’, ‘Gray’, ‘BlueGray’.
         self.pull_json_data()  # Pull data once
-        Clock.schedule_interval(self.start_json_pull, 15.0)
+        Clock.schedule_interval(self.start_json_pull, 8.0)
         from kivy.base import EventLoop
         EventLoop.window.bind(on_keyboard=self.hook_keyboard)
+
+        # for row in self.root.ids.lw_screen.ids.lw_rundown.ids.rv.children:
+        #     with row.ids.wig.canvas:
+        #         F.Color(.19, .19, .19, 1)
+        #         F.Rectangle(size=row.ids.wig.size)
 
     def hook_keyboard(self, window, key, *largs):
         if key == 27:
@@ -55,6 +124,11 @@ class TestApp(MDApp):
 
         eval(self.current_root_id).conn_status.text = (str(self.counter) + ' successful data pulls from AWS')
         self.counter += 1
+
+        if self.focus_current_story:
+            self.scroll_to_current_auto()
+
+
 
     def focused_row_properties_update(self, widget, story_id, title, backtime):
         # Update the Apps reference to the current row in focus
@@ -176,28 +250,9 @@ class TestApp(MDApp):
         DR.change_pencil_width(width)
         self.root.current = 'drawing_screen'
 
-    # def determine_current_pos(self):
-    #
-    #     list_len = len(self.rvdata)
-    #     item_pos = 0
-    #
-    #     for i, focus in enumerate(d['focus'] for d in reversed(self.rvdata)):
-    #         if focus == 'true':
-    #             item_pos = i
-    #             break
-    #
-    #     print('len: '+ str(list_len))
-    #     print('pos: ' + str(item_pos))
-    #
-    #
-    #     point = item_pos / list_len
-    #
-    #     print('point: ' + str(point))
-    #
-    #     return point
-
 
     def scroll_to_current(self):
+        eval(self.current_root_id).rvrt.effect_y.reset(0)
         item_pos = 0
 
         for i, focus in enumerate(d['focus'] for d in reversed(self.rvdata)):
@@ -210,12 +265,33 @@ class TestApp(MDApp):
         eval(self.current_root_id).rvrt.scroll_y = point
 
 
+    def scroll_to_current_auto(self):
+        item_pos = 0
+
+        for i, focus in enumerate(d['focus'] for d in reversed(self.rvdata)):
+            if focus == 'true':
+                item_pos = i
+                break
+
+        point = item_pos / len(self.rvdata)
+
+        eval(self.current_root_id).rvrt.scroll_y = point
+
     def scroll_to_top(self):
+        eval(self.current_root_id).rvrt.effect_y.reset(0)
         eval(self.current_root_id).rvrt.scroll_y = 1
 
     def scroll_to_bottom(self):
+        eval(self.current_root_id).rvrt.effect_y.reset(0)
         eval(self.current_root_id).rvrt.scroll_y = 0
 
+    def toggle_current_story_focus(self):
+        if self.focus_current_story:
+            self.focus_current_story = False
+            eval(self.current_root_id).toggle_focus_btn.text_color = 0, 0, 0, 0.4
+        else:
+            self.focus_current_story = True
+            eval(self.current_root_id).toggle_focus_btn.text_color = 1, 1, 1, 1
 
 
 class MyPaintPage(F.RelativeLayout):
