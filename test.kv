@@ -161,15 +161,13 @@ ScreenManager:
 
 
 <RundownTemplate@MDScreen>
-    rundown: 'default'
+    logo: 'assets/blank.png'
     BoxLayout:
         orientation: 'vertical'
 
         MDBoxLayout:
             size_hint_y: None
             height: 90
-            #md_bg_color: .2, .2, .2, 1
-            #title: root.rundown
             canvas.before:
                 Color:
                     rgba: .19, .19, .19, 1
@@ -177,16 +175,18 @@ ScreenManager:
                     size: self.size
                     pos: self.pos
 
-            MDLabel:
-                text: root.rundown
-                color: 1,1,1,1
+            Image
+                source: root.logo
 
+
+            Widget
+                size_hint_x: .7
 
             MDIconButton:
                 id: toggle_focus_btn
                 icon: "alpha-f-box-outline"
                 theme_text_color: "Custom"
-                text_color: 1, 1, 1, 1
+                text_color: 0, 0, 0, 0.4
                 on_release: app.toggle_current_story_focus()
 
             MDIconButton:
@@ -202,7 +202,7 @@ ScreenManager:
                 on_release: app.scroll_to_bottom()
 
             Widget
-                size_hint_x: .05
+                size_hint_x: .5
 
             MDIconButton
                 id: pencil_button
@@ -337,7 +337,7 @@ ScreenManager:
                         width: 2
                         rectangle: self.x, self.y, self.width, self.height
                     Color:
-                        rgb: 0.239, 0.4, 0.541
+                        rgb: .3, .3, .3
                     Rectangle:
                         pos: main.pos
                         size: main.size
@@ -353,6 +353,8 @@ ScreenManager:
                     MDIconButton
                         icon: "album"
                         on_release: app.root.current = 'width_screen'
+                        theme_text_color: "Custom"
+                        text_color: 0, 0, 0
                     Button:
                         id: drawing_color_button
                         background_normal: ''
@@ -386,6 +388,8 @@ ScreenManager:
                         pos_hint: {"center_x": .5, "center_y": .5}
                         user_font_size: 64
                         on_release: app.clear_current_drawing()
+                        theme_text_color: "Custom"
+                        text_color: 0, 0, 0
                     Widget
                         size_hint_x: .5
                 # Drawing housing
@@ -396,7 +400,6 @@ ScreenManager:
                     # Drawing area
                     MyPaintPage:
                         id: mypaintpage
-                        background_color: 1, 1, 1
                         size_hint_x: None
                         size_hint_y: None
                         height: 240
@@ -409,7 +412,6 @@ ScreenManager:
                     MDIconButton:
                         icon: "close-outline"
                         theme_text_color: "Custom"
-                        text_color: 0.988, 0.352, 0.329
                         on_press: app.back_to_main_page()
                         on_release: app.change_screen('current')
                     Widget
@@ -417,7 +419,6 @@ ScreenManager:
                     MDIconButton:
                         icon: "check-outline"
                         theme_text_color: "Custom"
-                        text_color: 0.490, 0.988, 0.501
                         on_press: app.back_to_main_page()
                         on_release: app.change_screen('current')
             # Middle right spacer
@@ -442,14 +443,14 @@ ScreenManager:
 <LWRundown@MDScreen>
     RundownTemplate
         id: lw_rundown
-        rundown: ' LW'
+        logo: 'assets/lw.png'
         data: app.rvdata
 
 
 <TMRundown@MDScreen>
     RundownTemplate
         id: tm_rundown
-        rundown: 'TM'
+        logo: 'assets/tm.png'
         data: app.rvdata
 
 

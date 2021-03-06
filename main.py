@@ -11,63 +11,11 @@ from kivy.uix import screenmanager as sm
 import boto3
 import botocore
 from threading import Thread
-
-
-colors = {
-        "Teal": {
-            "50": "e4f8f9",
-            "100": "bdedf0",
-            "200": "97e2e8",
-            "300": "79d5de",
-            "400": "6dcbd6",
-            "500": "6ac2cf",
-            "600": "63b2bc",
-            "700": "5b9ca3",
-            "800": "54888c",
-            "900": "486363",
-            "A100": "bdedf0",
-            "A200": "97e2e8",
-            "A400": "6dcbd6",
-            "A700": "5b9ca3",
-        },
-        "Blue": {
-            "50": "e3f3f8",
-            "100": "b9e1ee",
-            "200": "91cee3",
-            "300": "72bad6",
-            "400": "62acce",
-            "500": "589fc6",
-            "600": "5191b8",
-            "700": "487fa5",
-            "800": "426f91",
-            "900": "35506d",
-            "A100": "b9e1ee",
-            "A200": "91cee3",
-            "A400": "62acce",
-            "A700": "487fa5",
-        },
-        "Light": {
-            "StatusBar": "E0E0E0",
-            "AppBar": "F5F5F5",
-            "Background": "FAFAFA",
-            "CardsDialogs": "FFFFFF",
-            "FlatButtonDown": "cccccc",
-        },
-        "Dark": {
-            "StatusBar": "940000",
-            "AppBar": "212121",
-            "Background": "303030",
-            "CardsDialogs": "424242",
-            "FlatButtonDown": "999999",
-        }
-    }
+from misc import custom_colors
+import datetime
 
 
 class TestApp(MDApp):
-
-
-
-
     rvdata = KP.ListProperty()  # JSON data converted to list of dicts
 
     counter = 0
@@ -84,33 +32,30 @@ class TestApp(MDApp):
     current_widget = KP.ObjectProperty()
     current_story_id = KP.StringProperty()
 
-    focus_current_story = True
+    focus_current_story = False
+    in_drawing_screen = False
+
 
     def build(self):
-        self.theme_cls.colors = colors
-        # self.theme_cls.main_background_color = (0.5, 0.5, 0.5)
-        #
+        self.theme_cls.colors = custom_colors
         self.theme_cls.theme_style = "Dark"
-        #
-        #self.theme_cls.primary_palette = "Gray"
 
-
-        # ‘Red’, ‘Pink’, ‘Purple’, ‘DeepPurple’, ‘Indigo’, ‘Blue’, ‘LightBlue’, ‘Cyan’, ‘Teal’, ‘Green’, ‘LightGreen’, ‘Lime’, ‘Yellow’, ‘Amber’, ‘Orange’, ‘DeepOrange’, ‘Brown’, ‘Gray’, ‘BlueGray’.
         self.pull_json_data()  # Pull data once
         Clock.schedule_interval(self.start_json_pull, 8.0)
+
         from kivy.base import EventLoop
         EventLoop.window.bind(on_keyboard=self.hook_keyboard)
 
-        # for row in self.root.ids.lw_screen.ids.lw_rundown.ids.rv.children:
-        #     with row.ids.wig.canvas:
-        #         F.Color(.19, .19, .19, 1)
-        #         F.Rectangle(size=row.ids.wig.size)
+        now = datetime.datetime.now()
+
 
     def hook_keyboard(self, window, key, *largs):
         if key == 27:
             self.root.transition = sm.SlideTransition()
             self.root.current = 'menu'
             return True
+
+
 
     def start_json_pull(self, dt):
         t = Thread(target=self.pull_json_data)
@@ -121,7 +66,39 @@ class TestApp(MDApp):
         self.s3.download_file('hero-cat-test', 'test_rundown', 'test_rundown.json')
         with open('test_rundown.json') as json_file:
             fresh_data = json.load(json_file)
-            self.rvdata = fresh_data
+
+
+        now = datetime.datetime.now()
+
+        current_hours = now.hour
+        current_minutes = now.minute
+        current_seconds = now.second
+
+        current_total_seconds = (current_hours * 3600) + (current_minutes * 60) + current_seconds
+
+        # for current_story, next_story in zip(reversed(data), reversed(data[1:] + [data[0]])):
+        for current_story in reversed(fresh_data):
+
+            if current_story['backtime'] != '' and current_story['backtime'][0] not in ['1', '2']:
+                current_story['backtime'] = '0' + current_story['backtime']
+
+            bt_hours = (current_story['backtime'][0:2])
+            bt_minutes = (current_story['backtime'][3:5])
+            bt_seconds = (current_story['backtime'][6:8])
+
+            if ':' in bt_hours:
+                bt_hours = bt_hours[:-1]
+
+            if bt_hours != "":
+                story_total_time_seconds = (int(bt_hours) * 3600) + (int(bt_minutes) * 60) + int(bt_seconds)
+
+                if story_total_time_seconds <= current_total_seconds:
+
+                    # if current_story['totaltime'] != "00:00":
+                    current_story['focus'] = 'true'
+                    break
+
+        self.rvdata = fresh_data
 
         eval(self.current_root_id).conn_status.text = (str(self.counter) + ' successful data pulls from AWS')
         self.counter += 1
@@ -167,6 +144,7 @@ class TestApp(MDApp):
         # Enter drawing page, if drawing exists, write it to canvas. else clean canvas for new drawing
         drawings = DR.get_drawing(story_id)
         self.root.ids.drawing_screen.ids.drawing_color_button.background_color = DR.drawing_color
+        self.in_drawing_screen = True
 
         if drawings is not None:
             # Clear the widget and enter new BG color
@@ -188,12 +166,13 @@ class TestApp(MDApp):
             # If no drawing make canvas nice andw clean
             self.root.ids.drawing_screen.ids.mypaintpage.canvas.clear()
             with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
-                F.Color(.95, .95, .95, 1)
+                F.Color(.19, .19, .19, 1)
                 F.Rectangle(size=(800, 240))
 
     def back_to_main_page(self):
         # Once finished on the drawing page head back to main page and rewrite/rescale the drawing to fit notes
         drawings = DR.get_drawing(self.current_story_id)
+        self.in_drawing_screen = False
 
         if drawings is not None:
             with self.current_widget.canvas:
@@ -216,12 +195,12 @@ class TestApp(MDApp):
         DR.clear_drawing(self.current_story_id)
 
         with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
-            F.Color(1, 1, 1)
+            F.Color(.19, .19, .19)
             F.Rectangle(size=(800, 240))
 
     def clear_all_drawings(self):
         DR.clear_all()
-        for row in self.root.ids.lw_screen.ids.lw_rundown.ids.rv.children:
+        for row in eval(self.current_root_id).rv.children:
             row.ids.wig.canvas.clear()
 
     def change_screen(self, destination):
@@ -241,11 +220,11 @@ class TestApp(MDApp):
         DR.change_drawing_color(color)
         self.root.ids.drawing_screen.ids.drawing_color_button.background_color = color
 
-        if DR.tool == 'fill':
-            eval(self.current_root_id).fill_button.text_color = color
-            self.root.current = self.current_screen
-        else:
+        if self.in_drawing_screen:
             self.root.current = 'drawing_screen'
+        else:
+            self.root.current = self.current_screen
+
 
     def change_width(self, width):
         DR.change_pencil_width(width)
@@ -305,8 +284,8 @@ class MyPaintPage(F.RelativeLayout):
         self.bind(line_points=self.draw_on_canvas)
 
         with self.canvas:
-            F.Color(.95, .95, .95, 1)
-            F.Rectangle(size=(799.99, 180))
+            F.Color(.19, .19, .19, 1)
+            F.Rectangle(size=(800, 180))
 
     def draw_on_canvas(self, _, points):
         if DR.tool == 'pencil':
@@ -321,9 +300,9 @@ class MyPaintPage(F.RelativeLayout):
                 F.Color(rgb[0], rgb[1], rgb[2])
                 F.Rectangle(size=self.size)
 
-        else:  # eraser
+        else:  # eraser NEEDED?????
             with self.canvas:
-                F.Color(1, 1, 1)
+                F.Color(.19, .19, .19)
                 F.Rectangle(size=self.size)
 
     def on_touch_down(self, touch):

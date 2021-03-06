@@ -40,67 +40,121 @@
                         size: main.size
 
                 GridLayout:
-                    cols: 4
+                    cols: 5
+                    # 1
                     Button:
                         red: 0.941, 0, 0, 1
                         background_normal: ''
                         background_color: self.red
                         on_press: app.change_color(self.red)
+
+                        # 2
                     Button:
                         orange: 1, 0.501, 0, 1
                         background_normal: ''
                         background_color: self.orange
                         on_press: app.change_color(self.orange)
+
+                        # 3
                     Button:
                         yellow: 1, 1, 0, 1
                         background_normal: ''
                         background_color: self.yellow
                         on_press: app.change_color(self.yellow)
+
+                        # 4
                     Button:
                         green: 0.501, 1, 0, 1
                         background_normal: ''
                         background_color: self.green
                         on_press: app.change_color(self.green)
+
+                        # 5
                     Button:
                         teal: 0, 1, 0.501, 1
                         background_normal: ''
                         background_color: self.teal
                         on_press: app.change_color(self.teal)
+
+
+
+
+
+
+                        # 6
                     Button:
                         turquoise: 0, 1, 1, 1
                         background_normal: ''
                         background_color: self.turquoise
                         on_press: app.change_color(self.turquoise)
+
+                        # 7
                     Button:
                         blue: 0, 0.501, 1, 1
                         background_normal: ''
                         background_color: self.blue
                         on_press: app.change_color(self.blue)
+
+                        # 8
                     Button:
                         navy: 0, 0, 1, 1
                         background_normal: ''
                         background_color: self.navy
                         on_press: app.change_color(self.navy)
+
+                        # 9
                     Button:
                         purple: 0.498, 0, 1, 1
                         background_normal: ''
                         background_color: self.purple
                         on_press: app.change_color(self.purple)
+
+                        # 10
                     Button:
                         pink: 1, 0, 1, 1
                         background_normal: ''
                         background_color: self.pink
                         on_press: app.change_color(self.pink)
+
+
+
+
+
+                        # 11
                     Button:
-                        grey: 0.5, 0.5, 0.5, 1
+                        grey: 1, 1, 1, 1
                         background_normal: ''
                         background_color: self.grey
                         on_press: app.change_color(self.grey)
+
+                        # 12
+                    Button:
+                        black: .75, .75, .75, 1
+                        background_normal: ''
+                        background_color: self.black
+                        on_press: app.change_color(self.black)
+
+                        # 13
+                    Button:
+                        white: .5, .5, .5, 1
+                        background_normal: ''
+                        background_color: self.white
+                        on_press: app.change_color(self.white)
+
+                        # 14
+                    Button:
+                        grey: .25, .25, .25, 1
+                        background_normal: ''
+                        background_color: self.grey
+                        on_press: app.change_color(self.grey)
+
+                        # 15
                     Button:
                         black: 0, 0, 0, 1
                         background_normal: ''
                         background_color: self.black
                         on_press: app.change_color(self.black)
+
 
             # Middle right spacer
             Widget
@@ -149,20 +203,22 @@
                         width: 2
                         rectangle: self.x, self.y, self.width, self.height
                     Color:
-                        rgb: 1,1,1,1
+                        rgb: .3,.3,.3,1
                     Rectangle:
                         pos: main.pos
                         size: main.size
-
                 MDLabel
                     id: slider_lbl
                     text: 'PENCIL DIAMETER'
                     halign: 'center'
+
                 MDSlider:
                     min: 1
                     max: 10
                     show_off: False
                     value: app.line_width
+                    hint: False
+                    color: 1, 1, 1, 1
                     on_touch_move: slider_lbl.text = str(int(self.value))
                     on_touch_move: app.line_width = int(self.value)
                     on_touch_up: app.change_width(self.value)
@@ -217,7 +273,7 @@
                         width: 2
                         rectangle: self.x, self.y, self.width, self.height
                     Color:
-                        rgb: .9,.9,.9,1
+                        rgb: .3,.3,.3,1
                     Rectangle:
                         pos: main.pos
                         size: main.size

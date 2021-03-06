@@ -24,6 +24,7 @@ class Row(RecycleDataViewBehavior, BoxLayout):
 
         super().refresh_view_attrs(view, index, data)
 
+
     def on_parent(self, instance, parent):
         """Manually update the row labels from the class properties/app.rvdata"""
         if parent:
@@ -39,9 +40,10 @@ class Row(RecycleDataViewBehavior, BoxLayout):
 
             self.ids.wig.story_id = self.story_id
 
-            if 'COMMERCIAL' in tits:
-                print('comm break')
 
+
+            # focus not getting through each time
+            # TODO: IF RVDATA CHANGED BEFORE ON_PARENT CHECK - ALL GOOD. SOMETIMES ITS CHECKED AFTER, AND IT DOESN'T GET REGISTERED
             if self.focus == 'true':
                 self.ids.page_lbl.background_color = 0, 1, 0, .3
                 self.ids.title_lbl.background_color = 0, 1, 0, .3
@@ -71,7 +73,7 @@ class DrawingRepository:
     pencil_bg_color = (1, 1, 1, 1)
     fill_color = (1, 0, 0, .8)
 
-    drawing_color = (0, 0, 0, 1)
+    drawing_color = (1, 0.4, 0, 1)
 
 
 
@@ -102,7 +104,7 @@ class DrawingRepository:
                                        'pencil_drawings': []}
                 else:
                     drngs[story_id] = {'tool': tool,
-                                       'bg_color': (0.982, 0.982, 0.982),
+                                       'bg_color': (0.19, 0.19, 0.19),
                                        'pencil_drawings': [{'width': width,
                                                             'pencil_color': color,
                                                             'points': points}]}
@@ -149,7 +151,7 @@ class DrawingRepository:
     @staticmethod
     def clear_drawing(story_id):
 
-        DrawingRepository.drawings[story_id] = {'tool': 'pencil', 'bg_color': (1,1,1,1), 'pencil_drawings': []}
+        DrawingRepository.drawings[story_id] = {'tool': 'pencil', 'bg_color': (.19, .19, .19,1), 'pencil_drawings': []}
 
 
 
@@ -158,15 +160,8 @@ class DrawingRepository:
         DrawingRepository.drawings = {}
 
 
-    @staticmethod
-    def test():
-        print('twatfucker')
-
-
 class ClickableBox(F.ButtonBehavior, F.RelativeLayout):
     story_id = KP.StringProperty(None, allownone=True)
-
-
 
     def on_story_id(self, _, story_id):
         """Property event handler; this method is called automatically
@@ -202,11 +197,8 @@ class ClickableBox(F.ButtonBehavior, F.RelativeLayout):
                         F.Line(width=drawinz['width'], points=newlist)
 
         else:
-            # THIS COULD BE BULLSHIT FOR PERFORMANCE....!!!
             self.canvas.clear()
-            # with self.canvas:
-            #     Color(.19, .19, .19, 1)
-            #     Rectangle(size=self.size)
+
 
 
 #
