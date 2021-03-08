@@ -287,12 +287,13 @@
                     Widget
                     MDRaisedButton
                         text: 'Cancel'
-                        md_bg_color: .7,.7,.7,1
+                        md_bg_color: .4,.4,.4,1
                         on_release: app.change_screen('current')
                     Widget
                         size_hint_x: 2
                     MDRaisedButton
-                        text: '  OK  '
+                        text: '    OK    '
+                        md_bg_color: .1,.1,.1,1
                         on_press: app.clear_all_drawings()
                         on_release: app.change_screen('current')
 
