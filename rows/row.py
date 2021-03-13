@@ -16,7 +16,8 @@ class Row(RecycleDataViewBehavior, BoxLayout):
     page = KP.StringProperty()
     totaltime = KP.StringProperty()
     focus = KP.StringProperty()
-
+    location = KP.StringProperty()
+    brk = KP.StringProperty()
 
     def refresh_view_attrs(self, view, index, data):
         """Keep the index up to date"""
@@ -24,17 +25,20 @@ class Row(RecycleDataViewBehavior, BoxLayout):
 
         super().refresh_view_attrs(view, index, data)
 
-
     def on_parent(self, instance, parent):
         """Manually update the row labels from the class properties/app.rvdata"""
         if parent:
-            if len(self.title) >= 15:
-                tits = self.title[:15] + '\n' + self.title[15:]
+            if len(self.title) >= 25:
+                tits = self.title[:25] + '\n' + self.title[25:]
             else:
                 tits = self.title
 
+            if self.location == "" or self.location == " ":
+                self.ids.title_lbl.text = tits
+            else:
+                self.ids.title_lbl.text = tits + "\n [b]LOC[/b]: " + self.location
+
             self.ids.page_lbl.text = self.page
-            self.ids.title_lbl.text = tits
             self.ids.camera_lbl.text = self.camera
             self.ids.total_lbl.text = self.totaltime
 
@@ -45,16 +49,29 @@ class Row(RecycleDataViewBehavior, BoxLayout):
             # focus not getting through each time
             # TODO: IF RVDATA CHANGED BEFORE ON_PARENT CHECK - ALL GOOD. SOMETIMES ITS CHECKED AFTER, AND IT DOESN'T GET REGISTERED
             if self.focus == 'true':
+                self.ids.page_lbl.background_color = 1, 0, 0, .3
+                self.ids.title_lbl.background_color = 1, 0, 0, .3
+                self.ids.camera_lbl.background_color = 1, 0, 0, .3
+                self.ids.total_lbl.background_color = 1, 0, 0, .3
+
+            # elif 'COMMERCIAL' in tits or 'WEATHER &' in tits:
+            #     self.ids.page_lbl.background_color = 1, 0, 0, .3
+            #     self.ids.title_lbl.background_color = 1, 0, 0, .3
+            #     self.ids.camera_lbl.background_color = 1, 0, 0, .3
+            #     self.ids.total_lbl.background_color = 1, 0, 0, .3
+            #
+            # elif 'ITEM' in tits:
+            #     self.ids.page_lbl.background_color = 0, 0, 1, .3
+            #     self.ids.title_lbl.background_color = 0, 0, 1, .3
+            #     self.ids.camera_lbl.background_color = 0, 0, 1, .3
+            #     self.ids.total_lbl.background_color = 0, 0, 1, .3
+
+            elif self.brk == 'true':
                 self.ids.page_lbl.background_color = 0, 1, 0, .3
                 self.ids.title_lbl.background_color = 0, 1, 0, .3
                 self.ids.camera_lbl.background_color = 0, 1, 0, .3
                 self.ids.total_lbl.background_color = 0, 1, 0, .3
 
-            elif 'COMMERCIAL' in tits:
-                self.ids.page_lbl.background_color = 1, 0, 0, .3
-                self.ids.title_lbl.background_color = 1, 0, 0, .3
-                self.ids.camera_lbl.background_color = 1, 0, 0, .3
-                self.ids.total_lbl.background_color = 1, 0, 0, .3
 
             else:
                 self.ids.page_lbl.background_color = .19, .19, .19, 1

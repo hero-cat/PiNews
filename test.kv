@@ -177,7 +177,7 @@ ScreenManager:
 
             Image
                 source: root.logo
-
+                texture_size: self.texture.width - 20, self.texture.height - 20
 
             Widget
                 size_hint_x: .7
@@ -186,20 +186,28 @@ ScreenManager:
                 id: toggle_focus_btn
                 icon: "alpha-f-box-outline"
                 theme_text_color: "Custom"
-                text_color: 0, 0, 0, 0.4
+                text_color: .35, .35, .35, 1
                 on_release: app.toggle_current_story_focus()
 
+#            MDIconButton:
+#                icon: "format-vertical-align-top"
+#                on_release: app.scroll_to_top()
+
             MDIconButton:
-                icon: "format-vertical-align-top"
-                on_release: app.scroll_to_top()
+                icon: "chevron-double-up"
+                on_release: app.item_previous()
 
             MDIconButton:
                 icon: 'bullseye-arrow'
                 on_release: app.scroll_to_current()
 
             MDIconButton:
-                icon: "format-vertical-align-bottom"
-                on_release: app.scroll_to_bottom()
+                icon: "chevron-double-down"
+                on_release: app.item_next()
+#
+#            MDIconButton:
+#                icon: "format-vertical-align-bottom"
+#                on_release: app.scroll_to_bottom()
 
             Widget
                 size_hint_x: .5
@@ -211,27 +219,27 @@ ScreenManager:
                 text_color: 1, 1, 1, 1
                 on_release: app.change_tool('pencil')
                 on_release: self.text_color = 1, 1, 1, 1
-                on_press: fill_button.text_color = 0, 0, 0, .4
-                on_release: eraser_button.text_color = 0, 0, 0, .4
+                on_press: fill_button.text_color = .35, .35, .35, 1
+                on_release: eraser_button.text_color = .35, .35, .35, 1
             MDIconButton
                 id: fill_button
                 icon: "format-color-fill"
                 theme_text_color: "Custom"
-                text_color: 0, 0, 0, .4
+                text_color: .35, .35, .35, 1
                 on_press: app.change_tool('fill')
                 on_press: app.change_screen('color_screen')
                 on_release: self.text_color = 1, 1, 1, 1
-                on_release: pencil_button.text_color = 0, 0, 0, .4
-                on_release: eraser_button.text_color = 0, 0, 0, .4
+                on_release: pencil_button.text_color = .35, .35, .35, 1
+                on_release: eraser_button.text_color = .35, .35, .35, 1
             MDIconButton
                 id: eraser_button
                 icon: "eraser"
                 theme_text_color: "Custom"
-                text_color: 0, 0, 0, .4
+                text_color: .35, .35, .35, 1
                 on_press: app.change_tool('eraser')
                 on_release: self.text_color = 1, 1, 1, 1
-                on_release: pencil_button.text_color = 0, 0, 0, .4
-                on_release: fill_button.text_color = 0, 0, 0, .4
+                on_release: pencil_button.text_color = .35, .35, .35, 1
+                on_release: fill_button.text_color = .35, .35, .35, 1
             MDIconButton
                 icon: "close-box"
                 on_press: app.change_screen('clear_all_conf_screen')
@@ -292,7 +300,7 @@ ScreenManager:
             size_hint_y: .02
             canvas:
                 Color:
-                    rgb: 0.8, 0.8, 0.8
+                    rgb: 0.1, 0.1, 0.1
                 Rectangle:
                     pos: self.pos
                     size: self.size
@@ -300,6 +308,9 @@ ScreenManager:
                 id: conn_status
                 text: '  STATUS: '
                 font_size: 20
+                theme_text_color: "Custom"
+                text_color: .7, .7, .7, 1
+
 
 
 <DrawingScreen@MDScreen>

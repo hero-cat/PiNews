@@ -13,6 +13,7 @@ import botocore
 from threading import Thread
 from misc import custom_colors
 import datetime
+from kivy.base import EventLoop
 
 
 class TestApp(MDApp):
@@ -41,13 +42,10 @@ class TestApp(MDApp):
         self.theme_cls.theme_style = "Dark"
 
         self.pull_json_data()  # Pull data once
-        Clock.schedule_interval(self.start_json_pull, 8.0)
+        Clock.schedule_interval(self.refresh_focus_pos, 2.0)
+        Clock.schedule_interval(self.start_json_pull, 10.0)
 
-        from kivy.base import EventLoop
         EventLoop.window.bind(on_keyboard=self.hook_keyboard)
-
-        now = datetime.datetime.now()
-
 
     def hook_keyboard(self, window, key, *largs):
         if key == 27:
@@ -55,18 +53,24 @@ class TestApp(MDApp):
             self.root.current = 'menu'
             return True
 
-
-
     def start_json_pull(self, dt):
         t = Thread(target=self.pull_json_data)
         t.daemon = True
         t.start()
 
+    def refresh_focus_pos(self, dt):
+        t = Thread(target=self.set_focus)
+        t.daemon = True
+        t.start()
+
     def pull_json_data(self):
         self.s3.download_file('hero-cat-test', 'test_rundown', 'test_rundown.json')
+        eval(self.current_root_id).conn_status.text = (str(self.counter) + ' successful data pulls from AWS')
+        self.counter += 1
+
+    def set_focus(self):
         with open('test_rundown.json') as json_file:
             fresh_data = json.load(json_file)
-
 
         now = datetime.datetime.now()
 
@@ -93,19 +97,14 @@ class TestApp(MDApp):
                 story_total_time_seconds = (int(bt_hours) * 3600) + (int(bt_minutes) * 60) + int(bt_seconds)
 
                 if story_total_time_seconds <= current_total_seconds:
-
                     # if current_story['totaltime'] != "00:00":
                     current_story['focus'] = 'true'
                     break
 
         self.rvdata = fresh_data
 
-        eval(self.current_root_id).conn_status.text = (str(self.counter) + ' successful data pulls from AWS')
-        self.counter += 1
-
         if self.focus_current_story:
             self.scroll_to_current_auto()
-
 
 
     def focused_row_properties_update(self, widget, story_id, title, backtime):
@@ -257,21 +256,50 @@ class TestApp(MDApp):
 
         eval(self.current_root_id).rvrt.scroll_y = point
 
-    def scroll_to_top(self):
-        eval(self.current_root_id).rvrt.effect_y.reset(0)
-        eval(self.current_root_id).rvrt.scroll_y = 1
-
-    def scroll_to_bottom(self):
-        eval(self.current_root_id).rvrt.effect_y.reset(0)
-        eval(self.current_root_id).rvrt.scroll_y = 0
+    # def scroll_to_top(self):
+    #     eval(self.current_root_id).rvrt.effect_y.reset(0)
+    #     eval(self.current_root_id).rvrt.scroll_y = 1
+    #
+    # def scroll_to_bottom(self):
+    #     eval(self.current_root_id).rvrt.effect_y.reset(0)
+    #     eval(self.current_root_id).rvrt.scroll_y = 0
 
     def toggle_current_story_focus(self):
         if self.focus_current_story:
             self.focus_current_story = False
-            eval(self.current_root_id).toggle_focus_btn.text_color = 0, 0, 0, 0.4
+            eval(self.current_root_id).toggle_focus_btn.text_color = .35, .35, .35, 1
         else:
             self.focus_current_story = True
             eval(self.current_root_id).toggle_focus_btn.text_color = 1, 1, 1, 1
+
+    def get_pos(self):
+        pos = eval(self.current_root_id).rvrt.scroll_y
+        return pos
+
+
+    def item_previous(self):
+        current_pos = self.get_pos()
+        positions = []
+
+        for index, brk in enumerate(d['brk'] for d in self.rvdata):
+            if brk == 'true':
+                point = index / len(self.rvdata)
+                positions.append(point)
+
+        #print(eval(self.current_root_id).rvrt.scroll_y)
+
+        for p in reversed(positions):
+            print('cur: ' + str(current_pos))
+            if current_pos >= p:
+                print(p)
+                #eval(self.current_root_id).rvrt.scroll_y = p
+                break
+
+
+
+
+    def item_next(self):
+        pass
 
 
 class MyPaintPage(F.RelativeLayout):
