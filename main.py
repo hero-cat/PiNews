@@ -15,6 +15,8 @@ from misc import custom_colors
 import datetime
 from kivy.base import EventLoop
 
+# todo: KEEP PLAYING WITH DW, LOADS OF TIDYING TO DO
+
 
 class TestApp(MDApp):
     rvdata = KP.ListProperty()  # JSON data converted to list of dicts
@@ -37,6 +39,9 @@ class TestApp(MDApp):
     in_drawing_screen = False
 
     true_item_positions = []
+
+    def test(self):
+        print('THIS IS A TEST')
 
     # ## ### INITIALISATION ### ## #
     # ## ### INITIALISATION ### ## #
@@ -74,7 +79,7 @@ class TestApp(MDApp):
         self.s3.download_file('hero-cat-test', 'test_rundown', 'test_rundown.json')
         eval(self.current_root_id).conn_status.text = (str(self.counter) + ' successful data pulls from AWS')
         self.counter += 1
-        self.set_true_positions()
+        self.set_true_item_positions()
 
     # ## ### AUTO NAVIGATION ### ## #
     # ## ### AUTO NAVIGATION ### ## #
@@ -116,7 +121,7 @@ class TestApp(MDApp):
         self.rvdata = fresh_data
 
         if self.focus_current_story:
-            self.scroll_to_current_auto()
+            self.scroll_to_current()
 
     def toggle_current_story_focus(self):
         if self.focus_current_story:
@@ -126,7 +131,7 @@ class TestApp(MDApp):
             self.focus_current_story = True
             eval(self.current_root_id).toggle_focus_btn.text_color = 1, 1, 1, 1
 
-    def set_true_positions(self):
+    def set_true_item_positions(self):
         for index, brk in enumerate(d['brk'] for d in reversed(self.rvdata)):
             if brk == 'true':
                 point = index / len(self.rvdata)
@@ -152,19 +157,29 @@ class TestApp(MDApp):
                 break
 
         point = item_pos / len(self.rvdata)
-        eval(self.current_root_id).rvrt.scroll_y = point
 
-    def scroll_to_current_auto(self):
-        item_pos = 0
-
-        for i, focus in enumerate(d['focus'] for d in reversed(self.rvdata)):
-            if focus == 'true':
-                item_pos = i
-                break
-
-        point = item_pos / len(self.rvdata)
+        if 0.9 <= point <= 0.99:
+            point += 0.01
+        elif 0.8 <= point <= 0.89:
+            point += 0.005
+        elif 0.11 <= point <= 0.2:
+            point -= 0.005
+        elif 0.02 <= point <= 0.1:
+            point -= 0.01
 
         eval(self.current_root_id).rvrt.scroll_y = point
+
+    # def scroll_to_current_auto(self):
+    #     item_pos = 0
+    #
+    #     for i, focus in enumerate(d['focus'] for d in reversed(self.rvdata)):
+    #         if focus == 'true':
+    #             item_pos = i
+    #             break
+    #
+    #     point = item_pos / len(self.rvdata)
+    #
+    #     eval(self.current_root_id).rvrt.scroll_y = point
 
     def scroll_to_top(self):
         eval(self.current_root_id).rvrt.effect_y.reset(0)
@@ -315,6 +330,32 @@ class TestApp(MDApp):
         DR.change_pencil_width(width)
         self.root.current = 'drawing_screen'
 
+    def undo(self):
+        DR.undo(self.current_story_id)
+
+        drawings = DR.get_drawing(self.current_story_id)
+        self.root.ids.drawing_screen.ids.drawing_color_button.background_color = DR.drawing_color
+
+        self.root.ids.drawing_screen.ids.mypaintpage.canvas.clear()
+
+        # THIS IS REPEATED A LOT, MAKE IT OWN FUNCTION
+        with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
+            bgc = drawings['bg_color']
+            F.Color(bgc[0], bgc[1], bgc[2])
+            F.Rectangle(size=(800, 240))
+
+        # Loop through the drawings and add to canvas
+        for drawinz in drawings['pencil_drawings']:
+            with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
+                pc = drawinz['pencil_color']
+                F.Color(pc[0], pc[1], pc[2])
+                F.Line(width=drawinz['width'], points=drawinz['points'])
+
+    def cancel_recent_actions(self):
+        for _ in range(DR.quantity):
+            self.undo()
+
+        self.change_screen('current')
 
 class MyPaintPage(F.RelativeLayout):
     story_id = KP.StringProperty(None, allownone=True)
@@ -361,7 +402,7 @@ class MyPaintPage(F.RelativeLayout):
         return super().on_touch_move(touch)
 
     def on_touch_up(self, touch):
-        dp = DR
+
         if touch.grab_current is self:
             # Only add the final point if touch is released inside our boundaries.
             if self.collide_point(*touch.pos):
@@ -372,8 +413,8 @@ class MyPaintPage(F.RelativeLayout):
                 self.line_points = []
 
             if self.story_id is not None:
-                dp.add_drawing(self.story_id, dp.tool, dp.drawing_color, dp.pencil_width, self.line_points[:])
-
+                DR.add_drawing(self.story_id, DR.tool, DR.drawing_color, DR.pencil_width, self.line_points[:])
+                DR.quantity += 1
                 self.line_points = []
             return True
         return super().on_touch_up(touch)

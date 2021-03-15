@@ -92,6 +92,8 @@ class DrawingRepository:
 
     drawing_color = (1, 0.4, 0, 1)
 
+    quantity = 0
+
 
 
     @staticmethod
@@ -167,15 +169,14 @@ class DrawingRepository:
 
     @staticmethod
     def clear_drawing(story_id):
-
         DrawingRepository.drawings[story_id] = {'tool': 'pencil', 'bg_color': (.19, .19, .19,1), 'pencil_drawings': []}
 
-
-
     @staticmethod
-    def clear_all():
-        DrawingRepository.drawings = {}
-
+    def undo(story_id):
+        if DrawingRepository.drawings[story_id]['pencil_drawings']:
+            DrawingRepository.drawings[story_id]['pencil_drawings'].pop()
+        else:
+            print('empty')
 
 class ClickableBox(F.ButtonBehavior, F.RelativeLayout):
     story_id = KP.StringProperty(None, allownone=True)
@@ -189,7 +190,6 @@ class ClickableBox(F.ButtonBehavior, F.RelativeLayout):
         drawings = DrawingRepository.get_drawing(story_id)
 
         if drawings is not None:
-
 
             if drawings['tool'] != 'pencil':
 

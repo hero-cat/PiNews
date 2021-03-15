@@ -41,10 +41,7 @@ ScreenManager:
         name: 'width_screen'
         manager: 'screen_manager'
 
-    ClearAllConfScreen:
-        id: clear_all_conf_screen
-        name: 'clear_all_conf_screen'
-        manager: 'screen_manager'
+
 
 
 <LoginScreen>
@@ -175,9 +172,17 @@ ScreenManager:
                     size: self.size
                     pos: self.pos
 
-            Image
-                source: root.logo
-                texture_size: self.texture.width - 20, self.texture.height - 20
+            Button
+                background_normal: root.logo
+                background_down: root.logo
+                size_hint_x: None
+                width: 180
+                on_release: app.scroll_to_top()
+
+
+#            Image
+#                source: root.logo
+#                texture_size: self.texture.width - 20, self.texture.height - 20
 
             Widget
                 size_hint_x: .7
@@ -240,9 +245,7 @@ ScreenManager:
                 on_release: self.text_color = 1, 1, 1, 1
                 on_release: pencil_button.text_color = .35, .35, .35, 1
                 on_release: fill_button.text_color = .35, .35, .35, 1
-            MDIconButton
-                icon: "close-box"
-                on_press: app.change_screen('clear_all_conf_screen')
+
         MDBoxLayout:
             spacing: 3
             size_hint_y: 0.039
@@ -309,6 +312,11 @@ ScreenManager:
                 text_color: .7, .7, .7, 1
 
 
+<TransparentButton@Button>
+    background_color: 0, 0, 0, 0
+    on_press: app.cancel_recent_actions()
+
+
 
 <DrawingScreen@MDScreen>
     canvas.before:
@@ -320,14 +328,15 @@ ScreenManager:
         orientation: 'vertical'
 
         # Top spacer
-        Widget
+        TransparentButton
             size_hint_y: 1.5
+
 
         # Middle layer
         BoxLayout
 
             # Middle left spacer
-            Widget
+            TransparentButton
                 size_hint_x: .1
 
             # main housing
@@ -414,7 +423,19 @@ ScreenManager:
 
                     Widget
                         size_hint_x: None
-                        width: 50
+                        width: 20
+
+                    MDIconButton
+                        icon: "undo-variant"
+                        theme_text_color: "Custom"
+                        text_color: 0, 0, 0
+                        user_font_size: 55
+                        pos_hint: {"center_x": .5, "center_y": .5}
+                        on_release: app.undo()
+
+                    Widget
+                        size_hint_x: None
+                        width: 20
 
                     MDIconButton
                         icon: "close-box"
@@ -443,13 +464,6 @@ ScreenManager:
                     Widget:
                         size_hint_x: 5
                     MDIconButton:
-                        icon: "close-outline"
-                        theme_text_color: "Custom"
-                        on_press: app.back_to_main_page()
-                        on_release: app.change_screen('current')
-                    Widget
-                        size_hint_x: .1
-                    MDIconButton:
                         icon: "check-outline"
                         theme_text_color: "Custom"
                         on_press: app.back_to_main_page()
@@ -458,7 +472,7 @@ ScreenManager:
             Widget
                 size_hint_x: .1
         # Bottom spacer
-        Widget
+        TransparentButton
             size_hint_y: 2
 
 
