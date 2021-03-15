@@ -36,22 +36,19 @@ class TestApp(MDApp):
     focus_current_story = False
     in_drawing_screen = False
 
+    true_item_positions = []
+
+    # ## ### INITIALISATION ### ## #
+    # ## ### INITIALISATION ### ## #
+    # ## ### INITIALISATION ### ## #
 
     def build(self):
         self.theme_cls.colors = custom_colors
         self.theme_cls.theme_style = "Dark"
-
         self.pull_json_data()  # Pull data once
         Clock.schedule_interval(self.refresh_focus_pos, 2.0)
         Clock.schedule_interval(self.start_json_pull, 10.0)
-
         EventLoop.window.bind(on_keyboard=self.hook_keyboard)
-
-    def hook_keyboard(self, window, key, *largs):
-        if key == 27:
-            self.root.transition = sm.SlideTransition()
-            self.root.current = 'menu'
-            return True
 
     def start_json_pull(self, dt):
         t = Thread(target=self.pull_json_data)
@@ -63,10 +60,25 @@ class TestApp(MDApp):
         t.daemon = True
         t.start()
 
+    def hook_keyboard(self, window, key, *largs):
+        if key == 27:
+            self.root.transition = sm.SlideTransition()
+            self.root.current = 'menu'
+            return True
+
+    # ## ### DATA ### ## #
+    # ## ### DATA ### ## #
+    # ## ### DATA ### ## #
+
     def pull_json_data(self):
         self.s3.download_file('hero-cat-test', 'test_rundown', 'test_rundown.json')
         eval(self.current_root_id).conn_status.text = (str(self.counter) + ' successful data pulls from AWS')
         self.counter += 1
+        self.set_true_positions()
+
+    # ## ### AUTO NAVIGATION ### ## #
+    # ## ### AUTO NAVIGATION ### ## #
+    # ## ### AUTO NAVIGATION ### ## #
 
     def set_focus(self):
         with open('test_rundown.json') as json_file:
@@ -106,6 +118,86 @@ class TestApp(MDApp):
         if self.focus_current_story:
             self.scroll_to_current_auto()
 
+    def toggle_current_story_focus(self):
+        if self.focus_current_story:
+            self.focus_current_story = False
+            eval(self.current_root_id).toggle_focus_btn.text_color = .35, .35, .35, 1
+        else:
+            self.focus_current_story = True
+            eval(self.current_root_id).toggle_focus_btn.text_color = 1, 1, 1, 1
+
+    def set_true_positions(self):
+        for index, brk in enumerate(d['brk'] for d in reversed(self.rvdata)):
+            if brk == 'true':
+                point = index / len(self.rvdata)
+
+                if 0.9 <= point <= 0.99:
+                    point += 0.01
+                elif 0.8 <= point <= 0.89:
+                    point += 0.005
+                elif 0.11 <= point <= 0.2:
+                    point -= 0.005
+                elif 0.02 <= point <= 0.1:
+                    point -= 0.01
+
+                self.true_item_positions.append(point)
+
+    def scroll_to_current(self):
+        eval(self.current_root_id).rvrt.effect_y.reset(0)
+        item_pos = 0
+
+        for i, focus in enumerate(d['focus'] for d in reversed(self.rvdata)):
+            if focus == 'true':
+                item_pos = i
+                break
+
+        point = item_pos / len(self.rvdata)
+        eval(self.current_root_id).rvrt.scroll_y = point
+
+    def scroll_to_current_auto(self):
+        item_pos = 0
+
+        for i, focus in enumerate(d['focus'] for d in reversed(self.rvdata)):
+            if focus == 'true':
+                item_pos = i
+                break
+
+        point = item_pos / len(self.rvdata)
+
+        eval(self.current_root_id).rvrt.scroll_y = point
+
+    def scroll_to_top(self):
+        eval(self.current_root_id).rvrt.effect_y.reset(0)
+        eval(self.current_root_id).rvrt.scroll_y = 1
+
+    def item_previous(self):
+        current_pos = eval(self.current_root_id).rvrt.scroll_y
+
+        for pos in self.true_item_positions:
+            if current_pos < pos:
+                eval(self.current_root_id).rvrt.scroll_y = pos
+                break
+
+    def item_next(self):
+        current_pos = eval(self.current_root_id).rvrt.scroll_y
+
+        for pos in reversed(self.true_item_positions):
+            if current_pos > pos:
+                eval(self.current_root_id).rvrt.scroll_y = pos
+                break
+
+
+
+    # ## ### MANUAL NAVIGATION ### ## #
+    # ## ### MANUAL NAVIGATION ### ## #
+    # ## ### MANUAL NAVIGATION ### ## #
+
+    def change_screen(self, destination):
+        self.root.transition = sm.NoTransition()
+        if destination == 'current':
+            self.root.current = self.current_screen
+        else:
+            self.root.current = destination
 
     def focused_row_properties_update(self, widget, story_id, title, backtime):
         # Update the Apps reference to the current row in focus
@@ -189,6 +281,10 @@ class TestApp(MDApp):
                     F.Color(pc[0], pc[1], pc[2])
                     F.Line(width=drawinz['width'], points=newlist)
 
+    # ## ### DRAWING FUNC ### ## #
+    # ## ### DRAWING FUNC ### ## #
+    # ## ### DRAWING FUNC ### ## #
+
     def clear_current_drawing(self):
         self.root.ids.drawing_screen.ids.mypaintpage.canvas.clear()
         DR.clear_drawing(self.current_story_id)
@@ -201,15 +297,6 @@ class TestApp(MDApp):
         DR.clear_all()
         for row in eval(self.current_root_id).rv.children:
             row.ids.wig.canvas.clear()
-
-    def change_screen(self, destination):
-        self.root.transition = sm.NoTransition()
-
-        if destination == 'current':
-            self.root.current = self.current_screen
-
-        else:
-            self.root.current = destination
 
     @staticmethod
     def change_tool(tool):
@@ -224,82 +311,9 @@ class TestApp(MDApp):
         else:
             self.root.current = self.current_screen
 
-
     def change_width(self, width):
         DR.change_pencil_width(width)
         self.root.current = 'drawing_screen'
-
-
-    def scroll_to_current(self):
-        eval(self.current_root_id).rvrt.effect_y.reset(0)
-        item_pos = 0
-
-        for i, focus in enumerate(d['focus'] for d in reversed(self.rvdata)):
-            if focus == 'true':
-                item_pos = i
-                break
-
-        point = item_pos / len(self.rvdata)
-
-        eval(self.current_root_id).rvrt.scroll_y = point
-
-
-    def scroll_to_current_auto(self):
-        item_pos = 0
-
-        for i, focus in enumerate(d['focus'] for d in reversed(self.rvdata)):
-            if focus == 'true':
-                item_pos = i
-                break
-
-        point = item_pos / len(self.rvdata)
-
-        eval(self.current_root_id).rvrt.scroll_y = point
-
-    # def scroll_to_top(self):
-    #     eval(self.current_root_id).rvrt.effect_y.reset(0)
-    #     eval(self.current_root_id).rvrt.scroll_y = 1
-    #
-    # def scroll_to_bottom(self):
-    #     eval(self.current_root_id).rvrt.effect_y.reset(0)
-    #     eval(self.current_root_id).rvrt.scroll_y = 0
-
-    def toggle_current_story_focus(self):
-        if self.focus_current_story:
-            self.focus_current_story = False
-            eval(self.current_root_id).toggle_focus_btn.text_color = .35, .35, .35, 1
-        else:
-            self.focus_current_story = True
-            eval(self.current_root_id).toggle_focus_btn.text_color = 1, 1, 1, 1
-
-    def get_pos(self):
-        pos = eval(self.current_root_id).rvrt.scroll_y
-        return pos
-
-
-    def item_previous(self):
-        current_pos = self.get_pos()
-        positions = []
-
-        for index, brk in enumerate(d['brk'] for d in self.rvdata):
-            if brk == 'true':
-                point = index / len(self.rvdata)
-                positions.append(point)
-
-        #print(eval(self.current_root_id).rvrt.scroll_y)
-
-        for p in reversed(positions):
-            print('cur: ' + str(current_pos))
-            if current_pos >= p:
-                print(p)
-                #eval(self.current_root_id).rvrt.scroll_y = p
-                break
-
-
-
-
-    def item_next(self):
-        pass
 
 
 class MyPaintPage(F.RelativeLayout):
