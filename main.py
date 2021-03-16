@@ -168,18 +168,6 @@ class TestApp(MDApp):
 
         eval(self.current_root_id).rvrt.scroll_y = point
 
-    # def scroll_to_current_auto(self):
-    #     item_pos = 0
-    #
-    #     for i, focus in enumerate(d['focus'] for d in reversed(self.rvdata)):
-    #         if focus == 'true':
-    #             item_pos = i
-    #             break
-    #
-    #     point = item_pos / len(self.rvdata)
-    #
-    #     eval(self.current_root_id).rvrt.scroll_y = point
-
     def scroll_to_top(self):
         eval(self.current_root_id).rvrt.effect_y.reset(0)
         eval(self.current_root_id).rvrt.scroll_y = 1
@@ -218,7 +206,6 @@ class TestApp(MDApp):
         elif destination == 'color_pencil':
             self.root.ids.color_screen.pencil_or_bg_color_choice = 'pencil'
             self.root.current = 'color_screen'
-
         else:
             self.root.current = destination
 
@@ -233,7 +220,6 @@ class TestApp(MDApp):
             # Send a header to the drawing page
             drawing_screen_page_header = title + ' @ ' + backtime
             self.root.ids.drawing_screen.ids.drawing_screen_title.text = drawing_screen_page_header
-
             self.enter_drawing_page(story_id)
             self.root.transition = sm.NoTransition()
             self.root.current = 'drawing_screen'
@@ -242,8 +228,7 @@ class TestApp(MDApp):
         elif DR.tool == 'fill':
             self.current_widget.canvas.clear()
             with self.current_widget.canvas:
-                fc = DR.bg_color
-                F.Color(fc[0], fc[1], fc[2])
+                F.Color(*DR.bg_color)
                 F.Rectangle(size=self.current_widget.size)
                 DR.add_drawing(self.current_story_id, [])
 
@@ -261,13 +246,12 @@ class TestApp(MDApp):
 
         if drawings is not None:
             # Clear the widget and enter new BG color
-            self.redraw_from_repo()
-
+            self.redraw_to_dw()
         else:
             # If no drawing make canvas nice and clean
             self.root.ids.drawing_screen.ids.mypaintpage.canvas.clear()
             with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
-                F.Color(DR.bg_color[0], DR.bg_color[1], DR.bg_color[2])
+                F.Color(*DR.bg_color)
                 F.Rectangle(size=(800, 240))
 
     def back_to_main_page(self):
@@ -278,18 +262,14 @@ class TestApp(MDApp):
 
         if drawings is not None:
             with self.current_widget.canvas:
-                bgc = drawings['bg_color']
-                F.Color(bgc[0], bgc[1], bgc[2])
+                F.Color(*drawings['bg_color'])
                 F.Rectangle(size=self.current_widget.size)
 
             # Loop through each drawing and rescale it for the canvas
             for drawinz in drawings['pencil_drawings']:
-
                 newlist = [(x * .5) for x in drawinz['points']]
-
                 with self.current_widget.canvas:
-                    pc = drawinz['pencil_color']
-                    F.Color(pc[0], pc[1], pc[2])
+                    F.Color(*drawinz['pencil_color'])
                     F.Line(width=drawinz['width'], points=newlist)
 
     # ## ### DRAWING FUNC ### ## #
@@ -297,31 +277,25 @@ class TestApp(MDApp):
     # ## ### DRAWING FUNC ### ## #
 
 
-    def redraw_from_repo(self, color=None):
+    def redraw_to_dw(self, color=None):
         drawings = DR.get_drawing(self.current_story_id)
 
         self.root.ids.drawing_screen.ids.mypaintpage.canvas.clear()
 
         if color != None:
-
             with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
-                bgc = color
-                F.Color(bgc[0], bgc[1], bgc[2])
+                F.Color(*color)
                 F.Rectangle(size=(800, 240))
-
         else:
             with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
-                bgc = drawings['bg_color']
-                F.Color(bgc[0], bgc[1], bgc[2])
+                F.Color(*drawings['bg_color'])
                 F.Rectangle(size=(800, 240))
 
         if drawings:
-
             # Loop through the drawings and add to canvas
             for drawinz in drawings['pencil_drawings']:
                 with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
-                    pc = drawinz['pencil_color']
-                    F.Color(pc[0], pc[1], pc[2])
+                    F.Color(*drawinz['pencil_color'])
                     F.Line(width=drawinz['width'], points=drawinz['points'])
 
 
@@ -339,10 +313,9 @@ class TestApp(MDApp):
 
     @staticmethod
     def change_tool(tool):
-        DR.change_tool(tool)
+        DR.tool = tool
 
     def change_color(self, destination, color):
-
         if destination == 'bg':
             drawing = DR.get_drawing(self.current_story_id)
 
@@ -354,7 +327,7 @@ class TestApp(MDApp):
             else:
                 DR.add_drawing(self.current_story_id, [])
 
-            self.redraw_from_repo(color)
+            self.redraw_to_dw(color)
 
         else:
             DR.change_pencil_color(color)
@@ -374,23 +347,7 @@ class TestApp(MDApp):
         DR.undo(self.current_story_id)
         DR.drawing_quantity = 0
 
-        drawings = DR.get_drawing(self.current_story_id)
-        self.root.ids.drawing_screen.ids.drawing_color_button.background_color = DR.bg_color
-
-        self.root.ids.drawing_screen.ids.mypaintpage.canvas.clear()
-
-        # THIS IS REPEATED A LOT, MAKE IT OWN FUNCTION
-        with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
-            bgc = drawings['bg_color']
-            F.Color(bgc[0], bgc[1], bgc[2])
-            F.Rectangle(size=(800, 240))
-
-        # Loop through the drawings and add to canvas
-        for drawinz in drawings['pencil_drawings']:
-            with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
-                pc = drawinz['pencil_color']
-                F.Color(pc[0], pc[1], pc[2])
-                F.Line(width=drawinz['width'], points=drawinz['points'])
+        self.redraw_to_dw()
 
     def cancel_recent_actions(self):
         for _ in range(DR.drawing_quantity):
@@ -415,14 +372,12 @@ class MyPaintPage(F.RelativeLayout):
     def draw_on_canvas(self, _, points):
         if DR.tool == 'pencil':
             with self.canvas:
-                rgb = DR.pencil_color
-                F.Color(rgb[0], rgb[1], rgb[2])
+                F.Color(*DR.pencil_color)
                 F.Line(width=DR.pencil_width, points=points)
 
         elif DR.tool == 'fill':
             with self.canvas:
-                rgb = DR.bg_color
-                F.Color(rgb[0], rgb[1], rgb[2])
+                F.Color(*DR.bg_color)
                 F.Rectangle(size=self.size)
 
         else:  # eraser NEEDED?????

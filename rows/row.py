@@ -72,7 +72,7 @@ class DrawingRepository:
     tool = 'pencil'
     pencil_width = 2
     pencil_color = (1, 0.501, 0, 1)
-    bg_color = (.19, .19, .19, 1)
+    bg_color = (.19, .19, .19)
 
 
     @staticmethod
@@ -107,25 +107,16 @@ class DrawingRepository:
                                                             'points': points}]}
 
     @staticmethod
-    def replace_drawing(story_id, replacement):
-        DrawingRepository.drawings[story_id] = replacement
-
-
-    @staticmethod
     def get_drawing(story_id, default=None):
         return DrawingRepository.drawings.get(story_id, default)
 
     @staticmethod
-    def has_drawing(story_id):
-        return story_id in DrawingRepository.drawings
+    def replace_drawing(story_id, replacement):
+        DrawingRepository.drawings[story_id] = replacement
 
     @staticmethod
     def change_pencil_color(color):
         DrawingRepository.pencil_color = color
-
-    @staticmethod
-    def change_fill_color(color):
-        DrawingRepository.fill_color = color
 
     @staticmethod
     def change_bg_color(color):
@@ -133,22 +124,21 @@ class DrawingRepository:
 
     @staticmethod
     def change_pencil_width(width):
-
         DrawingRepository.pencil_width = int(width)
 
-    @staticmethod
-    def get_width():
-        return DrawingRepository.pencil_width
+    # @staticmethod
+    # def get_width():
+    #     return DrawingRepository.pencil_width
 
-    @staticmethod
-    def change_tool(tool):
-        DrawingRepository.tool = tool
-        if tool == 'fill':
-            DrawingRepository.change_fill_color(DrawingRepository.pencil_color)
+    # @staticmethod
+    # def change_tool(tool):
+    #     DrawingRepository.tool = tool
+    #     if tool == 'fill':
+    #         DrawingRepository.change_fill_color(DrawingRepository.pencil_color)
 
     @staticmethod
     def clear_drawing(story_id):
-        DrawingRepository.drawings[story_id] = {'tool': 'pencil', 'bg_color': (.19, .19, .19,1), 'pencil_drawings': []}
+        DrawingRepository.drawings[story_id] = {'tool': 'pencil', 'bg_color': (.19, .19, .19, 1), 'pencil_drawings': []}
 
     @staticmethod
     def undo(story_id):
