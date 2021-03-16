@@ -15,7 +15,6 @@ from misc import custom_colors
 import datetime
 from kivy.base import EventLoop
 
-# todo: KEEP PLAYING WITH DW, LOADS OF TIDYING TO DO
 
 
 class TestApp(MDApp):
@@ -211,22 +210,30 @@ class TestApp(MDApp):
         self.root.transition = sm.NoTransition()
         if destination == 'current':
             self.root.current = self.current_screen
+
+        elif destination == 'color_bg':
+            self.root.ids.color_screen.pencil_or_bg_color_choice = 'bg'
+            self.root.current = 'color_screen'
+
+        elif destination == 'color_pencil':
+            self.root.ids.color_screen.pencil_or_bg_color_choice = 'pencil'
+            self.root.current = 'color_screen'
+
         else:
             self.root.current = destination
 
     def focused_row_properties_update(self, widget, story_id, title, backtime):
         # Update the Apps reference to the current row in focus
-
         self.current_widget = widget
         self.current_story_id = story_id
         self.root.ids.drawing_screen.ids.mypaintpage.story_id = story_id
 
-        # Send a header to the drawing page
-        drawing_screen_page_header = title + ' @ ' + backtime
-        self.root.ids.drawing_screen.ids.drawing_screen_title.text = drawing_screen_page_header
-
         # Begin move to drawing page
         if DR.tool == 'pencil':
+            # Send a header to the drawing page
+            drawing_screen_page_header = title + ' @ ' + backtime
+            self.root.ids.drawing_screen.ids.drawing_screen_title.text = drawing_screen_page_header
+
             self.enter_drawing_page(story_id)
             self.root.transition = sm.NoTransition()
             self.root.current = 'drawing_screen'
@@ -235,11 +242,10 @@ class TestApp(MDApp):
         elif DR.tool == 'fill':
             self.current_widget.canvas.clear()
             with self.current_widget.canvas:
-
-                fc = DR.drawing_color
+                fc = DR.bg_color
                 F.Color(fc[0], fc[1], fc[2])
                 F.Rectangle(size=self.current_widget.size)
-                DR.add_drawing(self.current_story_id, DR.tool, DR.drawing_color, DR.pencil_width, [])
+                DR.add_drawing(self.current_story_id, [])
 
         # Or erase widget
         else:
@@ -249,36 +255,26 @@ class TestApp(MDApp):
     def enter_drawing_page(self, story_id):
         # Enter drawing page, if drawing exists, write it to canvas. else clean canvas for new drawing
         drawings = DR.get_drawing(story_id)
-        self.root.ids.drawing_screen.ids.drawing_color_button.background_color = DR.drawing_color
+        self.root.ids.drawing_screen.ids.dw_pencil_btn_color.background_color = DR.pencil_color
+        self.root.ids.drawing_screen.ids.dw_fill_btn_color.background_color = DR.bg_color
         self.in_drawing_screen = True
 
         if drawings is not None:
             # Clear the widget and enter new BG color
-            self.root.ids.drawing_screen.ids.mypaintpage.canvas.clear()
-            with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
-                bgc = drawings['bg_color']
-                F.Color(bgc[0], bgc[1], bgc[2])
-                F.Rectangle(size=(800, 240))
-
-            # Loop through the drawings and add to canvas
-            for drawinz in drawings['pencil_drawings']:
-
-                with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
-                    pc = drawinz['pencil_color']
-                    F.Color(pc[0], pc[1], pc[2])
-                    F.Line(width=drawinz['width'], points=drawinz['points'])
+            self.redraw_from_repo()
 
         else:
-            # If no drawing make canvas nice andw clean
+            # If no drawing make canvas nice and clean
             self.root.ids.drawing_screen.ids.mypaintpage.canvas.clear()
             with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
-                F.Color(.19, .19, .19, 1)
+                F.Color(DR.bg_color[0], DR.bg_color[1], DR.bg_color[2])
                 F.Rectangle(size=(800, 240))
 
     def back_to_main_page(self):
         # Once finished on the drawing page head back to main page and rewrite/rescale the drawing to fit notes
         drawings = DR.get_drawing(self.current_story_id)
         self.in_drawing_screen = False
+        DR.drawing_quantity = 0
 
         if drawings is not None:
             with self.current_widget.canvas:
@@ -300,6 +296,39 @@ class TestApp(MDApp):
     # ## ### DRAWING FUNC ### ## #
     # ## ### DRAWING FUNC ### ## #
 
+
+    def redraw_from_repo(self, color=None):
+        drawings = DR.get_drawing(self.current_story_id)
+
+        self.root.ids.drawing_screen.ids.mypaintpage.canvas.clear()
+
+        if color != None:
+
+            with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
+                bgc = color
+                F.Color(bgc[0], bgc[1], bgc[2])
+                F.Rectangle(size=(800, 240))
+
+        else:
+            with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
+                bgc = drawings['bg_color']
+                F.Color(bgc[0], bgc[1], bgc[2])
+                F.Rectangle(size=(800, 240))
+
+        if drawings:
+
+            # Loop through the drawings and add to canvas
+            for drawinz in drawings['pencil_drawings']:
+                with self.root.ids.drawing_screen.ids.mypaintpage.canvas:
+                    pc = drawinz['pencil_color']
+                    F.Color(pc[0], pc[1], pc[2])
+                    F.Line(width=drawinz['width'], points=drawinz['points'])
+
+
+
+
+
+
     def clear_current_drawing(self):
         self.root.ids.drawing_screen.ids.mypaintpage.canvas.clear()
         DR.clear_drawing(self.current_story_id)
@@ -308,18 +337,29 @@ class TestApp(MDApp):
             F.Color(.19, .19, .19)
             F.Rectangle(size=(800, 240))
 
-    def clear_all_drawings(self):
-        DR.clear_all()
-        for row in eval(self.current_root_id).rv.children:
-            row.ids.wig.canvas.clear()
-
     @staticmethod
     def change_tool(tool):
         DR.change_tool(tool)
 
-    def change_color(self, color):
-        DR.change_drawing_color(color)
-        self.root.ids.drawing_screen.ids.drawing_color_button.background_color = color
+    def change_color(self, destination, color):
+
+        if destination == 'bg':
+            drawing = DR.get_drawing(self.current_story_id)
+
+            DR.change_bg_color(color)
+
+            if drawing != None:
+                drawing['bg_color'] = color
+                DR.replace_drawing(self.current_story_id, drawing)
+            else:
+                DR.add_drawing(self.current_story_id, [])
+
+            self.redraw_from_repo(color)
+
+        else:
+            DR.change_pencil_color(color)
+
+        self.root.ids.drawing_screen.ids.dw_fill_btn_color.background_color = color
 
         if self.in_drawing_screen:
             self.root.current = 'drawing_screen'
@@ -332,9 +372,10 @@ class TestApp(MDApp):
 
     def undo(self):
         DR.undo(self.current_story_id)
+        DR.drawing_quantity = 0
 
         drawings = DR.get_drawing(self.current_story_id)
-        self.root.ids.drawing_screen.ids.drawing_color_button.background_color = DR.drawing_color
+        self.root.ids.drawing_screen.ids.drawing_color_button.background_color = DR.bg_color
 
         self.root.ids.drawing_screen.ids.mypaintpage.canvas.clear()
 
@@ -352,9 +393,10 @@ class TestApp(MDApp):
                 F.Line(width=drawinz['width'], points=drawinz['points'])
 
     def cancel_recent_actions(self):
-        for _ in range(DR.quantity):
-            self.undo()
-
+        for _ in range(DR.drawing_quantity):
+            DR.undo(self.current_story_id)
+        DR.drawing_quantity = 0
+        self.in_drawing_screen = False
         self.change_screen('current')
 
 class MyPaintPage(F.RelativeLayout):
@@ -373,13 +415,13 @@ class MyPaintPage(F.RelativeLayout):
     def draw_on_canvas(self, _, points):
         if DR.tool == 'pencil':
             with self.canvas:
-                rgb = DR.drawing_color
+                rgb = DR.pencil_color
                 F.Color(rgb[0], rgb[1], rgb[2])
                 F.Line(width=DR.pencil_width, points=points)
 
         elif DR.tool == 'fill':
             with self.canvas:
-                rgb = DR.drawing_color
+                rgb = DR.bg_color
                 F.Color(rgb[0], rgb[1], rgb[2])
                 F.Rectangle(size=self.size)
 
@@ -413,8 +455,9 @@ class MyPaintPage(F.RelativeLayout):
                 self.line_points = []
 
             if self.story_id is not None:
-                DR.add_drawing(self.story_id, DR.tool, DR.drawing_color, DR.pencil_width, self.line_points[:])
-                DR.quantity += 1
+                DR.add_drawing(self.story_id, self.line_points[:])
+                DR.drawing_quantity += 1
+                print(DR.drawing_quantity)
                 self.line_points = []
             return True
         return super().on_touch_up(touch)

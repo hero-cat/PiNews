@@ -44,27 +44,11 @@ class Row(RecycleDataViewBehavior, BoxLayout):
 
             self.ids.wig.story_id = self.story_id
 
-
-
-            # focus not getting through each time
-            # TODO: IF RVDATA CHANGED BEFORE ON_PARENT CHECK - ALL GOOD. SOMETIMES ITS CHECKED AFTER, AND IT DOESN'T GET REGISTERED
             if self.focus == 'true':
                 self.ids.page_lbl.background_color = 1, 0, 0, .3
                 self.ids.title_lbl.background_color = 1, 0, 0, .3
                 self.ids.camera_lbl.background_color = 1, 0, 0, .3
                 self.ids.total_lbl.background_color = 1, 0, 0, .3
-
-            # elif 'COMMERCIAL' in tits or 'WEATHER &' in tits:
-            #     self.ids.page_lbl.background_color = 1, 0, 0, .3
-            #     self.ids.title_lbl.background_color = 1, 0, 0, .3
-            #     self.ids.camera_lbl.background_color = 1, 0, 0, .3
-            #     self.ids.total_lbl.background_color = 1, 0, 0, .3
-            #
-            # elif 'ITEM' in tits:
-            #     self.ids.page_lbl.background_color = 0, 0, 1, .3
-            #     self.ids.title_lbl.background_color = 0, 0, 1, .3
-            #     self.ids.camera_lbl.background_color = 0, 0, 1, .3
-            #     self.ids.total_lbl.background_color = 0, 0, 1, .3
 
             elif self.brk == 'true':
                 self.ids.page_lbl.background_color = 0, 1, 0, .3
@@ -82,51 +66,50 @@ class Row(RecycleDataViewBehavior, BoxLayout):
 
 class DrawingRepository:
     """This class houses all the DrawingWidget data"""
-
+    # todo: change all to KP
     drawings = {}
+    drawing_quantity = 0
     tool = 'pencil'
     pencil_width = 2
-    pencil_color = (0, 0, 0, .8)
-    pencil_bg_color = (1, 1, 1, 1)
-    fill_color = (1, 0, 0, .8)
-
-    drawing_color = (1, 0.4, 0, 1)
-
-    quantity = 0
-
+    pencil_color = (1, 0.501, 0, 1)
+    bg_color = (.19, .19, .19, 1)
 
 
     @staticmethod
-    def add_drawing(story_id, tool, color, width, points):
-
-        drngs = DrawingRepository.drawings
+    def add_drawing(story_id, points):
+        DR = DrawingRepository
 
         if story_id is not None:
 
-            if story_id in drngs:
+            if story_id in DR.drawings:
                 # if a drawing already exists against the current_story_id
-
-                if tool != 'pencil':
-                    drngs[story_id] = {'tool': tool,
-                                       'bg_color': color,
+                if DR.tool != 'pencil':
+                    DR.drawings[story_id] = {'tool': DR.tool,
+                                       'bg_color': DR.bg_color,
                                        'pencil_drawings': []}
                 else:
-                    drngs[story_id]['tool'] = tool
-                    drngs[story_id]['pencil_drawings'].append({'width': width,
-                                                               'pencil_color': color,
+                    DR.drawings[story_id]['tool'] = DR.tool
+                    DR.drawings[story_id]['bg_color'] = DR.bg_color
+                    DR.drawings[story_id]['pencil_drawings'].append({'width': DR.pencil_width,
+                                                               'pencil_color': DR.pencil_color,
                                                                'points': points})
             else:
                 # If no drawing yet exists in the repo
-                if tool != 'pencil':
-                    drngs[story_id] = {'tool': tool,
-                                       'bg_color': color,
+                if DR.tool != 'pencil':
+                    DR.drawings[story_id] = {'tool': DR.tool,
+                                       'bg_color': DR.bg_color,
                                        'pencil_drawings': []}
                 else:
-                    drngs[story_id] = {'tool': tool,
-                                       'bg_color': (0.19, 0.19, 0.19),
-                                       'pencil_drawings': [{'width': width,
-                                                            'pencil_color': color,
+                    DR.drawings[story_id] = {'tool': DR.tool,
+                                       'bg_color': DR.bg_color,
+                                       'pencil_drawings': [{'width': DR.pencil_width,
+                                                            'pencil_color': DR.pencil_color,
                                                             'points': points}]}
+
+    @staticmethod
+    def replace_drawing(story_id, replacement):
+        DrawingRepository.drawings[story_id] = replacement
+
 
     @staticmethod
     def get_drawing(story_id, default=None):
@@ -137,20 +120,16 @@ class DrawingRepository:
         return story_id in DrawingRepository.drawings
 
     @staticmethod
-    def change_line_color(color):
+    def change_pencil_color(color):
         DrawingRepository.pencil_color = color
-
-    @staticmethod
-    def change_bg_color(color):
-        DrawingRepository.pencil_bg_color = color
 
     @staticmethod
     def change_fill_color(color):
         DrawingRepository.fill_color = color
 
     @staticmethod
-    def change_drawing_color(color):
-        DrawingRepository.drawing_color = color
+    def change_bg_color(color):
+        DrawingRepository.bg_color = color
 
     @staticmethod
     def change_pencil_width(width):
@@ -217,95 +196,3 @@ class ClickableBox(F.ButtonBehavior, F.RelativeLayout):
             self.canvas.clear()
 
 
-
-#
-# class DrawingWidget(RelativeLayout):
-#     """This class needs to be as efficiejhnt as possible so the drawing is as smooth as can be"""
-#     current_story_id = KP.StringProperty(None, allownone=True)
-#     line_points = KP.ListProperty()
-#
-#     def __init__(self, **kwargs):
-#         super().__init__(**kwargs)
-#         # Ensure that canvas instructions are in sync with properties
-#         self.bind(line_points=self.draw_on_canvas)
-#
-#     def draw_on_canvas(self, _, points):
-#         # IS this slowing it down?
-#         if DrawingRepository.tool == 'pencil':
-#             with self.canvas:
-#                 rgb = DrawingRepository.pencil_color
-#                 Color(rgb[0], rgb[1], rgb[2])
-#                 Line(width=DrawingRepository.pencil_width, points=points)
-#
-#         elif DrawingRepository.tool == 'fill':
-#             with self.canvas:
-#                 rgb = DrawingRepository.pencil_bg_color
-#                 Color(rgb[0], rgb[1], rgb[2])
-#                 Rectangle(size=self.size)
-#         else:
-#             # Eraser
-#             with self.canvas:
-#                 DrawingRepository.change_bg_color((0.982, 0.982, 0.982))
-#                 Color(0.982, 0.982, 0.982, 1)
-#                 Rectangle(size=self.size)
-#
-#     def on_story_id(self, _, current_story_id):
-#         """Property event handler; this method is called automatically
-#         when the current_story_id property changes. This is how RecycleView redraws drawings
-#         against the correct row.
-#         """
-#         drawings = DrawingRepository.get_drawing(current_story_id)
-#
-#         if drawings is not None:
-#             with self.canvas:
-#                 rgb1 = drawings['pencil_bg_color']
-#                 Color(rgb1[0], rgb1[1], rgb1[2])
-#                 Rectangle(size=self.size)
-#
-#             for drawinz in drawings['pencil_drawings']:
-#                 with self.canvas:
-#                     rgb = drawinz['pencil_color']
-#                     Color(rgb[0], rgb[1], rgb[2])
-#                     Line(width=drawinz['width'], points=drawinz['points'])
-#         else:
-#             self.line_points = []
-#             self.canvas.clear()
-#
-#     def on_touch_down(self, touch):
-#         """If the touch occurs within widget boundaries, we do touch.grab
-#         which ensures that our move/up handlers will always be called
-#         or this touch event's lifetime
-#         """
-#         if self.collide_point(*touch.pos):
-#             touch.grab(self)
-#             return True
-#         return super().on_touch_down(touch)
-#
-#     def on_touch_move(self, touch):
-#         """Our logic only applies to grabbed touches. This test will fail
-#         if the initial touch_down event was outside our boundaries, in
-#         which case the super() handler is called (as usual).
-#         """
-#         if touch.grab_current is self:
-#             if self.collide_point(*touch.pos):
-#                 self.line_points.extend(self.to_local(*touch.pos))
-#             return True
-#         return super().on_touch_move(touch)
-#
-#     def on_touch_up(self, touch):
-#         dp = DrawingRepository
-#         if touch.grab_current is self:
-#             # Only add the final point if touch is released inside our boundaries.
-#             if self.collide_point(*touch.pos):
-#                 self.line_points.extend(self.to_local(*touch.pos))
-#
-#             # Reject single-point drawings
-#             if len(self.line_points) <= 2:
-#                 self.line_points = []
-#
-#             if self.current_story_id is not None:
-#                 dp.add_drawing(self.current_story_id, dp.tool, dp.pencil_color, dp.pencil_bg_color, dp.pencil_width, self.line_points[:])
-#                 self.line_points = []
-#
-#             return True
-#         return super().on_touch_up(touch)

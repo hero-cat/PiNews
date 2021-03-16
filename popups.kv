@@ -1,3 +1,8 @@
+<TransparentExitButton@Button>
+    background_color: 0, 0, 0, 0
+    on_press: app.change_screen('current')
+
+
 <ColorScreen@MDScreen>
     id: color_screen
     canvas.before:
@@ -9,14 +14,14 @@
         orientation: 'vertical'
 
         # Top spacer
-        Widget
+        TransparentExitButton
             size_hint_y: 1.5
 
         # Middle layer
         BoxLayout
 
             # Middle left spacer
-            Widget
+            TransparentExitButton
                 size_hint_x: .1
 
             # main housing
@@ -46,35 +51,35 @@
                         red: 0.941, 0, 0, 1
                         background_normal: ''
                         background_color: self.red
-                        on_press: app.change_color(self.red)
+                        on_press: app.change_color(root.pencil_or_bg_color_choice, self.red)
 
                         # 2
                     Button:
                         orange: 1, 0.501, 0, 1
                         background_normal: ''
                         background_color: self.orange
-                        on_press: app.change_color(self.orange)
+                        on_press: app.change_color(root.pencil_or_bg_color_choice, self.orange)
 
                         # 3
                     Button:
                         yellow: 1, 1, 0, 1
                         background_normal: ''
                         background_color: self.yellow
-                        on_press: app.change_color(self.yellow)
+                        on_press: app.change_color(root.pencil_or_bg_color_choice, self.yellow)
 
                         # 4
                     Button:
                         green: 0.501, 1, 0, 1
                         background_normal: ''
                         background_color: self.green
-                        on_press: app.change_color(self.green)
+                        on_press: app.change_color(root.pencil_or_bg_color_choice, self.green)
 
                         # 5
                     Button:
                         teal: 0, 1, 0.501, 1
                         background_normal: ''
                         background_color: self.teal
-                        on_press: app.change_color(self.teal)
+                        on_press: app.change_color(root.pencil_or_bg_color_choice, self.teal)
 
 
 
@@ -86,35 +91,35 @@
                         turquoise: 0, 1, 1, 1
                         background_normal: ''
                         background_color: self.turquoise
-                        on_press: app.change_color(self.turquoise)
+                        on_press: app.change_color(root.pencil_or_bg_color_choice, self.turquoise)
 
                         # 7
                     Button:
                         blue: 0, 0.501, 1, 1
                         background_normal: ''
                         background_color: self.blue
-                        on_press: app.change_color(self.blue)
+                        on_press: app.change_color(root.pencil_or_bg_color_choice, self.blue)
 
                         # 8
                     Button:
                         navy: 0, 0, 1, 1
                         background_normal: ''
                         background_color: self.navy
-                        on_press: app.change_color(self.navy)
+                        on_press: app.change_color(root.pencil_or_bg_color_choice, self.navy)
 
                         # 9
                     Button:
                         purple: 0.498, 0, 1, 1
                         background_normal: ''
                         background_color: self.purple
-                        on_press: app.change_color(self.purple)
+                        on_press: app.change_color(root.pencil_or_bg_color_choice, self.purple)
 
                         # 10
                     Button:
                         pink: 1, 0, 1, 1
                         background_normal: ''
                         background_color: self.pink
-                        on_press: app.change_color(self.pink)
+                        on_press: app.change_color(root.pencil_or_bg_color_choice, self.pink)
 
 
 
@@ -125,43 +130,43 @@
                         grey: 1, 1, 1, 1
                         background_normal: ''
                         background_color: self.grey
-                        on_press: app.change_color(self.grey)
+                        on_press: app.change_color(root.pencil_or_bg_color_choice, self.grey)
 
                         # 12
                     Button:
                         black: .75, .75, .75, 1
                         background_normal: ''
                         background_color: self.black
-                        on_press: app.change_color(self.black)
+                        on_press: app.change_color(root.pencil_or_bg_color_choice, self.black)
 
                         # 13
                     Button:
                         white: .5, .5, .5, 1
                         background_normal: ''
                         background_color: self.white
-                        on_press: app.change_color(self.white)
+                        on_press: app.change_color(root.pencil_or_bg_color_choice, self.white)
 
                         # 14
                     Button:
                         grey: .25, .25, .25, 1
                         background_normal: ''
                         background_color: self.grey
-                        on_press: app.change_color(self.grey)
+                        on_press: app.change_color(root.pencil_or_bg_color_choice, self.grey)
 
                         # 15
                     Button:
                         black: 0, 0, 0, 1
                         background_normal: ''
                         background_color: self.black
-                        on_press: app.change_color(self.black)
+                        on_press: app.change_color(root.pencil_or_bg_color_choice, self.black)
 
 
             # Middle right spacer
-            Widget
+            TransparentExitButton
                 size_hint_x: .1
 
         # Bottom spacer
-        Widget
+        TransparentExitButton
             size_hint_y: 2
 
 
@@ -178,14 +183,14 @@
         orientation: 'vertical'
 
         # Top spacer
-        Widget
+        TransparentExitButton
             size_hint_y: 1.5
 
         # Middle layer
         BoxLayout
 
             # Middle left spacer
-            Widget
+            TransparentExitButton
                 size_hint_x: .1
 
             # main housing
@@ -226,11 +231,11 @@
                 Widget
 
             # Middle right spacer
-            Widget
+            TransparentExitButton
                 size_hint_x: .1
 
         # Bottom spacer
-        Widget
+        TransparentExitButton
             size_hint_y: 2
 
 

@@ -35,6 +35,7 @@ ScreenManager:
         id: color_screen
         name: 'color_screen'
         manager: 'screen_manager'
+        pencil_or_bg_color_choice: 'bg'
 
     WidthScreen:
         id: width_screen
@@ -232,7 +233,7 @@ ScreenManager:
                 theme_text_color: "Custom"
                 text_color: .35, .35, .35, 1
                 on_press: app.change_tool('fill')
-                on_press: app.change_screen('color_screen')
+                on_release: app.change_screen('color_bg')
                 on_release: self.text_color = 1, 1, 1, 1
                 on_release: pencil_button.text_color = .35, .35, .35, 1
                 on_release: eraser_button.text_color = .35, .35, .35, 1
@@ -366,10 +367,44 @@ ScreenManager:
 
                 # toolbar
                 BoxLayout
+
                     Widget
                         size_hint_x: None
-                        width: 30
+                        width: 5
 
+                    # COLOR FILL
+                    Button:
+                        id: dw_fill_btn_color
+                        text: 'BG'
+                        background_normal: ''
+                        background_color: 1, 0 ,1 ,1
+                        size_hint: None, None
+                        size: 45, 45
+                        pos_hint: {"center_x": .5, "center_y": .5}
+                        on_release: app.change_screen('color_bg')
+
+                    Button:
+                        text: '   |'
+                        background_normal: ''
+                        opacity: .5
+                        font_size: 50
+                        background_color: 1, 0 ,1 ,0
+
+
+                    # PENCIL
+                    MDIconButton
+                        id: dw_pencil_btn
+                        icon: "pencil"
+                        theme_text_color: "Custom"
+                        text_color: 1, 1, 1
+                        user_font_size: 55
+                        pos_hint: {"center_x": .5, "center_y": .5}
+                        on_press: self.text_color = 1, 1, 1
+                        #on_press: dw_fill_btn.text_color = 0, 0, 0
+                        on_release: app.change_tool('pencil')
+
+
+                    # ALBUM
                     MDIconButton
                         icon: "album"
                         theme_text_color: "Custom"
@@ -380,51 +415,46 @@ ScreenManager:
 
                     Widget
                         size_hint_x: None
-                        width: 75
+                        width: 15
 
+                    # COLOR PENCIL
                     Button:
-                        id: drawing_color_button
+                        id: dw_pencil_btn_color
                         background_normal: ''
                         background_color: 1, 0 ,1 ,1
                         size_hint: None, None
                         size: 45, 45
                         pos_hint: {"center_x": .5, "center_y": .5}
-                        on_release: app.root.current = 'color_screen'
+                        on_release: app.change_screen('color_pencil')
 
-                    Widget
-                        size_hint_x: None
-                        width: 80
+                    Button:
+                        text: '  |'
+                        background_normal: ''
+                        opacity: .5
+                        font_size: 50
+                        background_color: 1, 0 ,1 ,0
 
-                    MDIconButton
-                        id: dw_pencil_btn
-                        icon: "pencil"
-                        theme_text_color: "Custom"
-                        text_color: 1, 1, 1
-                        user_font_size: 55
-                        pos_hint: {"center_x": .5, "center_y": .5}
-                        on_press: self.text_color = 1, 1, 1
-                        on_press: dw_fill_btn.text_color = 0, 0, 0
-                        on_release: app.change_tool('pencil')
+#
+#                    # FILL BUCKET
+#                    MDIconButton
+#                        id: dw_fill_btn
+#                        icon: "format-color-fill"
+#                        theme_text_color: "Custom"
+#                        text_color: 0, 0, 0
+#                        user_font_size: 64
+#                        pos_hint: {"center_x": .3, "center_y": .4}
+#                        on_press: self.text_color = 1, 1, 1
+#                        on_press: dw_pencil_btn.text_color = 0, 0, 0
+#                        on_release: app.change_tool('fill')
+#
+#                    Widget
+#                        size_hint_x: None
+#                        width: 8
 
-                    Widget
-                        size_hint_x: None
-                        width: 30
 
-                    MDIconButton
-                        id: dw_fill_btn
-                        icon: "format-color-fill"
-                        theme_text_color: "Custom"
-                        text_color: 0, 0, 0
-                        user_font_size: 64
-                        pos_hint: {"center_x": .5, "center_y": .4}
-                        on_press: self.text_color = 1, 1, 1
-                        on_press: dw_pencil_btn.text_color = 0, 0, 0
-                        on_release: app.change_tool('fill')
 
-                    Widget
-                        size_hint_x: None
-                        width: 20
 
+                    # UNDO
                     MDIconButton
                         icon: "undo-variant"
                         theme_text_color: "Custom"
@@ -435,15 +465,20 @@ ScreenManager:
 
                     Widget
                         size_hint_x: None
-                        width: 20
+                        width: 1
 
+                   # CLEAR ALL
                     MDIconButton
                         icon: "close-box"
                         theme_text_color: "Custom"
                         text_color: 0, 0, 0
                         user_font_size: 55
-                        pos_hint: {"center_x": .5, "center_y": .5}
+                        pos_hint: {"center_x": .4, "center_y": .5}
                         on_release: app.clear_current_drawing()
+
+                    Widget
+                        size_hint_x: None
+                        width: 1
 
 
                 # Drawing housing
@@ -459,15 +494,25 @@ ScreenManager:
                         height: 240
                         width: 800
                     Widget
+
                 #Bottom bar
-                BoxLayout:
-                    Widget:
-                        size_hint_x: 5
-                    MDIconButton:
-                        icon: "check-outline"
-                        theme_text_color: "Custom"
-                        on_press: app.back_to_main_page()
+                BoxLayout
+                    padding: 5, 5
+                    Button:
+                        canvas.after:
+                            Color:
+                                rgb: 0,0,0,1
+                            Line:
+                                width: 1
+                                rectangle: self.x, self.y, self.width, self.height
+
+                        text: 'OK'
+                        background_normal: ""
+                        background_color: .3, .3, .3, 1
+                        background_down: 'assets/black.png'
+                        on_release: app.back_to_main_page()
                         on_release: app.change_screen('current')
+
             # Middle right spacer
             Widget
                 size_hint_x: .1
